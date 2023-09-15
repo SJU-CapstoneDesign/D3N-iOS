@@ -16,10 +16,14 @@ public class TodayHomeViewModel: ObservableObject {
         public init() { }
     }
     
-    enum Action { }
+    enum Action { 
+        case nextButtonTapped
+    }
     
     private let dependencies: Dependencies
     private let newsUseCase: NewsUseCaseInterface
+    
+    @Published var questionPassageDependencies: QuestionPassageViewModel.Dependencies?
     
     public init(
         dependencies: Dependencies,
@@ -33,7 +37,10 @@ public class TodayHomeViewModel: ObservableObject {
     
     @MainActor
     func send(_ action: Action) {
-        
+        switch action {
+        case .nextButtonTapped:
+            questionPassageDependencies = .init(parent: .today)
+        }
     }
     
     func bind() {

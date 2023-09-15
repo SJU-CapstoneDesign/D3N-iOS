@@ -13,13 +13,25 @@ public class QuestionPassageViewModel: ObservableObject {
     private var subscribers: Set<AnyCancellable> = []
     
     public struct Dependencies: Hashable {
-        public init() { }
+        public var parent: Parent
+        
+        public init(parent: Parent) {
+            self.parent = parent
+        }
+        
+        public enum Parent {
+            case today
+        }
     }
     
-    enum Action { }
+    enum Action { 
+        case nextButtonTapped
+    }
     
-    private let dependencies: Dependencies
+    public let dependencies: Dependencies
     private let newsUseCase: NewsUseCaseInterface
+    
+    @Published var questionResultDependenices: QuestionResultViewModel.Dependencies?
     
     public init(
         dependencies: Dependencies,
@@ -33,7 +45,10 @@ public class QuestionPassageViewModel: ObservableObject {
     
     @MainActor
     func send(_ action: Action) {
-        
+        switch action {
+        case .nextButtonTapped:
+            questionResultDependenices = .init()
+        }
     }
     
     func bind() {

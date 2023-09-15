@@ -17,7 +17,16 @@ public struct TodayHomeView: View {
     }
     
     public var body: some View {
-        Text("Home")
+        VStack {
+            Button("Home") {
+                viewModel.send(.nextButtonTapped)
+            }
+        }
+        .onReceive(viewModel.$questionPassageDependencies) { dependenciesOrNil in
+            if let dependencies = dependenciesOrNil {
+                flowCoordinator.navigate(.questionPassage(dependencies))
+            }
+        }
     }
 }
 

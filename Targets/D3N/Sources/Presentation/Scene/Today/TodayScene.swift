@@ -30,8 +30,10 @@ public struct TodayScene: View {
                     switch scene {
                     case let .questionPassage(dependencies):
                         QuestionPassageView(viewModel: sceneDIContainer.makeQuestionPassageViewModel(dependencies: dependencies))
+                            .environmentObject(flowCoordinator)
                     case let .questionResult(dependencies):
                         QuestionResultView(viewModel: sceneDIContainer.makeQuestionResultViewModel(dependencies: dependencies))
+                            .environmentObject(flowCoordinator)
                     }
                 }
         }
