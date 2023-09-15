@@ -12,17 +12,14 @@ import AppTrackingTransparency
 @main
 struct RootApp: App {
     @UIApplicationDelegateAdaptor var delegate: AppDelegate
-    let appDIContainer: AppDIContainerInterface = AppDIContainer()
     
-    init() {
-        
-    }
+    private let appDIContainer: AppDIContainerInterface = AppDIContainer()
+    
+    init() { }
     
     var body: some Scene {
         WindowGroup {
-            
-            ChatScene(chatSceneDIContainer: appDIContainer.makeChatSceneDIContainer())
-                .onAppear(perform : UIApplication.shared.hideKeyboard)
+            TodayScene(sceneDIContainer: appDIContainer.makeTodaySceneDIContainer())
         }
     }
 }

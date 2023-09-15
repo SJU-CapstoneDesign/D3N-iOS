@@ -10,4 +10,5 @@ import Foundation
 
 protocol AppDIContainerInterface {
     func makeChatSceneDIContainer() -> ChatSceneDIContainer
+    func makeTodaySceneDIContainer() -> TodaySceneDIContainer
 }

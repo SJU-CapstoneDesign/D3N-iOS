@@ -24,24 +24,22 @@ public struct TodayScene: View {
     
     public var body: some View {
         NavigationStack(path: $flowCoordinator.path) {
-            TodayHomeView(viewModel: sceneDIContainer)
-            ChatView(viewModel: sceneDIContainer.makeChatViewModel(dependencies: .init()))
-                .environmentObject(flowCoordinator)
-                .navigationDestination(for: TodayFlowCoordinator.Scene.self) { scene in
-                    switch scene {
-                    case let .chatResult(dependencies):
-                        ChatResultView(
-                            viewModel: chatSceneDIContainer.makeChatResultViewModel(dependencies: dependencies)
-                        )
-                        .environmentObject(chatFlowCoordinator)
-                    }
-                }
+            TodayHomeView(viewModel: sceneDIContainer.makeTodayHomeViewModel(dependencies: .init()))
+//            ChatView(viewModel: sceneDIContainer.makeChatViewModel(dependencies: .init()))
+//                .environmentObject(flowCoordinator)
+//                .navigationDestination(for: TodayFlowCoordinator.Scene.self) { scene in
+//                    switch scene {
+//                    case let .chatResult(dependencies):
+//                        ChatResultView(
+//                            viewModel: chatSceneDIContainer.makeChatResultViewModel(dependencies: dependencies)
+//                        )
+//                        .environmentObject(chatFlowCoordinator)
+//                    }
+//                }
         }
     }
 }
 
-struct ChatScene_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatScene(chatSceneDIContainer: .init())
-    }
+#Preview {
+    TodayScene(sceneDIContainer: AppDIContainer().makeTodaySceneDIContainer())
 }

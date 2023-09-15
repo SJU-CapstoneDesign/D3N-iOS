@@ -23,7 +23,7 @@ public final class TodayFlowCoordinator: ObservableObject {
     }
     
     public enum Scene: Hashable {
-        case 
+        case home
     }
     
     @Published public var path = NavigationPath()
