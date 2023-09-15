@@ -22,5 +22,5 @@ public struct TodayHomeView: View {
 }
 
 #Preview {
-    Text("hi")
+    TodayHomeView(viewModel: AppDIContainer().makeTodaySceneDIContainer().makeTodayHomeViewModel(dependencies: .init()))
 }

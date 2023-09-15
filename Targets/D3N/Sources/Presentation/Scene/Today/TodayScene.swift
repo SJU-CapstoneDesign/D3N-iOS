@@ -11,9 +11,9 @@ import SwiftUI
 import AppTrackingTransparency
 
 public struct TodayScene: View {
-    private let sceneDIContainer: TodaySceneDIContainer
-    
     @StateObject private var flowCoordinator: TodayFlowCoordinator
+    
+    private let sceneDIContainer: TodaySceneDIContainer
     
     public init(sceneDIContainer: TodaySceneDIContainer) {
         self.sceneDIContainer = sceneDIContainer
@@ -25,17 +25,15 @@ public struct TodayScene: View {
     public var body: some View {
         NavigationStack(path: $flowCoordinator.path) {
             TodayHomeView(viewModel: sceneDIContainer.makeTodayHomeViewModel(dependencies: .init()))
-//            ChatView(viewModel: sceneDIContainer.makeChatViewModel(dependencies: .init()))
-//                .environmentObject(flowCoordinator)
-//                .navigationDestination(for: TodayFlowCoordinator.Scene.self) { scene in
-//                    switch scene {
-//                    case let .chatResult(dependencies):
-//                        ChatResultView(
-//                            viewModel: chatSceneDIContainer.makeChatResultViewModel(dependencies: dependencies)
-//                        )
-//                        .environmentObject(chatFlowCoordinator)
-//                    }
-//                }
+                .environmentObject(flowCoordinator)
+                .navigationDestination(for: TodayFlowCoordinator.Scene.self) { scene in
+                    switch scene {
+                    case let .questionPassage(dependencies):
+                        QuestionPassageView(viewModel: sceneDIContainer.makeQuestionPassageViewModel(dependencies: dependencies))
+                    case let .questionResult(dependencies):
+                        QuestionResultView(viewModel: sceneDIContainer.makeQuestionResultViewModel(dependencies: dependencies))
+                    }
+                }
         }
     }
 }

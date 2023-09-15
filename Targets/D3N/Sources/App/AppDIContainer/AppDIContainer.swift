@@ -9,27 +9,7 @@
 import Foundation
 
 public final class AppDIContainer: AppDIContainerInterface {
-    public func makeChatSceneDIContainer() -> ChatSceneDIContainer {
-        return ChatSceneDIContainer()
-    }
-    
     public func makeTodaySceneDIContainer() -> TodaySceneDIContainer {
         return TodaySceneDIContainer()
     }
-    
-//    func appSearchDependencies() -> AppSearchViewModel {
-//        let dataSource : AppSearchDataSourceInterface = AppSearchDataSource(networkProvider: NetworkProvider())
-//        let repository : AppSearchRepositoryInterface = AppSearchRepository(dataSource: dataSource)
-//        let useCase : AppSearchUseCaseInterface = AppSearchUseCase(searchRepository: repository, recentKeywordRepository: getRecentKeywordDependencies())
-//        let viewModel : AppSearchViewModel = AppSearchViewModel(useCase: useCase)
-//
-//        return viewModel
-//    }
-    
-//    private func getRecentKeywordDependencies() -> RecentKeywordRepositoryInterface {
-//        let recentKeywordStorage: RecentKeywordStorageInterface = RecentKeywordStorage()
-//        let recentKeywordRepository: RecentKeywordRepositoryInterface = RecentKeywordRepository(recentKeywordStorage: recentKeywordStorage)
-//
-//        return recentKeywordRepository
-//    }
 }

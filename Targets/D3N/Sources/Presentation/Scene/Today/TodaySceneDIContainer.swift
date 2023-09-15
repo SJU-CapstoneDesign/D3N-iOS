@@ -9,41 +9,30 @@
 import Foundation
 
 public final class TodaySceneDIContainer: TodayFlowCoordinatorDependencies {
-    public init() {
-        
-    }
+    public init() { }
     
     public func makeTodayFlowCoordinator() -> TodayFlowCoordinator {
         return TodayFlowCoordinator(dependencies: self)
     }
     
     public func makeTodayHomeViewModel(dependencies: TodayHomeViewModel.Dependencies) -> TodayHomeViewModel {
-        return TodayHomeViewModel(dependencies: dependencies, chatUseCase: <#T##ChatUseCaseInterface#>, pointUseCase: <#T##PointUseCaseInterface#>)
+        let newsRepository: NewsRepositoryInterface = NewsRepository()
+        let newsUseCase: NewsUseCaseInterface = NewsUseCase(newsRepository: newsRepository)
+        
+        return TodayHomeViewModel(dependencies: dependencies, newsUseCase: newsUseCase)
     }
     
-    public func makeChatViewModel(dependencies: ChatViewModel.Dependencies) -> ChatViewModel {
-        let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
-        let chatUseCase: ChatUseCaseInterface = ChatUseCase(openAIRepository: openAIRepository)
-        let pointUseCase: PointUseCaseInterface = PointUseCase()
+    public func makeQuestionPassageViewModel(dependencies: QuestionPassageViewModel.Dependencies) -> QuestionPassageViewModel {
+        let newsRepository: NewsRepositoryInterface = NewsRepository()
+        let newsUseCase: NewsUseCaseInterface = NewsUseCase(newsRepository: newsRepository)
         
-        return .init(
-            dependencies: dependencies,
-            chatUseCase: chatUseCase,
-            pointUseCase: pointUseCase
-        )
+        return QuestionPassageViewModel(dependencies: dependencies, newsUseCase: newsUseCase)
     }
     
-    public func makeChatResultViewModel(
-        dependencies: ChatResultViewModel.Dependencies
-    ) -> ChatResultViewModel {
-        let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
-        let chatUseCase: ChatUseCaseInterface = ChatUseCase(openAIRepository: openAIRepository)
-        let pointUseCase: PointUseCaseInterface = PointUseCase()
+    public func makeQuestionResultViewModel(dependencies: QuestionResultViewModel.Dependencies) -> QuestionResultViewModel {
+        let newsRepository: NewsRepositoryInterface = NewsRepository()
+        let newsUseCase: NewsUseCaseInterface = NewsUseCase(newsRepository: newsRepository)
         
-        return .init(
-            dependencies: dependencies,
-            chatUseCase: chatUseCase,
-            pointUseCase: pointUseCase
-        )
+        return QuestionResultViewModel(dependencies: dependencies, newsUseCase: newsUseCase)
     }
 }

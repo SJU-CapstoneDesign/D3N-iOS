@@ -10,20 +10,21 @@ import Foundation
 import SwiftUI
 
 public protocol TodayFlowCoordinatorDependencies {
-    func makeTodayHomeViewModel(dependencies: )
-    func makeChatViewModel(dependencies: ChatViewModel.Dependencies) -> ChatViewModel
-    func makeChatResultViewModel(dependencies: ChatResultViewModel.Dependencies) -> ChatResultViewModel
+    func makeTodayHomeViewModel(dependencies: TodayHomeViewModel.Dependencies) -> TodayHomeViewModel
+    func makeQuestionPassageViewModel(dependencies: QuestionPassageViewModel.Dependencies) -> QuestionPassageViewModel
+    func makeQuestionResultViewModel(dependencies: QuestionResultViewModel.Dependencies) -> QuestionResultViewModel
 }
 
 public final class TodayFlowCoordinator: ObservableObject {
     public let dependencies: TodayFlowCoordinatorDependencies
     
-    init(dependencies: TodayFlowCoordinatorDependencies) {
+    public init(dependencies: TodayFlowCoordinatorDependencies) {
         self.dependencies = dependencies
     }
     
     public enum Scene: Hashable {
-        case home
+        case questionPassage(QuestionPassageViewModel.Dependencies)
+        case questionResult(QuestionResultViewModel.Dependencies)
     }
     
     @Published public var path = NavigationPath()
