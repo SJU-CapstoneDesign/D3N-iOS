@@ -19,20 +19,24 @@ public struct TodayHomeView: View {
     public var body: some View {
         GeometryReader { proxy in
             VStack {
+                HStack {
+                    Button(action: {}, label: {
+                        Label("뉴스", systemImage: "chevron.down")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                    })
+                    Spacer()
+                }
+                .padding(.horizontal)
+                
                 TabView {
                     ForEach(0...10, id: \.self) { i in
                         PassageCardView()
-                            .background(Color(
-                                red: .random(in: 0...1),
-                                green: .random(in: 0...1),
-                                blue: .random(in: 0...1)
-                            ))
-                            .frame(width: proxy.size.width, height: proxy.size.height * 0.9)
+                            .frame(width: proxy.size.width * 0.9, height: proxy.size.height * 0.8)
+                            .onTapGesture {
+                                viewModel.send(.passageItemTapped(i))
+                            }
                     }
-                }
-                
-                Button("Home") {
-                    viewModel.send(.nextButtonTapped)
                 }
             }
         }

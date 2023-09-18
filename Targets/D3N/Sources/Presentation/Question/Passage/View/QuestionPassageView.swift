@@ -18,9 +18,27 @@ public struct QuestionPassageView: View {
     }
     
     public var body: some View {
-        VStack {
-            Button("Passage") {
-                viewModel.send(.nextButtonTapped)
+        GeometryReader { proxy in
+            ZStack {
+                if let url = URL(string: "https://n.news.naver.com/mnews/article/214/0001300292?sid=102") {
+                    WebView(url: url)
+                }
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button("GO TO RESULT") {
+                            viewModel.send(.nextButtonTapped)
+                        }
+                        .foregroundStyle(.white)
+                        Spacer()
+                    }
+                    .padding(.top)
+                    .background(.black)
+                    .frame(width: proxy.size.width, height: 80)
+                }
+                .ignoresSafeArea()
             }
         }
         .onReceive(viewModel.$questionResultDependenices) { dependenciesOrNil in
