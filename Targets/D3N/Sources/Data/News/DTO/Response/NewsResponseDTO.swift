@@ -8,12 +8,24 @@
 
 import Foundation
 
-public struct NewsResponseDTO {
-    public var title: String
-    public var content: String
+struct NewsResponseDTO: Codable {
+    let title, summary: String
+    let url: String
+    let field: String
+    let quizs: [QuizDTO]
     
-    public init(title: String, content: String) {
-        self.title = title
-        self.content = content
+    enum CodingKeys: String, CodingKey {
+        case title
+        case summary
+        case url
+        case field
+        case quizs = "quizList"
     }
+}
+
+struct QuizDTO: Codable {
+    let question: String
+    let choiceList: [String]
+    let answer: Int
+    let reason: String
 }

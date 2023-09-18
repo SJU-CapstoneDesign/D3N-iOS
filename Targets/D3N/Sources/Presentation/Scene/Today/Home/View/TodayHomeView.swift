@@ -17,11 +17,26 @@ public struct TodayHomeView: View {
     }
     
     public var body: some View {
-        VStack {
-            Button("Home") {
-                viewModel.send(.nextButtonTapped)
+        GeometryReader { proxy in
+            VStack {
+                TabView {
+                    ForEach(0...10, id: \.self) { i in
+                        PassageCardView()
+                            .background(Color(
+                                red: .random(in: 0...1),
+                                green: .random(in: 0...1),
+                                blue: .random(in: 0...1)
+                            ))
+                            .frame(width: proxy.size.width, height: proxy.size.height * 0.9)
+                    }
+                }
+                
+                Button("Home") {
+                    viewModel.send(.nextButtonTapped)
+                }
             }
         }
+        .tabViewStyle(.page(indexDisplayMode: .never))
         .onReceive(viewModel.$questionPassageDependencies) { dependenciesOrNil in
             if let dependencies = dependenciesOrNil {
                 flowCoordinator.navigate(.questionPassage(dependencies))

@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol NewsRepositoryInterface {
-    func fetch() async -> Result<NewsEntity, NewsError>
+    func fetch() async -> Result<[NewsEntity], NewsError>
 }

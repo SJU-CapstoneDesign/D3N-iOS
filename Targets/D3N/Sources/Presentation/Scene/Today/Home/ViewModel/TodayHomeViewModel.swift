@@ -17,11 +17,14 @@ public class TodayHomeViewModel: ObservableObject {
     }
     
     enum Action { 
+        case onAppear
         case nextButtonTapped
     }
     
     private let dependencies: Dependencies
     private let newsUseCase: NewsUseCaseInterface
+    
+    @Published var newsList: [NewsEntity] = []
     
     @Published var questionPassageDependencies: QuestionPassageViewModel.Dependencies?
     
@@ -38,6 +41,10 @@ public class TodayHomeViewModel: ObservableObject {
     @MainActor
     func send(_ action: Action) {
         switch action {
+        case .onAppear:
+            Task {
+                newsList = try await newsUseCase.fetch().get()
+            }
         case .nextButtonTapped:
             questionPassageDependencies = .init(parent: .today)
         }

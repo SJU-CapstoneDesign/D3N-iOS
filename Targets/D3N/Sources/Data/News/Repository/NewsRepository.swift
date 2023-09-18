@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 final class NewsRepository: NewsRepositoryInterface {
-    func fetch() async -> Result<NewsEntity, NewsError> {
-        return .success(.init(title: "d", content: "d"))
+    func fetch() async -> Result<[NewsEntity], NewsError> {
+        return .success(.init())
     }
 }
