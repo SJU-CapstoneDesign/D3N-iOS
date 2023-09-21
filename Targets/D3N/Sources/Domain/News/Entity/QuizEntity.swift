@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct QuizEntity {
+public struct QuizEntity: Codable, Hashable {
     let question: String
     let choiceList: [String]
     let answer: Int

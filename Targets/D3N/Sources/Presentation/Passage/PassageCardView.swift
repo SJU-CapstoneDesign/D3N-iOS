@@ -9,6 +9,13 @@
 import SwiftUI
 
 public struct PassageCardView: View {
+    //TODO: NewsEntity는 이후에 Passage로 통일 되어야 함.
+    public let news: NewsEntity
+    
+    public init(news: NewsEntity) {
+        self.news = news
+    }
+    
     public var body: some View {
         VStack {
             Spacer()
@@ -16,7 +23,7 @@ public struct PassageCardView: View {
             HStack {
                 Spacer()
                 
-                Text("철도파업 사흘째 열차 감축 운행 지속‥이용객 불편 이어져")
+                Text(news.title)
                     .font(.title3)
                     .fontWeight(.semibold)
                 
@@ -24,7 +31,7 @@ public struct PassageCardView: View {
             }
             .padding()
             
-            Text("전국철도노동조합 파업 사흘째인 오늘도 열차 감축 운행이 이어지는 가운데 운행률은 평소의 70% 수준에 머물고 있습니다.")
+            Text(news.summary)
                 .padding()
             
             Spacer()

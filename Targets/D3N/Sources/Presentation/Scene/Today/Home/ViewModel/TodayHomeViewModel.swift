@@ -18,8 +18,7 @@ public class TodayHomeViewModel: ObservableObject {
     
     enum Action { 
         case onAppear
-        case nextButtonTapped
-        case passageItemTapped(Int)
+        case newsPageTapped(NewsEntity)
     }
     
     private let dependencies: Dependencies
@@ -47,11 +46,8 @@ public class TodayHomeViewModel: ObservableObject {
                 newsList = try await newsUseCase.fetch().get()
             }
             
-        case let .passageItemTapped(int):
-            questionPassageDependencies = .init(parent: .today)
-            
-        case .nextButtonTapped:
-            questionPassageDependencies = .init(parent: .today)
+        case let .newsPageTapped(news):
+            questionPassageDependencies = .init(parent: .today, news: news)
         }
     }
     

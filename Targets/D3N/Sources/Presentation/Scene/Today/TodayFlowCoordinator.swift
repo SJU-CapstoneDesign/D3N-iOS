@@ -36,4 +36,8 @@ public final class TodayFlowCoordinator: ObservableObject {
     public func pop() {
         path.removeLast()
     }
+    
+    public func popToRoot() {
+        path = .init()
+    }
 }

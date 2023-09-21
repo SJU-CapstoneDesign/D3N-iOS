@@ -13,10 +13,15 @@ public class QuestionPassageViewModel: ObservableObject {
     private var subscribers: Set<AnyCancellable> = []
     
     public struct Dependencies: Hashable {
-        public var parent: Parent
+        public let parent: Parent
+        public let news: NewsEntity
         
-        public init(parent: Parent) {
+        public init(
+            parent: Parent,
+            news: NewsEntity
+        ) {
             self.parent = parent
+            self.news = news
         }
         
         public enum Parent {
@@ -26,11 +31,15 @@ public class QuestionPassageViewModel: ObservableObject {
     
     enum Action { 
         case nextButtonTapped
+        case questionButtonTapped
     }
     
     public let dependencies: Dependencies
     private let newsUseCase: NewsUseCaseInterface
     
+    @Published public var news: NewsEntity
+    @Published public var isShowQuestionBottomSheet: Bool = false
+
     @Published var questionResultDependenices: QuestionResultViewModel.Dependencies?
     
     public init(
@@ -40,6 +49,8 @@ public class QuestionPassageViewModel: ObservableObject {
         self.dependencies = dependencies
         self.newsUseCase = newsUseCase
         
+        self.news = dependencies.news
+        
         bind()
     }
     
@@ -47,7 +58,11 @@ public class QuestionPassageViewModel: ObservableObject {
     func send(_ action: Action) {
         switch action {
         case .nextButtonTapped:
-            questionResultDependenices = .init()
+            isShowQuestionBottomSheet = false
+            questionResultDependenices = .init(.init(parent: .today, quizs: news.quizs))
+            
+        case .questionButtonTapped:
+            isShowQuestionBottomSheet = true
         }
     }
     

@@ -20,7 +20,7 @@ public struct QuestionPassageView: View {
     public var body: some View {
         GeometryReader { proxy in
             ZStack {
-                if let url = URL(string: "https://n.news.naver.com/mnews/article/214/0001300292?sid=102") {
+                if let url = URL(string: viewModel.news.url) {
                     WebView(url: url)
                 }
                 
@@ -28,8 +28,8 @@ public struct QuestionPassageView: View {
                     Spacer()
                     HStack {
                         Spacer()
-                        Button("GO TO RESULT") {
-                            viewModel.send(.nextButtonTapped)
+                        Button("Question Bottom Sheet") {
+                            viewModel.send(.questionButtonTapped)
                         }
                         .foregroundStyle(.white)
                         Spacer()
@@ -48,6 +48,12 @@ public struct QuestionPassageView: View {
                     todayFlowCoordinator.navigate(.questionResult(dependencies))
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.isShowQuestionBottomSheet) {
+            QuestionBottomSheetView(quizs: viewModel.dependencies.news.quizs) {
+                viewModel.send(.nextButtonTapped)
+            }
+                .presentationDetents([.medium, .large])
         }
     }
 }

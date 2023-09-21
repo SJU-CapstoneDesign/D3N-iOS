@@ -30,17 +30,20 @@ public struct TodayHomeView: View {
                 .padding(.horizontal)
                 
                 TabView {
-                    ForEach(0...10, id: \.self) { i in
-                        PassageCardView()
+                    ForEach(viewModel.newsList, id: \.self) { news in
+                        PassageCardView(news: news)
                             .frame(width: proxy.size.width * 0.9, height: proxy.size.height * 0.8)
                             .onTapGesture {
-                                viewModel.send(.passageItemTapped(i))
+                                viewModel.send(.newsPageTapped(news))
                             }
                     }
                 }
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
+        .onAppear {
+            viewModel.send(.onAppear)
+        }
         .onReceive(viewModel.$questionPassageDependencies) { dependenciesOrNil in
             if let dependencies = dependenciesOrNil {
                 flowCoordinator.navigate(.questionPassage(dependencies))

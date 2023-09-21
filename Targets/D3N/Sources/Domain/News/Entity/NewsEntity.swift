@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct NewsEntity {
+public struct NewsEntity: Codable, Hashable {
     public var title: String
     public var summary: String
     public var url: String
