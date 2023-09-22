@@ -1,20 +1,23 @@
 //
-//  QuestionResultView.swift
+//  QuestionBottomSheetView.swift
 //  D3N
 //
-//  Created by 송영모 on 2023/09/15.
+//  Created by 송영모 on 2023/09/19.
 //  Copyright © 2023 sju. All rights reserved.
 //
 
 import SwiftUI
 
-public struct QuestionResultView: View {
-    @EnvironmentObject private var todayFlowCoordinator: TodayFlowCoordinator
+public struct QuestionBottomSheetView: View {
+    public let quizs: [QuizEntity]
+    public var nextButtonTappedAction: () -> Void
     
-    @StateObject private var viewModel: QuestionResultViewModel
-    
-    public init(viewModel: QuestionResultViewModel) {
-        self._viewModel = .init(wrappedValue: viewModel)
+    public init(
+        quizs: [QuizEntity], 
+        nextButtonTappedAction: @escaping () -> Void
+    ) {
+        self.quizs = quizs
+        self.nextButtonTappedAction = nextButtonTappedAction
     }
     
     public var body: some View {
@@ -27,7 +30,7 @@ public struct QuestionResultView: View {
                     Spacer()
                 }
                 
-                ForEach(viewModel.quizs, id: \.self) { quiz in
+                ForEach(quizs, id: \.self) { quiz in
                     VStack {
                         HStack {
                             Text(quiz.question)
@@ -40,8 +43,6 @@ public struct QuestionResultView: View {
                                 HStack {
                                     Text("\(index+1). \(choice)")
                                         .font(.body)
-                                        .foregroundStyle(index + 1 == quiz.answer ? Color.init(uiColor: .systemPink) : Color.init(uiColor: .label))
-                                        .fontWeight(index + 1 == quiz.answer ? .semibold : .regular)
                                     Spacer()
                                 }
                             }
@@ -49,19 +50,12 @@ public struct QuestionResultView: View {
                     }
                 }
                 
-                Button("Root") {
-                    viewModel.send(.rootButtonTapped)
+                Button("Next") {
+                    nextButtonTappedAction()
                 }
             }
             .padding()
         }
-        .onReceive(viewModel.$popToRoot) { popToRoot in
-            if popToRoot {
-                switch viewModel.parent {
-                case .today:
-                    todayFlowCoordinator.popToRoot()
-                }
-            }
-        }
     }
 }
+

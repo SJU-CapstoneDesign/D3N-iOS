@@ -8,7 +8,24 @@
 
 import Foundation
 
-public struct NewsEntity {
+public struct NewsEntity: Codable, Hashable {
     public var title: String
-    public var content: String
+    public var summary: String
+    public var url: String
+    public var field: String
+    public let quizs: [QuizEntity]
+    
+    public init(
+        title: String,
+        summary: String,
+        url: String,
+        field: String,
+        quizs: [QuizEntity]
+    ) {
+        self.title = title
+        self.summary = summary
+        self.url = url
+        self.field = field
+        self.quizs = quizs
+    }
 }

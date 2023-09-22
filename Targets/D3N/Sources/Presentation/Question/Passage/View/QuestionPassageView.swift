@@ -18,9 +18,27 @@ public struct QuestionPassageView: View {
     }
     
     public var body: some View {
-        VStack {
-            Button("Passage") {
-                viewModel.send(.nextButtonTapped)
+        GeometryReader { proxy in
+            ZStack {
+                if let url = URL(string: viewModel.news.url) {
+                    WebView(url: url)
+                }
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button("Question Bottom Sheet") {
+                            viewModel.send(.questionButtonTapped)
+                        }
+                        .foregroundStyle(.white)
+                        Spacer()
+                    }
+                    .padding(.top)
+                    .background(.black)
+                    .frame(width: proxy.size.width, height: 80)
+                }
+                .ignoresSafeArea()
             }
         }
         .onReceive(viewModel.$questionResultDependenices) { dependenciesOrNil in
@@ -30,6 +48,12 @@ public struct QuestionPassageView: View {
                     todayFlowCoordinator.navigate(.questionResult(dependencies))
                 }
             }
+        }
+        .sheet(isPresented: $viewModel.isShowQuestionBottomSheet) {
+            QuestionBottomSheetView(quizs: viewModel.dependencies.news.quizs) {
+                viewModel.send(.nextButtonTapped)
+            }
+                .presentationDetents([.medium, .large])
         }
     }
 }

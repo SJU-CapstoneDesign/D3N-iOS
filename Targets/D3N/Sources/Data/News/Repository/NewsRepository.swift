@@ -10,7 +10,10 @@ import Foundation
 import Combine
 
 final class NewsRepository: NewsRepositoryInterface {
-    func fetch() async -> Result<NewsEntity, NewsError> {
-        return .success(.init(title: "d", content: "d"))
+    func fetch() async -> Result<[NewsEntity], NewsError> {
+        let mock: [NewsResponseDTO] = .init(repeating: NewsResponseDTO.mock, count: 10)
+        let newsEntities = mock.map { $0.toDomain() }
+        
+        return .success(newsEntities)
     }
 }

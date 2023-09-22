@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol NewsUseCaseInterface {
-    func fetch() async -> Result<NewsEntity, NewsError>
+    func fetch() async -> Result<[NewsEntity], NewsError>
 }
 
 public final class NewsUseCase: NewsUseCaseInterface {
@@ -21,7 +21,7 @@ public final class NewsUseCase: NewsUseCaseInterface {
         self.newsRepository = newsRepository
     }
     
-    public func fetch() async -> Result<NewsEntity, NewsError> {
+    public func fetch() async -> Result<[NewsEntity], NewsError> {
         return await newsRepository.fetch()
     }
 }
