@@ -53,7 +53,7 @@ public struct QuestionResultView: View {
             }
             .padding()
         }
-        VStack{
+        ZStack{
             Button{
                 viewModel.send(.rootButtonTapped)
             } label:{
