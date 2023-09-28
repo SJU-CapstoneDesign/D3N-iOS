@@ -19,9 +19,6 @@ public struct QuestionResultView: View {
     
     public var body: some View {
         ScrollView {
-            ZStack{
-                
-            }
             VStack {
 //                HStack {
 //                    Text("문제")
@@ -29,7 +26,7 @@ public struct QuestionResultView: View {
 //                        .frame(maxWidth: .infinity, alignment: .leading)
 //                    Spacer()
 //                }
-// 나중에 navigation bar 따로 만드려고 일단 주석으로 뺌
+// TODO: navigation bar ROOT APP 단위에서 만들어 불러오기
                 ForEach(viewModel.quizs, id: \.self) { quiz in
                     VStack (alignment: .trailing){
                         HStack {
@@ -46,7 +43,7 @@ public struct QuestionResultView: View {
                                         .font(.body)
                                         .foregroundStyle(index + 1 == quiz.answer ? Color.init(uiColor: .systemIndigo) : Color.init(uiColor: .label))
                                         .fontWeight(index + 1 == quiz.answer ? .bold : .regular)
-// 유저가 고른 정답 == 원래 정답이면 green, 아니면 고른 정답은 red나 pink, 원래 정답은 indigo로 표현하고 싶은데 유저 정답 테스트 데이터가 있나?
+                                        //TODO: 유저가 고른 정답 == 원래 정답이면 green, 아니면 고른 정답은 red나 pink, 원래 정답은 indigo로 표현
                                     Spacer()
                                 }
                             }
@@ -56,7 +53,7 @@ public struct QuestionResultView: View {
             }
             .padding()
         }
-        VStack{
+        ZStack{
             Button{
                 viewModel.send(.rootButtonTapped)
             } label:{
@@ -67,7 +64,7 @@ public struct QuestionResultView: View {
             }
             .tint(.indigo)
             .buttonStyle(.borderedProminent)
-        }.padding()
+        }.padding(.leading) .padding(.trailing)
         .onReceive(viewModel.$popToRoot) { popToRoot in
             if popToRoot {
                 switch viewModel.parent {
