@@ -31,7 +31,7 @@ public struct QuestionResultView: View {
                         ZStack{
                             RoundedRectangle(cornerRadius: 25)
                                 .foregroundColor(Color.indigo)
-                                .opacity(0.2)
+                                .opacity(0.2)       //TODO: ColorSet 만들면 다시 수정하기
                                 .padding()
                         VStack (alignment: .leading){
                             HStack {
@@ -45,7 +45,7 @@ public struct QuestionResultView: View {
                                     ZStack(alignment: .leading){
                                         RoundedRectangle(cornerRadius: 10)
                                             .foregroundStyle(Color.white)
-                                            .opacity(0.9)
+                                            .opacity(0.9)       //TODO: ColorSet 만들면 다시 수정하기
                                             .shadow(radius: 3, x: 5, y: 5);                                                   VStack(alignment: .leading){
                                                 Text("\(index+1). \(choice)")
                                                     .font(.body)
