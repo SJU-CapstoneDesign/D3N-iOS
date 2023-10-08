@@ -1,25 +1,24 @@
 //
-//  RootApp.swift
-//  MullingIOS
+//  FiniensApp.swift
+//  Finiens
 //
-//  Created by 송영모 on 2023/08/21.
-//  Copyright © 2023 folio.world. All rights reserved.
+//  Created by 송영모 on 2023/07/26.
 //
 
 import SwiftUI
-import AppTrackingTransparency
+
+import ComposableArchitecture
 
 @main
 struct RootApp: App {
-    @UIApplicationDelegateAdaptor var delegate: AppDelegate
-    
-    private let appDIContainer: AppDIContainerInterface = AppDIContainer()
-    
-    init() { }
-    
     var body: some Scene {
         WindowGroup {
-            TodayScene(sceneDIContainer: appDIContainer.makeTodaySceneDIContainer())
+            RootView(
+                store: Store(initialState: RootStore.State()) {
+                    RootStore()
+                        ._printChanges()
+                }
+            )
         }
     }
 }
