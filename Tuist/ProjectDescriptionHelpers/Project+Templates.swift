@@ -12,11 +12,14 @@ extension Project {
         
         dependencies += [
             .external(name: "ComposableArchitecture"),
+            .external(name: "Moya")
         ]
 
-        var targets = makeAppTargets(name: name,
-                                     platform: platform,
-                                     dependencies: dependencies)
+        var targets = makeAppTargets(
+            name: name,
+            platform: platform,
+            dependencies: dependencies
+        )
         targets += additionalTargets.flatMap({ makeFrameworkTargets(name: $0, platform: platform) })
         return Project(name: name,
                        organizationName: "sju",
@@ -49,22 +52,27 @@ extension Project {
     /// Helper function to create the application target and the unit test target.
     private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
         let platform: Platform = platform
-        let infoPlist: [String: InfoPlist.Value] = [
-            "CFBundleShortVersionString": "1.0",
-            "CFBundleVersion": "1",
-            "UIMainStoryboardFile": "",
-            "UILaunchStoryboardName": "LaunchScreen"
-            ]
-
         let mainTarget = Target(
             name: name,
             platform: platform,
             product: .app,
             bundleId: "sju.\(name)",
-            infoPlist: .extendingDefault(with: infoPlist),
+            infoPlist: .file(path: .relativeToRoot("Targets/\(name)/Sources/Config/D3N-Info.plist")),
             sources: ["Targets/\(name)/Sources/**"],
             resources: ["Targets/\(name)/Resources/**"],
-            dependencies: dependencies
+            dependencies: dependencies,
+            settings: .settings(
+                configurations: [
+                    .debug(
+                        name: "Debug",
+                        xcconfig: .relativeToRoot("Targets/\(name)/Sources/Config/Debug.xcconfig")
+                    ),
+                    .release(
+                        name: "Release",
+                        xcconfig: .relativeToRoot("Targets/\(name)/Sources/Config/Release.xcconfig")
+                    ),
+                ]
+            )
         )
 
         let testTarget = Target(
