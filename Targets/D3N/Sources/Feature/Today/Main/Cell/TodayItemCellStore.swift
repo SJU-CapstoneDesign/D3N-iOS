@@ -1,5 +1,5 @@
 //
-//  TodayMainStore.swift
+//  TodayItemCellStore.swift
 //  D3N
 //
 //  Created by 송영모 on 10/12/23.
@@ -10,20 +10,17 @@ import Foundation
 
 import ComposableArchitecture
 
-public struct TodayMainStore: Reducer {
-    public struct State: Equatable {
-        var todayItems: IdentifiedArrayOf<TodayItemCellStore.State> = [
-            .init(), .init(), .init(), .init(), .init(), .init(), .init()
-        ]
+public struct TodayItemCellStore: Reducer {
+    public struct State: Equatable, Identifiable {
+        public var id: UUID
         
-        public init() { }
-        
+        public init(id: UUID = .init()) {
+            self.id = id
+        }
     }
     
     public enum Action: Equatable {
         case onAppear
-        
-        case todayItems(id: TodayItemCellStore.State.ID, action: TodayItemCellStore.Action)
     }
     
     public var body: some ReducerOf<Self> {
@@ -38,4 +35,5 @@ public struct TodayMainStore: Reducer {
         }
     }
 }
+
 
