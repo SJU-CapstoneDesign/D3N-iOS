@@ -9,12 +9,26 @@
 import ComposableArchitecture
 
 public struct QuestionListStore: Reducer {
-    public struct State: Equatable { }
+    public struct State: Equatable {
+        public var questionListItems: IdentifiedArrayOf<QuestionListItemCellStore.State> = []
+        
+        public init() {
+            self.questionListItems = .init(uniqueElements: [
+                .init(),
+                .init(),
+                .init(),
+                .init(),
+                .init(),
+            ])
+        }
+    }
     
     public enum Action: Equatable {
         case onAppear
         
         case nextButtonTapped
+        
+        case questionListItems(id: QuestionListItemCellStore.State.ID, action: QuestionListItemCellStore.Action)
         
         case delegate(Delegate)
         

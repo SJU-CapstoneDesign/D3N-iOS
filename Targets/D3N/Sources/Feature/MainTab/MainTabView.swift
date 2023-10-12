@@ -10,12 +10,22 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MainTabView: View {
-    let store: StoreOf<MainTabViewStore>
+    let store: StoreOf<MainTabStore>
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             TabView {
+                TodayNavigationStackView(store: self.store.scope(state: \.today, action: MainTabStore.Action.today))
+                    .tabItem {
+                        Image(systemName: "doc.text.image")
+                        Text("투데이")
+                    }
+                
+                //FIXME: 우선 제거
                 QuestionNavigationStackView(store: self.store.scope(state: \.question, action: { .question($0) }))
+                    .tabItem {
+                        Image(systemName: "")
+                    }
             }
         }
     }
@@ -23,6 +33,6 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView(store: .init(initialState: .init()) {
-        MainTabViewStore()
+        MainTabStore()
     })
 }
