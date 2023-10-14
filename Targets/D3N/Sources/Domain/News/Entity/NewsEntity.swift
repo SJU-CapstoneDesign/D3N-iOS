@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct NewsEntity {
+public struct NewsEntity: Equatable {
     let field: NewsField
     let type: NewsType
     let title: String

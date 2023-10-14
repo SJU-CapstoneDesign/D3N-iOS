@@ -16,12 +16,12 @@ public enum NewsError: Error {
 }
 
 struct NewsClient {
-    var fetchTodayNewsList: () async throws -> Result<[NewsEntity], NewsError>
+    var fetchTodayNewsList: () async throws -> [NewsEntity]
 }
 
 extension NewsClient: TestDependencyKey {
     static let previewValue = Self(
-        fetchTodayNewsList: { .failure(.no) }
+        fetchTodayNewsList: { [] }
     )
     
     static let testValue = Self(
@@ -41,9 +41,8 @@ extension DependencyValues {
 extension NewsClient: DependencyKey {
     static let liveValue = NewsClient(
         fetchTodayNewsList: {
-            let provider = MoyaProvider<NewsService>()
-            
-            let dd = await provider.request(.fetchTodayNewsList)
+            let provider = MoyaProvider<NewsService>(plugins: [NetworkLoggerPlugin()])
+            let response = await provider.request(.fetchTodayNewsList)
                 .map { result in
                     let data = try? JSONDecoder().decode(BaseModel<TodayNewsListResponseDTO>.self, from: result.data)
                     if let dto = data.map(\.result) {
@@ -51,10 +50,7 @@ extension NewsClient: DependencyKey {
                     }
                     return []
                 }
-                .mapError { _ in
-                    return NewsError.no
-                }
-            return dd
+            return try response.get()
         }
     )
 }

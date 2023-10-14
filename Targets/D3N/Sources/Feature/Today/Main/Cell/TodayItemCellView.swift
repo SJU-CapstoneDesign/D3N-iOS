@@ -26,12 +26,14 @@ public struct TodayItemCellView: View {
                     .frame(width: 50, height: 50)
                 
                 VStack(alignment: .leading) {
-                    Text("테스트 제목")
+                    Text(viewStore.state.news.title)
                         .font(.headline)
+                        .lineLimit(1)
                     
-                    Text("설명")
+                    Text(viewStore.state.news.summary)
                         .font(.caption)
                         .foregroundStyle(.gray)
+                        .lineLimit(1)
                 }
                 
                 Spacer()

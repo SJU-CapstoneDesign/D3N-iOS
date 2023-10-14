@@ -22,22 +22,25 @@ public struct TodayMainView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
-                    todayNewsView()
+                    todayNewsView(viewStore: viewStore)
                         .padding()
                 }
+            }
+            .onAppear {
+                viewStore.send(.onAppear, animation: .default)
             }
             .navigationTitle("Today")
         }
     }
     
-    private func todayNewsView() -> some View {
+    private func todayNewsView(viewStore: ViewStoreOf<TodayMainStore>) -> some View {
         VStack(alignment: .leading) {
             Text("최신 뉴스를 가져왔어요")
                 .font(.subheadline)
                 .foregroundStyle(.gray)
                 .fontWeight(.semibold)
             
-            Text("오늘 풀어야 할 뉴스 10 문제")
+            Text("오늘 풀어야 할 뉴스 \(viewStore.state.todayItems.count) 문제")
                 .font(.title)
                 .fontWeight(.semibold)
             

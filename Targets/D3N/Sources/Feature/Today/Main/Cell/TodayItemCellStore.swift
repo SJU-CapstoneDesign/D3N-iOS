@@ -13,9 +13,14 @@ import ComposableArchitecture
 public struct TodayItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: UUID
+        public var news: NewsEntity
         
-        public init(id: UUID = .init()) {
+        public init(
+            id: UUID = .init(),
+            news: NewsEntity
+        ) {
             self.id = id
+            self.news = news
         }
     }
     
