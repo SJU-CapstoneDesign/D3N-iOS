@@ -21,7 +21,23 @@ public struct QuizListView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
-                Text("Quiz List View")
+                quizListItemView()
+                    .padding()
+                
+                Spacer()
+                
+                MinimalButton(title: "완료", isActive: false, action: {
+                    viewStore.send(.completeButtonTapped)
+                })
+                .padding()
+            }
+        }
+    }
+    
+    private func quizListItemView() -> some View {
+        VStack(spacing: 10) {
+            ForEachStore(self.store.scope(state: \.quizListItems, action: QuizListStore.Action.quizListItems(id:action:))) {
+                QuizListItemCellView(store: $0)
             }
         }
     }

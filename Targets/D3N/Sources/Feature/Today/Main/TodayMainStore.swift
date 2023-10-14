@@ -67,7 +67,7 @@ public struct TodayMainStore: Reducer {
             }
         }
         .forEach(\.todayItems, action: /Action.todayItems(id:action:)) {
-          TodayItemCellStore()
+            TodayItemCellStore()
         }
     }
 }
