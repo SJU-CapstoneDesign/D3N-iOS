@@ -13,4 +13,6 @@ public struct QuizEntity: Equatable {
     let choiceList: [String]
     let answer: Int
     let reason: String
+    
+    var userAnswer: Int? = nil
 }

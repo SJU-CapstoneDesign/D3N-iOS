@@ -26,6 +26,14 @@ public struct TodayItemCellStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
+        
+        case tapped
+        
+        case delegate(Delegate)
+        
+        public enum Delegate: Equatable {
+            case tapped
+        }
     }
     
     public var body: some ReducerOf<Self> {
@@ -33,6 +41,9 @@ public struct TodayItemCellStore: Reducer {
             switch action {
             case .onAppear:
                 return .none
+                
+            case .tapped:
+                return .send(.delegate(.tapped))
                 
             default:
                 return .none

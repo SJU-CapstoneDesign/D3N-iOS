@@ -9,15 +9,15 @@
 import SwiftUI
 import WebKit
 
-struct WebView: UIViewRepresentable {
+public struct WebView: UIViewRepresentable {
     let webView: WKWebView = .init()
     let url: String
     
-    init(url: String) {
+    public init(url: String) {
         self.url = url
     }
     
-    func makeUIView(context: Context) -> WKWebView {
+    public func makeUIView(context: Context) -> WKWebView {
         webView.isOpaque = false
         webView.backgroundColor = .clear
         
@@ -28,12 +28,12 @@ struct WebView: UIViewRepresentable {
         return webView
     }
     
-    func update(url: URL) {
+    public func update(url: URL) {
         let request = URLRequest(url: url)
         webView.load(request)
     }
     
-    func updateUIView(_ webView: WKWebView, context: Context) {
+    public func updateUIView(_ webView: WKWebView, context: Context) {
         
     }
 }

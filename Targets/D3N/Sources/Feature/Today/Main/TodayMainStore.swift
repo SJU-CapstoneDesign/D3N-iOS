@@ -25,6 +25,12 @@ public struct TodayMainStore: Reducer {
         case fetchTodayNewsListResponse(TaskResult<[NewsEntity]>)
         
         case todayItems(id: TodayItemCellStore.State.ID, action: TodayItemCellStore.Action)
+        
+        case delegate(Delegate)
+        
+        public enum Delegate: Equatable {
+            case select(NewsEntity)
+        }
     }
     
     @Dependency(\.newsClient) var newsClient
@@ -50,9 +56,18 @@ public struct TodayMainStore: Reducer {
                 )
                 return .none
                 
+            case let .todayItems(id: id, action: .delegate(.tapped)):
+                if let news = state.todayItems[id: id]?.news {
+                    return .send(.delegate(.select(news)))
+                }
+                return .none
+                
             default:
                 return .none
             }
+        }
+        .forEach(\.todayItems, action: /Action.todayItems(id:action:)) {
+          TodayItemCellStore()
         }
     }
 }

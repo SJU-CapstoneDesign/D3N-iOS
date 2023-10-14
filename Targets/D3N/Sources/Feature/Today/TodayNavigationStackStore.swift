@@ -34,15 +34,20 @@ public struct TodayNavigationStackStore: Reducer {
     public struct Path: Reducer {
         public enum State: Equatable {
             case detail(TodayDetailStore.State)
+            case quizMain(QuizMainStore.State)
         }
         
         public enum Action: Equatable {
             case detail(TodayDetailStore.Action)
+            case quizMain(QuizMainStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
             Scope(state: /State.detail, action: /Action.detail) {
                 TodayDetailStore()
+            }
+            Scope(state: /State.quizMain, action: /Action.quizMain) {
+                QuizMainStore()
             }
         }
     }
@@ -54,6 +59,13 @@ public struct TodayNavigationStackStore: Reducer {
             switch action {
             case .onAppear:
                 return .none
+                
+            case let .main(.delegate(action)):
+                switch action {
+                case let .select(news):
+                    state.path.append(.quizMain(.init(news: news)))
+                    return .none
+                }
                 
             default:
                 return .none

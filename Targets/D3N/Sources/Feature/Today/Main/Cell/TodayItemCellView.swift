@@ -23,7 +23,7 @@ public struct TodayItemCellView: View {
             HStack {
                 RoundedRectangle(cornerRadius: 5)
                     .fill(.mint)
-                    .frame(width: 50, height: 50)
+                    .frame(width: 40, height: 40)
                 
                 VStack(alignment: .leading) {
                     Text(viewStore.state.news.title)
@@ -38,8 +38,10 @@ public struct TodayItemCellView: View {
                 
                 Spacer()
                 
-                Button("풀기", action: {})
-                    .buttonStyle(.bordered)
+                Button("풀기", action: {
+                    viewStore.send(.tapped)
+                })
+                .buttonStyle(.bordered)
             }
         }
     }
