@@ -12,7 +12,7 @@ import ComposableArchitecture
 
 public struct QuizMainStore: Reducer {
     public struct State: Equatable { 
-        let news: NewsEntity
+        var news: NewsEntity
         
         @PresentationState var quizList: QuizListStore.State?
         
@@ -26,6 +26,12 @@ public struct QuizMainStore: Reducer {
         
         case solveButtonTapped
         case quizList(PresentationAction<QuizListStore.Action>)
+        
+        case delegate(Delegate)
+        
+        public enum Delegate: Equatable {
+            case solved(NewsEntity)
+        }
     }
     
     public var body: some ReducerOf<Self> {
@@ -37,6 +43,14 @@ public struct QuizMainStore: Reducer {
             case .solveButtonTapped:
                 state.quizList = .init(quizs: state.news.quizList)
                 return .none
+                
+            case let .quizList(.presented(.delegate(action))):
+                switch action {
+                case let .solved(quizs):
+                    state.news.quizList = quizs
+                    state.quizList = nil
+                    return .send(.delegate(.solved(state.news)))
+                }
                 
             default:
                 return .none

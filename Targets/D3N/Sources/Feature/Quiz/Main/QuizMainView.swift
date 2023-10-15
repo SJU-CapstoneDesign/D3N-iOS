@@ -47,6 +47,7 @@ public struct QuizMainView: View {
             ) {
                 QuizListView(store: $0)
             }
+            .toolbar(.hidden, for: .tabBar)
         }
     }
 }
