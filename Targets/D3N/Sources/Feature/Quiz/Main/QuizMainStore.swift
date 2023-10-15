@@ -42,5 +42,8 @@ public struct QuizMainStore: Reducer {
                 return .none
             }
         }
+        .ifLet(\.$quizList, action: /Action.quizList) {
+            QuizListStore()
+        }
     }
 }

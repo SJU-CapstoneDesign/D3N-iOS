@@ -24,7 +24,10 @@ public struct ChoiceListItemCellView: View {
                 Button(action: {
                     viewStore.send(.tapped)
                 }, label: {
-                    Label(LocalizedStringKey(viewStore.state.choice), systemImage: "circle")
+                    Label(
+                        LocalizedStringKey(viewStore.state.choice),
+                        systemImage: viewStore.state.isSelected ? "circle.fill" : "circle"
+                    )
                 })
                 .font(.subheadline)
                 .foregroundStyle(.black)

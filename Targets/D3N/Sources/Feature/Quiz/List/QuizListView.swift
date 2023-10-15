@@ -27,7 +27,7 @@ public struct QuizListView: View {
                 Spacer()
                 
                 MinimalButton(title: "완료", isActive: false, action: {
-                    viewStore.send(.completeButtonTapped)
+                    viewStore.send(.solvedButtonTapped)
                 })
                 .padding()
             }

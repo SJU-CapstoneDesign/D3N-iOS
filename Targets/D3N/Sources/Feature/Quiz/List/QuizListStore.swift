@@ -30,13 +30,13 @@ public struct QuizListStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case completeButtonTapped
+        case solvedButtonTapped
         
         case quizListItems(id: QuizListItemCellStore.State.ID, action: QuizListItemCellStore.Action)
         case delegate(Delegate)
         
-        public enum Delegate {
-            case completeButtonTapped
+        public enum Delegate: Equatable {
+            case solved([QuizEntity])
         }
     }
     
@@ -46,8 +46,19 @@ public struct QuizListStore: Reducer {
             case .onAppear:
                 return .none
                 
-            case .completeButtonTapped:
-                return .send(.completeButtonTapped)
+            case .solvedButtonTapped:
+                var newQuizs = state.quizListItems.map { return $0.quiz }
+                return .send(.delegate(.solved(newQuizs)))
+                
+            case let .quizListItems(id: id, action: .delegate(action)):
+                switch action {
+                case let .userAnswered(answer):
+                    state.quizListItems[id: id]?.quiz.userAnswer = answer
+                    return .none
+                    
+                default:
+                    return .none
+                }
                 
             default:
                 return .none

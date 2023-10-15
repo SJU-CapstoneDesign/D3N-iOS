@@ -25,13 +25,13 @@ public struct TodayItemCellView: View {
                     .fill(.mint)
                     .frame(width: 40, height: 40)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 5) {
                     Text(viewStore.state.news.title)
                         .font(.headline)
                         .lineLimit(1)
                     
                     Text(viewStore.state.news.summary)
-                        .font(.caption)
+                        .font(.footnote)
                         .foregroundStyle(.gray)
                         .lineLimit(1)
                 }

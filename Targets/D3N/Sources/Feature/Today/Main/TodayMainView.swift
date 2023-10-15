@@ -46,6 +46,7 @@ public struct TodayMainView: View {
             
             ForEachStore(self.store.scope(state: \.todayItems, action: TodayMainStore.Action.todayItems(id:action:))) {
                 TodayItemCellView(store: $0)
+                    .padding(.vertical, 5)
             }
         }
         .padding()

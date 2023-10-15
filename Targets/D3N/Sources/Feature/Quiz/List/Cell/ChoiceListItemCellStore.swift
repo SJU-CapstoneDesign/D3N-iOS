@@ -14,13 +14,16 @@ public struct ChoiceListItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: UUID
         public let choice: String
+        public var isSelected: Bool
         
         public init(
             id: UUID = .init(),
-            choice: String
+            choice: String,
+            isSelected: Bool = false
         ) {
             self.id = id
             self.choice = choice
+            self.isSelected = isSelected
         }
     }
     
@@ -51,5 +54,3 @@ public struct ChoiceListItemCellStore: Reducer {
         }
     }
 }
-
-
