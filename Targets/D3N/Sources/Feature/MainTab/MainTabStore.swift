@@ -19,7 +19,7 @@ struct MainTabStore: Reducer {
         var currentScene: MainScene = .question
         
         var today: TodayNavigationStackStore.State = .init()
-        var question: QuestionNavigationStackStore.State = .init()
+        var myPage: MyPageNavigationStackStore.State = .init()
     }
     
     enum Action: BindableAction, Equatable {
@@ -28,7 +28,7 @@ struct MainTabStore: Reducer {
         case selectTab(MainScene)
         
         case today(TodayNavigationStackStore.Action)
-        case question(QuestionNavigationStackStore.Action)
+        case myPage(MyPageNavigationStackStore.Action)
     }
     
     public var body: some ReducerOf<Self> {
@@ -43,8 +43,8 @@ struct MainTabStore: Reducer {
         Scope(state: \.today, action: /Action.today) {
             TodayNavigationStackStore()
         }
-        Scope(state: \.question, action: /Action.question) {
-            QuestionNavigationStackStore()
+        Scope(state: \.myPage, action: /Action.myPage) {
+            MyPageNavigationStackStore()
         }
     }
 }

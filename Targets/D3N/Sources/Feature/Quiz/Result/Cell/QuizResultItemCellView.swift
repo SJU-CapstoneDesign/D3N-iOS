@@ -79,11 +79,11 @@ public struct QuizResultItemCellView: View {
                 return Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.mint)
             } else if current == answer {
-                return Image(systemName: "circle.fill")
-                    .foregroundStyle(.mint)
-            } else if current == userAnswer {
                 return Image(systemName: "checkmark.circle.fill")
                     .foregroundStyle(.pink)
+            } else if current == userAnswer {
+                return Image(systemName: "circle.fill")
+                    .foregroundStyle(.foreground)
             } else {
                 return Image(systemName: "circle")
                     .foregroundStyle(.foreground)

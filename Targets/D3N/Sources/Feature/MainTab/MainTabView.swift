@@ -21,10 +21,10 @@ struct MainTabView: View {
                         Text("투데이")
                     }
                 
-                //FIXME: 우선 제거
-                QuestionNavigationStackView(store: self.store.scope(state: \.question, action: { .question($0) }))
+                MyPageNavigationStackView(store: self.store.scope(state: \.myPage, action: MainTabStore.Action.myPage))
                     .tabItem {
-                        Image(systemName: "")
+                        Image(systemName: "person.circle")
+                        Text("마이")
                     }
             }
         }
