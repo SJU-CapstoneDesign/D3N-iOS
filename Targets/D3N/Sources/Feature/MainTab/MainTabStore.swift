@@ -13,11 +13,13 @@ enum MainScene: Hashable {
     case question
 }
 
-struct MainTabViewStore: Reducer {
+struct MainTabStore: Reducer {
 
     struct State: Equatable {
         var currentScene: MainScene = .question
-        var question: QuestionNavigationStackStore.State = .init()
+        
+        var today: TodayNavigationStackStore.State = .init()
+        var myPage: MyPageNavigationStackStore.State = .init()
     }
     
     enum Action: BindableAction, Equatable {
@@ -25,7 +27,8 @@ struct MainTabViewStore: Reducer {
         
         case selectTab(MainScene)
         
-        case question(QuestionNavigationStackStore.Action)
+        case today(TodayNavigationStackStore.Action)
+        case myPage(MyPageNavigationStackStore.Action)
     }
     
     public var body: some ReducerOf<Self> {
@@ -33,12 +36,15 @@ struct MainTabViewStore: Reducer {
         
         Reduce { state, action in
             switch action {
-            default: return .none
+            default: 
+                return .none
             }
         }
-        
-        Scope(state: \.question, action: /Action.question) {
-            QuestionNavigationStackStore()
+        Scope(state: \.today, action: /Action.today) {
+            TodayNavigationStackStore()
+        }
+        Scope(state: \.myPage, action: /Action.myPage) {
+            MyPageNavigationStackStore()
         }
     }
 }

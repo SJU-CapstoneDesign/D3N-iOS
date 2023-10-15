@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct RootStore: Reducer {
 
     enum State: Equatable {
-        case mainTab(MainTabViewStore.State)
+        case mainTab(MainTabStore.State)
         
         init() {
             self = .mainTab(.init())
@@ -20,7 +20,7 @@ struct RootStore: Reducer {
     }
     
     enum Action: Equatable {
-        case mainTab(MainTabViewStore.Action)
+        case mainTab(MainTabStore.Action)
     }
     
     public var body: some ReducerOf<Self> {
@@ -31,7 +31,7 @@ struct RootStore: Reducer {
         }
         
         .ifCaseLet(/State.mainTab, action: /Action.mainTab) {
-            MainTabViewStore()
+            MainTabStore()
         }
     }
 }
