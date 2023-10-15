@@ -12,7 +12,8 @@ extension Project {
         
         dependencies += [
             .external(name: "ComposableArchitecture"),
-            .external(name: "Moya")
+            .external(name: "Moya"),
+            .external(name: "FirebaseAnalytics"),
         ]
 
         var targets = makeAppTargets(
@@ -21,9 +22,11 @@ extension Project {
             dependencies: dependencies
         )
         targets += additionalTargets.flatMap({ makeFrameworkTargets(name: $0, platform: platform) })
-        return Project(name: name,
-                       organizationName: "sju",
-                       targets: targets)
+        return Project(
+            name: name,
+            organizationName: "sju",
+            targets: targets
+        )
     }
 
     // MARK: - Private
@@ -62,6 +65,7 @@ extension Project {
             resources: ["Targets/\(name)/Resources/**"],
             dependencies: dependencies,
             settings: .settings(
+                base: SettingsDictionary().otherLinkerFlags(["-ObjC"]),
                 configurations: [
                     .debug(
                         name: "Debug",
