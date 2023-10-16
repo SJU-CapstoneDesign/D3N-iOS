@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppTrackingTransparency
 
 import ComposableArchitecture
 
@@ -21,6 +22,10 @@ struct RootApp: App {
                         ._printChanges()
                 }
             )
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                ATTrackingManager.requestTrackingAuthorization(completionHandler: { _ in
+                })
+            }
         }
     }
 }
