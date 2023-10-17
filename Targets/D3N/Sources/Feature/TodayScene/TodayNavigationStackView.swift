@@ -50,6 +50,13 @@ public struct TodayNavigationStackView: View {
                          action: TodayNavigationStackStore.Path.Action.quizResult,
                          then: QuizResultView.init(store:)
                     )
+                    
+                case .newsList:
+                    CaseLet(
+                        /TodayNavigationStackStore.Path.State.newsList,
+                         action: TodayNavigationStackStore.Path.Action.newsList,
+                         then: NewsListView.init(store:)
+                    )
                 }
             }
 

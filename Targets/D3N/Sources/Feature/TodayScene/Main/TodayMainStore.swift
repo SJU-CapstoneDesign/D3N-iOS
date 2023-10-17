@@ -12,7 +12,7 @@ import ComposableArchitecture
 
 public struct TodayMainStore: Reducer {
     let TODAY_NEWS_PAGE_INDEX = 0
-    let TODAY_NEWS_PAGE_SIZE = 10
+    let TODAY_NEWS_PAGE_SIZE = 3
     
     public struct State: Equatable {
         var newsList: [NewsEntity] = [] {
@@ -30,6 +30,8 @@ public struct TodayMainStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
+        case allNewsButtonTapped
+        
         case fetchNewsListRequest
         case fetchNewsListResponse(Result<[NewsEntity], NewsError>)
         
@@ -39,6 +41,7 @@ public struct TodayMainStore: Reducer {
         
         public enum Delegate: Equatable {
             case select(NewsEntity)
+            case allNewsButtonTapped
         }
     }
     
@@ -51,6 +54,9 @@ public struct TodayMainStore: Reducer {
                 return .concatenate([
                     .send(.fetchNewsListRequest)
                 ])
+                
+            case .allNewsButtonTapped:
+                return .send(.delegate(.allNewsButtonTapped))
                 
             case .fetchNewsListRequest:
                 return .run { send in
