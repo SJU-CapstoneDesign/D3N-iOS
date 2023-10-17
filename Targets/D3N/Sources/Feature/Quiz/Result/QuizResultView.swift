@@ -18,8 +18,11 @@ public struct QuizResultView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             GeometryReader { proxy in
                 ScrollView {
-                    VStack {
-                        quizResultItemsView(viewStore: viewStore)
+                    VStack(alignment: .leading) {
+                        titleView(collect: viewStore.state.collectCount, whole: viewStore.state.quizEntityList.count)
+                            .padding(.horizontal)
+                        
+                        quizResultItemsView()
                         
                         Spacer()
                         
@@ -40,7 +43,24 @@ public struct QuizResultView: View {
         }
     }
     
-    private func quizResultItemsView(viewStore: ViewStoreOf<QuizResultStore>) -> some View {
+    private func titleView(collect: Int, whole: Int) -> some View {
+        HStack(spacing: .zero) {
+            Text("\(whole)문제 중 ")
+                .fontWeight(.semibold)
+                .font(.title)
+            
+            Text("\(collect)")
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundStyle(.mint)
+            
+            Text("문제를 맞췄습니다.")
+                .fontWeight(.semibold)
+                .font(.title)
+        }
+    }
+    
+    private func quizResultItemsView() -> some View {
         VStack(spacing: 20) {
             ForEachStore(self.store.scope(state: \.quizResultItems, action: QuizResultStore.Action.quizResultItems(id:action:))) {
                 QuizResultItemCellView(store: $0)

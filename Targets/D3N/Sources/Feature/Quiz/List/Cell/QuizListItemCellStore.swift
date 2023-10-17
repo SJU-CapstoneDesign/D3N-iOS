@@ -41,7 +41,6 @@ public struct QuizListItemCellStore: Reducer {
         
         public enum Delegate: Equatable {
             case userAnswered(Int)
-            case tapped
         }
     }
     
@@ -51,9 +50,6 @@ public struct QuizListItemCellStore: Reducer {
             case .onAppear:
                 return .none
                 
-            case .tapped:
-                return .send(.delegate(.tapped))
-                
             case let .choiceListItems(id: id, action: .delegate(action)):
                 switch action {
                 case .tapped:
@@ -62,7 +58,7 @@ public struct QuizListItemCellStore: Reducer {
                     }
                     state.choiceListItems[id: id]?.isSelected = true
                     if let index = state.choiceListItems.index(id: id) {
-                        return .send(.delegate(.userAnswered(index + 1)))
+                        return .send(.delegate(.userAnswered(index)))
                     }
                     return .none
                 }

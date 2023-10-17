@@ -16,7 +16,7 @@ public struct MinimalButton: View {
     
     public init(
         title: String = "",
-        isActive: Bool = false,
+        isActive: Bool = true,
         action: @escaping () -> Void
     ) {
         self.title = title
@@ -34,13 +34,13 @@ public struct MinimalButton: View {
                 Text(self.title)
                     .font(.title3)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.background)
+                    .foregroundStyle(Color.background)
                 
                 Spacer()
             }
             .padding(.vertical, 10)
         })
-        .background(isActive ? Color.foreground : Color.foreground) //TODO: active 현재 미사용
+        .background(isActive ? Color.foreground : Color.gray)
         .clipShape(
             RoundedRectangle(
                 cornerRadius: 8,
