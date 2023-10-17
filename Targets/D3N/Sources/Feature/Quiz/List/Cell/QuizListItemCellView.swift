@@ -25,14 +25,7 @@ public struct QuizListItemCellView: View {
                 
                 choiceListItemView()
             }
-            .padding(10)
-            .background(Color(uiColor: .systemGray6))
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: 8,
-                    style: .continuous
-                )
-            )
+            .minimalBackgroundStyle()
         }
     }
     

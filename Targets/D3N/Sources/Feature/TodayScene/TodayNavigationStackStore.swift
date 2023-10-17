@@ -36,12 +36,14 @@ public struct TodayNavigationStackStore: Reducer {
             case detail(TodayDetailStore.State)
             case quizMain(QuizMainStore.State)
             case quizResult(QuizResultStore.State)
+            case newsList(NewsListStore.State)
         }
         
         public enum Action: Equatable {
             case detail(TodayDetailStore.Action)
             case quizMain(QuizMainStore.Action)
             case quizResult(QuizResultStore.Action)
+            case newsList(NewsListStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
@@ -53,6 +55,9 @@ public struct TodayNavigationStackStore: Reducer {
             }
             Scope(state: /State.quizResult, action: /Action.quizResult) {
                 QuizResultStore()
+            }
+            Scope(state: /State.newsList, action: /Action.newsList) {
+                NewsListStore()
             }
         }
     }
@@ -70,20 +75,30 @@ public struct TodayNavigationStackStore: Reducer {
                 case let .select(newsEntity):
                     state.path.append(.quizMain(.init(newsEntity: newsEntity)))
                     return .none
+                case .allNewsButtonTapped:
+                    state.path.append(.newsList(.init()))
+                    return .none
                 }
                 
             case let .path(.element(id: _, action: .quizMain(.delegate(action)))):
                 switch action {
                 case let .solved(quizEntityList):
                     state.path.append(.quizResult(.init(quizEntityList: quizEntityList)))
+                    return .none
                 }
-                return .none
                 
             case let .path(.element(id: _, action: .quizResult(.delegate(action)))):
                 switch action {
                 case .backToRoot:
                     return .send(.popToRoot)
                 }
+                
+            case let .path(.element(id: _, action: .newsList(.delegate(action)))):
+                switch action {
+                case let .select(newsEntity):
+                    state.path.append(.quizMain(.init(newsEntity: newsEntity)))
+                }
+                return .none
                 
             case .popToRoot:
                 state.path.removeAll()

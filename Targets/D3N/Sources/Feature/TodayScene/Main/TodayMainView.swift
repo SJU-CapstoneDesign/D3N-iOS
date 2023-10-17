@@ -40,9 +40,17 @@ public struct TodayMainView: View {
                 .foregroundStyle(.gray)
                 .fontWeight(.semibold)
             
-            Text("오늘 풀어야 할 뉴스 \(viewStore.state.todayItems.count) 문제")
-                .font(.title)
-                .fontWeight(.semibold)
+            HStack {
+                Text("오늘의 뉴스 3 문제")
+                    .font(.title)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                Button("전체보기", action: {
+                    viewStore.send(.allNewsButtonTapped)
+                })
+            }
             
             ForEachStore(self.store.scope(state: \.todayItems, action: TodayMainStore.Action.todayItems(id:action:))) {
                 TodayItemCellView(store: $0)
