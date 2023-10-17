@@ -21,9 +21,7 @@ public struct NewsListItemCellView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             HStack {
-                RoundedRectangle(cornerRadius: 5)
-                    .fill(.mint)
-                    .frame(width: 40, height: 40)
+                newsLogoView(url: viewStore.state.newsEntity.mediaCompanyLogo, isAlreadySolved: viewStore.state.newsEntity.isAlreadySolved)
                 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(viewStore.state.newsEntity.title)
@@ -41,10 +39,32 @@ public struct NewsListItemCellView: View {
                 Button("풀기", action: {
                     viewStore.send(.tapped)
                 })
+                .foregroundStyle(viewStore.state.newsEntity.isAlreadySolved ? Color.gray : Color.blue)
                 .minimalBackgroundStyle()
             }
             .onAppear {
                 viewStore.send(.onAppear)
+            }
+        }
+    }
+    
+    private func newsLogoView(url: String, isAlreadySolved: Bool) -> some View {
+        ZStack {
+            AsyncImage(url: URL(string: url)) { image in
+                image
+                    .resizable()
+                    .frame(width: 40, height: 40)
+            } placeholder: {
+                ProgressView().progressViewStyle(.circular)
+            }
+            .frame(width: 40, height: 40)
+            
+            if isAlreadySolved {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(.green)
+                    .backgroundStyle(.background)
+                    .frame(width: 15, height: 15)
+                    .offset(x: 15, y: -15)
             }
         }
     }
