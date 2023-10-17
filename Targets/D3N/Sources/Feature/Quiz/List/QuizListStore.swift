@@ -57,8 +57,11 @@ public struct QuizListStore: Reducer {
                 return .none
                 
             case .solvedButtonTapped:
-                let quizEntityList = state.quizListItems.map { return $0.quizEntity }
-                return .send(.delegate(.solved(quizEntityList)))
+                if state.isActive {
+                    let quizEntityList = state.quizListItems.map { return $0.quizEntity }
+                    return .send(.delegate(.solved(quizEntityList)))
+                }
+                return .none
                 
             case let .quizListItems(id: id, action: .delegate(action)):
                 switch action {
