@@ -39,7 +39,7 @@ public struct QuizListItemCellView: View {
     private func titleView(viewStore: ViewStoreOf<QuizListItemCellStore>) -> some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(viewStore.state.quiz.question)
+                Text(viewStore.state.quizEntity.question)
                     .font(.title3)
                     .fontWeight(.semibold)
                 

@@ -12,16 +12,16 @@ import ComposableArchitecture
 
 public struct QuizListStore: Reducer {
     public struct State: Equatable {
-        let quizs: [QuizEntity]
+        let quizEntityList: [QuizEntity]
         
         var quizListItems: IdentifiedArrayOf<QuizListItemCellStore.State> = []
         
-        public init(quizs: [QuizEntity]) {
-            self.quizs = quizs
+        public init(quizEntityList: [QuizEntity]) {
+            self.quizEntityList = quizEntityList
             
             self.quizListItems = .init(
-                uniqueElements: quizs.map { quiz in
-                    return .init(quiz: quiz)
+                uniqueElements: quizEntityList.map { quizEntity in
+                    return .init(quizEntity: quizEntity)
                 }
             )
         }
@@ -47,13 +47,13 @@ public struct QuizListStore: Reducer {
                 return .none
                 
             case .solvedButtonTapped:
-                var newQuizs = state.quizListItems.map { return $0.quiz }
-                return .send(.delegate(.solved(newQuizs)))
+                var quizEntityList = state.quizListItems.map { return $0.quizEntity }
+                return .send(.delegate(.solved(quizEntityList)))
                 
             case let .quizListItems(id: id, action: .delegate(action)):
                 switch action {
                 case let .userAnswered(answer):
-                    state.quizListItems[id: id]?.quiz.userAnswer = answer
+                    state.quizListItems[id: id]?.quizEntity.userAnswer = answer
                     return .none
                     
                 default:

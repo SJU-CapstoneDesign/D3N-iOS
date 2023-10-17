@@ -10,7 +10,8 @@ import Foundation
 import Moya
 
 public enum NewsService {
-    case fetchTodayNewsList
+    case fetchNewsList(pageIndex: Int,pageSize: Int)
+    case fetchQuizList(newsId: Int)
 }
 
 extension NewsService: TargetType {
@@ -18,26 +19,32 @@ extension NewsService: TargetType {
     
     public var path: String {
         switch self {
-        case .fetchTodayNewsList:
-            return "/api/v1/news/list/today"
+        case .fetchNewsList:
+            return "/api/v1/news/list"
+        case .fetchQuizList:
+            return "/api/v1/quiz/list"
         }
     }
     public var method: Moya.Method {
         switch self {
-        case .fetchTodayNewsList:
+        case .fetchNewsList, .fetchQuizList:
             return .get
         }
     }
     public var task: Task {
         switch self {
-        case .fetchTodayNewsList:
-            return .requestPlain
+        case let .fetchNewsList(pageIndex: page, pageSize: size):
+            return .requestParameters(parameters: ["pageIndex": page, "pageSize": size], encoding: URLEncoding.queryString)
+        case let .fetchQuizList(newsId: id):
+            return .requestParameters(parameters: ["newsId": id], encoding: URLEncoding.queryString)
         }
     }
     public var sampleData: Data {
         switch self {
-        case .fetchTodayNewsList:
-            return "{\"id\": \(""), \"first_name\": \"\("")\", \"last_name\": \"\("")\"}".utf8Encoded
+        case .fetchNewsList:
+            return "".utf8Encoded
+        case .fetchQuizList:
+            return "".utf8Encoded
         }
     }
     public var headers: [String: String]? {

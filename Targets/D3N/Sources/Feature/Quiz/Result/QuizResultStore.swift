@@ -12,15 +12,15 @@ import ComposableArchitecture
 
 public struct QuizResultStore: Reducer {
     public struct State: Equatable {
-        var news: NewsEntity
+        var quizEntityList: [QuizEntity]
         
         var quizResultItems: IdentifiedArrayOf<QuizResultItemCellStore.State> = []
         
-        public init(news: NewsEntity) {
-            self.news = news
+        public init(quizEntityList: [QuizEntity]) {
+            self.quizEntityList = quizEntityList
             self.quizResultItems = .init(
-                uniqueElements: news.quizList.map { quiz in
-                    return .init(quiz: quiz)
+                uniqueElements: quizEntityList.map { quizEntity in
+                    return .init(quizEntity: quizEntity)
                 }
             )
         }

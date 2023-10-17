@@ -67,15 +67,15 @@ public struct TodayNavigationStackStore: Reducer {
                 
             case let .main(.delegate(action)):
                 switch action {
-                case let .select(news):
-                    state.path.append(.quizMain(.init(news: news)))
+                case let .select(newsEntity):
+                    state.path.append(.quizMain(.init(newsEntity: newsEntity)))
                     return .none
                 }
                 
             case let .path(.element(id: _, action: .quizMain(.delegate(action)))):
                 switch action {
-                case let .solved(news):
-                    state.path.append(.quizResult(.init(news: news)))
+                case let .solved(quizEntityList):
+                    state.path.append(.quizResult(.init(quizEntityList: quizEntityList)))
                 }
                 return .none
                 
