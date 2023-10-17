@@ -24,7 +24,6 @@ public struct TodayMainStore: Reducer {
         var todayItems: IdentifiedArrayOf<TodayItemCellStore.State> = []
         
         public init() { }
-        
     }
     
     public enum Action: Equatable {

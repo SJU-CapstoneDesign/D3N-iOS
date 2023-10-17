@@ -67,6 +67,8 @@ public struct QuizMainStore: Reducer {
                 case let .solved(quizEntityList):
                     state.quizEntityList = quizEntityList
                     state.quizList = nil
+                    //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
+                    LocalStorageRepository.saveAlreadySolvedNewsIds(ids: [state.newsEntity.id])
                     return .send(.delegate(.solved(quizEntityList)))
                 }
                 
