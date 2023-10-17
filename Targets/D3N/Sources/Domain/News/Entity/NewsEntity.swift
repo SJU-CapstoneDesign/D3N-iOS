@@ -9,12 +9,12 @@
 import Foundation
 
 public struct NewsEntity: Equatable {
+    let id: Int
     let field: NewsField
     let type: NewsType
     let title: String
     let summary: String
-    let content: String
     let url: String
     
-    var quizList: [QuizEntity]
+//    var quizList: [QuizEntity]
 }
