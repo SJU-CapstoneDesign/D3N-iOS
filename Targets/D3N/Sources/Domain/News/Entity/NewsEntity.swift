@@ -15,4 +15,26 @@ public struct NewsEntity: Equatable {
     let title: String
     let summary: String
     let url: String
+    
+    //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
+    let isAlreadySolved: Bool
+    
+    init(
+        id: Int,
+        field: NewsField,
+        type: NewsType,
+        title: String,
+        summary: String,
+        url: String
+    ) {
+        self.id = id
+        self.field = field
+        self.type = type
+        self.title = title
+        self.summary = summary
+        self.url = url
+        
+        //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
+        self.isAlreadySolved = LocalStorageRepository.loadAlreadySolvedNewsIds().contains(id)
+    }
 }
