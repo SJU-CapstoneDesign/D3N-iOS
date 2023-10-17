@@ -15,6 +15,4 @@ public struct NewsEntity: Equatable {
     let title: String
     let summary: String
     let url: String
-    
-//    var quizList: [QuizEntity]
 }

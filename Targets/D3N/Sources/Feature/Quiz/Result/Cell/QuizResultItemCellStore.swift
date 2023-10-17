@@ -14,14 +14,14 @@ import ComposableArchitecture
 public struct QuizResultItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: UUID
-        public var quiz: QuizEntity
+        public var quizEntity: QuizEntity
         
         public init(
             id: UUID = .init(),
-            quiz: QuizEntity
+            quizEntity: QuizEntity
         ) {
             self.id = id
-            self.quiz = quiz
+            self.quizEntity = quizEntity
         }
     }
     

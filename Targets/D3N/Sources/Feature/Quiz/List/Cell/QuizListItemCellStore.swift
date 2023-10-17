@@ -13,18 +13,18 @@ import ComposableArchitecture
 public struct QuizListItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: UUID
-        public var quiz: QuizEntity
+        public var quizEntity: QuizEntity
         
         var choiceListItems: IdentifiedArrayOf<ChoiceListItemCellStore.State> = []
         
         public init(
             id: UUID = .init(),
-            quiz: QuizEntity
+            quizEntity: QuizEntity
         ) {
             self.id = id
-            self.quiz = quiz
+            self.quizEntity = quizEntity
             self.choiceListItems = .init(
-                uniqueElements: quiz.choiceList.map { choice in
+                uniqueElements: quizEntity.choiceList.map { choice in
                     return .init(choice: choice)
                 }
             )

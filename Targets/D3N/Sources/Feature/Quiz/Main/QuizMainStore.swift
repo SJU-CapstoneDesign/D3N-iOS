@@ -12,17 +12,21 @@ import ComposableArchitecture
 
 public struct QuizMainStore: Reducer {
     public struct State: Equatable { 
-        var news: NewsEntity
+        var newsEntity: NewsEntity
+        var quizEntityList: [QuizEntity] = []
         
         @PresentationState var quizList: QuizListStore.State?
         
-        public init(news: NewsEntity) {
-            self.news = news
+        public init(newsEntity: NewsEntity) {
+            self.newsEntity = newsEntity
         }
     }
     
     public enum Action: Equatable {
         case onAppear
+        
+        case fetchQuizListRequest
+        case fetchQuizListResponse(Result<[QuizEntity], NewsError>)
         
         case solveButtonTapped
         case quizList(PresentationAction<QuizListStore.Action>)
@@ -30,26 +34,40 @@ public struct QuizMainStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case solved(NewsEntity)
+            case solved([QuizEntity])
         }
     }
+    
+    @Dependency(\.newsClient) var newsClient
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                return .concatenate([
+                    .send(.fetchQuizListRequest)
+                ])
+                
+            case .fetchQuizListRequest:
+                return .run { [newsId = state.newsEntity.id] send in
+                    let response = await newsClient.fetchQuizList(newsId)
+                    await send(.fetchQuizListResponse(response))
+                }
+                
+            case let .fetchQuizListResponse(.success(quizEntityList)):
+                state.quizEntityList = quizEntityList
                 return .none
                 
             case .solveButtonTapped:
-                state.quizList = .init(quizs: state.news.quizList)
+                state.quizList = .init(quizEntityList: state.quizEntityList)
                 return .none
                 
             case let .quizList(.presented(.delegate(action))):
                 switch action {
-                case let .solved(quizs):
-                    state.news.quizList = quizs
+                case let .solved(quizEntityList):
+                    state.quizEntityList = quizEntityList
                     state.quizList = nil
-                    return .send(.delegate(.solved(state.news)))
+                    return .send(.delegate(.solved(quizEntityList)))
                 }
                 
             default:

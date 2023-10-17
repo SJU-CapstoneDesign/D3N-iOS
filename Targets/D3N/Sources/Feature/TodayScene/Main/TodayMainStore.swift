@@ -11,7 +11,16 @@ import Foundation
 import ComposableArchitecture
 
 public struct TodayMainStore: Reducer {
+    let TODAY_NEWS_PAGE_INDEX = 0
+    let TODAY_NEWS_PAGE_SIZE = 10
+    
     public struct State: Equatable {
+        var newsList: [NewsEntity] = [] {
+            didSet {
+                self.todayItems = makeTodayItems(from: newsList)
+            }
+        }
+        
         var todayItems: IdentifiedArrayOf<TodayItemCellStore.State> = []
         
         public init() { }
@@ -21,8 +30,8 @@ public struct TodayMainStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case fetchTodayNewsListRequest
-        case fetchTodayNewsListResponse(TaskResult<[NewsEntity]>)
+        case fetchNewsListRequest
+        case fetchNewsListResponse(Result<[NewsEntity], NewsError>)
         
         case todayItems(id: TodayItemCellStore.State.ID, action: TodayItemCellStore.Action)
         
@@ -40,20 +49,17 @@ public struct TodayMainStore: Reducer {
             switch action {
             case .onAppear:
                 return .concatenate([
-                    .send(.fetchTodayNewsListRequest)
+                    .send(.fetchNewsListRequest)
                 ])
                 
-            case .fetchTodayNewsListRequest:
+            case .fetchNewsListRequest:
                 return .run { send in
-                    await send(.fetchTodayNewsListResponse(TaskResult { try await newsClient.fetchTodayNewsList() }))
+                    let response = await newsClient.fetchNewsList(TODAY_NEWS_PAGE_INDEX, TODAY_NEWS_PAGE_SIZE)
+                    await send(.fetchNewsListResponse(response))
                 }
                 
-            case let .fetchTodayNewsListResponse(.success(entities)):
-                state.todayItems = .init(
-                    uniqueElements: entities.map { entity in
-                        return .init(news: entity)
-                    }
-                )
+            case let .fetchNewsListResponse(.success(newsList)):
+                state.newsList = newsList
                 return .none
                 
             case let .todayItems(id: id, action: .delegate(.tapped)):
@@ -72,3 +78,12 @@ public struct TodayMainStore: Reducer {
     }
 }
 
+public extension TodayMainStore.State {
+    func makeTodayItems(from newsList: [NewsEntity]) -> IdentifiedArrayOf<TodayItemCellStore.State> {
+        return .init(
+            uniqueElements: newsList.map { news in
+                return .init(news: news)
+            }
+        )
+    }
+}

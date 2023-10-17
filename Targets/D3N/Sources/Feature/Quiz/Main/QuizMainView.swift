@@ -21,7 +21,7 @@ public struct QuizMainView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ZStack {
-                WebView(url: viewStore.state.news.url)
+                WebView(url: viewStore.state.newsEntity.url)
                 
                 VStack {
                     Spacer()
@@ -38,6 +38,9 @@ public struct QuizMainView: View {
                     }
                 }
                 .padding()
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
             }
             .sheet(
                 store: self.store.scope(

@@ -32,7 +32,7 @@ public struct QuizResultItemCellView: View {
     }
     private func titleView(viewStore: ViewStoreOf<QuizResultItemCellStore>) -> some View {
         HStack {
-            Text(viewStore.state.quiz.question)
+            Text(viewStore.state.quizEntity.question)
                 .font(.title3)
                 .fontWeight(.semibold)
                 .lineLimit(nil)
@@ -47,14 +47,14 @@ public struct QuizResultItemCellView: View {
             HStack {
                 Spacer()
             }
-            ForEach(Array(viewStore.state.quiz.choiceList.enumerated()), id: \.offset) { index, choice in
+            ForEach(Array(viewStore.state.quizEntity.choiceList.enumerated()), id: \.offset) { index, choice in
                 Label(title: {
                     Text(choice)
                 }, icon: {
                     quizResultItemImage(
                         current: index + 1,
-                        answer: viewStore.state.quiz.answer,
-                        userAnswer: viewStore.state.quiz.userAnswer ?? 0
+                        answer: viewStore.state.quizEntity.answer,
+                        userAnswer: viewStore.state.quizEntity.userAnswer ?? 0
                     )
                 })
                 .font(.subheadline)
@@ -64,7 +64,7 @@ public struct QuizResultItemCellView: View {
     
     private func reasoneView(viewStore: ViewStoreOf<QuizResultItemCellStore>) -> some View {
         HStack {
-            Text(viewStore.state.quiz.reason)
+            Text(viewStore.state.quizEntity.reason)
                 .font(.subheadline)
                 .lineLimit(nil)
                 .fixedSize(horizontal: false, vertical: true)
