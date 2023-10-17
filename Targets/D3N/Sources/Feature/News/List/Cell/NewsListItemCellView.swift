@@ -41,7 +41,7 @@ public struct NewsListItemCellView: View {
                 Button("풀기", action: {
                     viewStore.send(.tapped)
                 })
-                .buttonStyle(.bordered)
+                .minimalBackgroundStyle()
             }
             .onAppear {
                 viewStore.send(.onAppear)
