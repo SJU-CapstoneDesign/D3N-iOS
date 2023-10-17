@@ -36,13 +36,11 @@ public struct NewsListStore: Reducer {
         case fetchNewsListRequest
         case fetchNewsListResponse(Result<[NewsEntity], NewsError>)
         
-        case tapped
-        
         case newsListItems(id: NewsListItemCellStore.State.ID, action: NewsListItemCellStore.Action)
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case tapped
+            case select(NewsEntity)
         }
     }
     
@@ -53,9 +51,6 @@ public struct NewsListStore: Reducer {
                 return .concatenate([
                     .send(.fetchNewsListRequest)
                 ])
-                
-            case .tapped:
-                return .send(.delegate(.tapped))
                 
             case .fetchNewsListRequest:
                 return .run { [pageIndex = state.pageIndex] send in
@@ -74,7 +69,10 @@ public struct NewsListStore: Reducer {
                     if id == state.newsListItems.ids.last {
                         return .send(.fetchNewsListRequest)
                     }
-                case .tapped: break
+                case .tapped:
+                    if let newsEntity = state.newsListItems[id: id]?.newsEntity {
+                        return .send(.delegate(.select(newsEntity)))
+                    }
                 }
                 return .none
                 
