@@ -15,43 +15,49 @@ extension Project {
             .external(name: "Moya"),
             .external(name: "FirebaseAnalytics"),
         ]
-
+        
         var targets = makeAppTargets(
             name: name,
             platform: platform,
             dependencies: dependencies
         )
-        targets += additionalTargets.flatMap({ makeFrameworkTargets(name: $0, platform: platform) })
+            //TODO: 지금 안사용
+        // targets += additionalTargets.flatMap({ makeFrameworkTargets(name: $0, platform: platform) })
         return Project(
             name: name,
             organizationName: "sju",
             targets: targets
         )
     }
-
+    
     // MARK: - Private
-
+    
     /// Helper function to create a framework target and an associated unit test target
     private static func makeFrameworkTargets(name: String, platform: Platform) -> [Target] {
-        let sources = Target(name: name,
-                platform: platform,
-                product: .framework,
-                bundleId: "sju.\(name)",
-                infoPlist: .default,
-                sources: ["Targets/\(name)/Sources/**"],
-                resources: [],
-                dependencies: [])
-        let tests = Target(name: "\(name)Tests",
-                platform: platform,
-                product: .unitTests,
-                bundleId: "sju.\(name)Tests",
-                infoPlist: .default,
-                sources: ["Targets/\(name)/Tests/**"],
-                resources: [],
-                dependencies: [.target(name: name)])
+        let sources = Target(
+            name: name,
+            platform: platform,
+            product: .framework,
+            bundleId: "sju.\(name)",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad]),
+            infoPlist: .default,
+            sources: ["Targets/\(name)/Sources/**"],
+            resources: [],
+            dependencies: []
+        )
+        let tests = Target(
+            name: "\(name)Tests",
+            platform: platform,
+            product: .unitTests,
+            bundleId: "sju.\(name)Tests",
+            infoPlist: .default,
+            sources: ["Targets/\(name)/Tests/**"],
+            resources: [],
+            dependencies: [.target(name: name)]
+        )
         return [sources, tests]
     }
-
+    
     /// Helper function to create the application target and the unit test target.
     private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
         let platform: Platform = platform
@@ -60,6 +66,7 @@ extension Project {
             platform: platform,
             product: .app,
             bundleId: "sju.\(name)",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: [.iphone, .ipad]),
             infoPlist: .file(path: .relativeToRoot("Targets/\(name)/Sources/Config/D3N-Info.plist")),
             sources: ["Targets/\(name)/Sources/**"],
             resources: ["Targets/\(name)/Resources/**"],
@@ -78,7 +85,6 @@ extension Project {
                 ]
             )
         )
-
         let testTarget = Target(
             name: "\(name)Tests",
             platform: platform,
@@ -88,7 +94,7 @@ extension Project {
             sources: ["Targets/\(name)/Tests/**"],
             dependencies: [
                 .target(name: "\(name)")
-        ])
+            ])
         return [mainTarget, testTarget]
     }
 }
