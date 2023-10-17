@@ -16,4 +16,12 @@ public extension Color {
     static var background: Self {
         return Color(uiColor: .systemBackground)
     }
+    
+    static var systemGray5: Self {
+        return Color(uiColor: .systemGray5)
+    }
+    
+    static var systemGray6: Self {
+        return Color(uiColor: .systemGray6)
+    }
 }

@@ -20,13 +20,14 @@ public struct QuizListView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack {
-                quizListItemView()
-                    .padding()
+            VStack(alignment: .leading) {
+                titleView(current: viewStore.state.currentIndex, whole: viewStore.state.quizListItems.count)
+                
+                quizListItemView(tab: viewStore.binding(get: \.currentTab, send: QuizListStore.Action.setTab))
                 
                 Spacer()
                 
-                MinimalButton(title: "완료", isActive: false, action: {
+                MinimalButton(title: "완료", isActive: viewStore.state.isActive, action: {
                     viewStore.send(.solvedButtonTapped)
                 })
                 .padding()
@@ -34,10 +35,18 @@ public struct QuizListView: View {
         }
     }
     
-    private func quizListItemView() -> some View {
-        TabView {
+    private func titleView(current: Int, whole: Int) -> some View {
+        Text("\(current + 1) / \(whole)")
+            .font(.title)
+            .fontWeight(.semibold)
+            .padding([.top, .horizontal])
+    }
+    
+    private func quizListItemView(tab: Binding<UUID>) -> some View {
+        TabView(selection: tab) {
             ForEachStore(self.store.scope(state: \.quizListItems, action: QuizListStore.Action.quizListItems(id:action:))) {
                 QuizListItemCellView(store: $0)
+                    .padding(.horizontal)
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))

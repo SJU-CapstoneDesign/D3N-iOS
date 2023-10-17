@@ -52,7 +52,7 @@ public struct QuizResultItemCellView: View {
                     Text(choice)
                 }, icon: {
                     quizResultItemImage(
-                        current: index + 1,
+                        current: index,
                         answer: viewStore.state.quizEntity.answer,
                         userAnswer: viewStore.state.quizEntity.userAnswer ?? 0
                     )
