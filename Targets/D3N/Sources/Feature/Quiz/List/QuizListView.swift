@@ -35,10 +35,11 @@ public struct QuizListView: View {
     }
     
     private func quizListItemView() -> some View {
-        VStack(spacing: 10) {
+        TabView {
             ForEachStore(self.store.scope(state: \.quizListItems, action: QuizListStore.Action.quizListItems(id:action:))) {
                 QuizListItemCellView(store: $0)
             }
         }
+        .tabViewStyle(.page(indexDisplayMode: .never))
     }
 }

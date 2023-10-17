@@ -20,7 +20,7 @@ public struct QuizListItemCellView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack {
+            VStack(spacing: 15) {
                 titleView(viewStore: viewStore)
                 
                 choiceListItemView()
@@ -33,6 +33,12 @@ public struct QuizListItemCellView: View {
                     style: .continuous
                 )
             )
+        }
+    }
+    
+    private func headerView(viewStore: ViewStoreOf<QuizListItemCellStore>) -> some View {
+        HStack {
+            Text("")
         }
     }
     
@@ -49,8 +55,10 @@ public struct QuizListItemCellView: View {
     }
     
     private func choiceListItemView() -> some View {
-        ForEachStore(self.store.scope(state: \.choiceListItems, action: QuizListItemCellStore.Action.choiceListItems(id:action:))) {
-            ChoiceListItemCellView(store: $0)
+        VStack(spacing: 10) {
+            ForEachStore(self.store.scope(state: \.choiceListItems, action: QuizListItemCellStore.Action.choiceListItems(id:action:))) {
+                ChoiceListItemCellView(store: $0)
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ public struct ChoiceListItemCellView: View {
                     )
                 })
                 .font(.subheadline)
-                .foregroundStyle(.black)
+                .foregroundStyle(.foreground)
                 
                 Spacer()
             }
