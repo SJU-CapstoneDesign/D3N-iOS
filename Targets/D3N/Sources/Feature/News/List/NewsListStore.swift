@@ -61,6 +61,7 @@ public struct NewsListStore: Reducer {
             case let .fetchNewsListResponse(.success(newsEntityList)):
                 let newsListItems = state.makeNewsListItems(from: newsEntityList)
                 state.newsListItems.append(contentsOf: newsListItems)
+                state.pageIndex += 1
                 return .none
                 
             case let .newsListItems(id: id, action: .delegate(action)):
