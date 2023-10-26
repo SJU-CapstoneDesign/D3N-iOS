@@ -17,7 +17,7 @@ struct RootStore: Reducer {
         
         init() {
             self = .onboarding(.init())
-            self = .mainTab(.init())
+//            self = .mainTab(.init())
         }
     }
     

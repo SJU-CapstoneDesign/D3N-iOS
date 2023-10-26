@@ -17,11 +17,13 @@ public struct OnboardingSignUpStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
+        
+        case signInWithAppleButtonTapped
 
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case select(NewsEntity)
+            case signIn
         }
     }
     
@@ -30,6 +32,9 @@ public struct OnboardingSignUpStore: Reducer {
             switch action {
             case .onAppear:
                 return .none
+                
+            case .signInWithAppleButtonTapped:
+                return .send(.delegate(.signIn))
                 
             default:
                 return .none

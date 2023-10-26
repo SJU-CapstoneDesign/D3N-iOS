@@ -54,6 +54,13 @@ public struct OnboardingNavigationStackStore: Reducer {
             case .onAppear:
                 return .none
                 
+            case let .signUp(.delegate(action)):
+                switch action {
+                case .signIn:
+                    state.path.append(.nickname(.init()))
+                    return .none
+                }
+                
             default:
                 return .none
             }

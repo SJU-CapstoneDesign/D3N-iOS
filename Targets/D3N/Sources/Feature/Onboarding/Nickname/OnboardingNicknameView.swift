@@ -12,13 +12,45 @@ import ComposableArchitecture
 
 struct OnboardingNicknameView: View {
     let store: StoreOf<OnboardingNicknameStore>
+    @FocusState var focus: OnboardingNicknameStore.State.Field?
+    
+    init(store: StoreOf<OnboardingNicknameStore>) {
+        self.store = store
+    }
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack {
+            VStack(alignment: .leading) {
                 Text("닉네임을 입력해주세요.")
-                    .font(.largeTitle)
+                    .font(.title)
+                    .fontWeight(.bold)
+                
+                TextField("닉네임", text: viewStore.$nickname)
+                    .focused(
+                        self.$focus,
+                        equals: .nickname
+                    )
+                    .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            HStack {
+                                Spacer()
+                                
+                                Button("완료") {
+                                    viewStore.send(.confirmButtonTapped)
+                                }
+                            }
+                        }
+                    }
+                    .onAppear {
+                        viewStore.send(.onAppear)
+                    }
+                
+                Spacer()
             }
+            .navigationBarBackButtonHidden()
+            .padding()
+            .padding(.vertical, 40)
+            .bind(viewStore.$focus, to: self.$focus)
         }
     }
 }
