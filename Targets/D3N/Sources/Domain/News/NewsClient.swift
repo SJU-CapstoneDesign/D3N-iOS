@@ -11,7 +11,7 @@ import Foundation
 import ComposableArchitecture
 import Moya
 
-public enum NewsError: Error {
+public enum NewsError: Error, Equatable {
     case no
 }
 

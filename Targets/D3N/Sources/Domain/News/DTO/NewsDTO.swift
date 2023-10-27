@@ -15,6 +15,9 @@ struct NewsDTO: Codable {
     let title: String
     let summary: String
     let url: String
+    let mediaCompanyId: String
+    let mediaCompanyLogo: String
+    let mediaCompanyName: String
     
     func toDomain() -> NewsEntity {
         return .init(
@@ -23,7 +26,10 @@ struct NewsDTO: Codable {
             type: self.newsType,
             title: self.title,
             summary: self.summary,
-            url: self.url
+            url: self.url,
+            mediaCompanyId: self.mediaCompanyId,
+            mediaCompanyLogo: self.mediaCompanyLogo,
+            mediaCompanyName: self.mediaCompanyName
         )
     }
 }

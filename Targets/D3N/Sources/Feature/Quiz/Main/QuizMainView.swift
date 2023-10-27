@@ -29,12 +29,10 @@ public struct QuizMainView: View {
                     HStack {
                         Spacer()
                         
-                        Button(action: {
+                        Button("풀기", action: {
                             viewStore.send(.solveButtonTapped)
-                        }, label: {
-                            Label("풀기", systemImage: "pencil")
                         })
-                        .buttonStyle(.borderedProminent)
+                        .minimalBackgroundStyle()
                     }
                 }
                 .padding()
