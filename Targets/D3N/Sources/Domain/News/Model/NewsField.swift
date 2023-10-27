@@ -19,5 +19,5 @@ public enum NewsField: String, Codable {
     case sports = "SPORTS"
     case it = "IT"
     case science = "SCIENCE"
-    case entertainment = "ENTERTAINMENT"
+    case entertainments = "ENTERTAINMENTS"
 }

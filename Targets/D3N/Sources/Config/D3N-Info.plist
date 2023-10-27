@@ -26,9 +26,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2</string>
+	<string>2.3</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>2.3</string>
 	<key>CFBundleDisplayName</key>
 	<string>Daily3News</string>
 	<key>CFBundleName</key>

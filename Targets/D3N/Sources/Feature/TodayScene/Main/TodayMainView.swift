@@ -13,6 +13,7 @@ import ComposableArchitecture
 
 public struct TodayMainView: View {
     let store: StoreOf<TodayMainStore>
+    @State private var isPressing = false
     
     public init(store: StoreOf<TodayMainStore>) {
         self.store = store
@@ -62,5 +63,20 @@ public struct TodayMainView: View {
         .cornerRadius(20)
         .clipped()
         .shadow(color: Color(uiColor: .systemGray5), radius: 20)
+        .blur(radius: isPressing ? 3 : 0)
+        .scaleEffect(isPressing ? 1.05 : 1.0)
+        .gesture(
+            LongPressGesture(minimumDuration: 0.01)
+                .onChanged { _ in
+                    withAnimation (.easeInOut(duration: 0.5)){
+                        isPressing = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation (.easeInOut(duration: 0.2)){
+                            isPressing = false
+                    }
+                }
+            }
+        )
     }
 }
