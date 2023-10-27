@@ -70,6 +70,7 @@ extension Project {
             infoPlist: .file(path: .relativeToRoot("Targets/\(name)/Sources/Config/D3N-Info.plist")),
             sources: ["Targets/\(name)/Sources/**"],
             resources: ["Targets/\(name)/Resources/**"],
+            entitlements: .file(path: .relativeToRoot("D3N.entitlements")),
             dependencies: dependencies,
             settings: .settings(
                 base: SettingsDictionary().otherLinkerFlags(["-ObjC"]),

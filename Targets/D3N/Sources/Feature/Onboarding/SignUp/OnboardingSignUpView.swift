@@ -98,9 +98,9 @@ public struct OnboardingSignUpView: View {
                 })
                 .frame(height: 50, alignment: .center)
                 .padding()
-                .onTapGesture {
-                    viewStore.send(.signInWithAppleButtonTapped)
-                }
+//                .onTapGesture {
+//                    viewStore.send(.signInWithAppleButtonTapped)
+//                }
             }
         }
     }
