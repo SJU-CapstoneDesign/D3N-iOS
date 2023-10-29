@@ -14,11 +14,15 @@ import ComposableArchitecture
 public struct TodayMainView: View {
     let store: StoreOf<TodayMainStore>
     @State private var isPressing = false
-    @State private var isCompleted = false
+    
+    public func toggleIsPressing() {
+        withAnimation(.easeOut(duration: 0.3)){
+            isPressing.toggle()
+        }
+    }
     
     public init(store: StoreOf<TodayMainStore>) {
         self.store = store
-        isPressing = false
     }
     
     public var body: some View {
@@ -38,52 +42,56 @@ public struct TodayMainView: View {
     
     private func todayNewsView(viewStore: ViewStoreOf<TodayMainStore>) -> some View {
         VStack(alignment: .leading) {
-            Text("최신 뉴스를 가져왔어요")
-                .font(.subheadline)
-                .foregroundStyle(.gray)
-                .fontWeight(.semibold)
-            
-            HStack {
-                Text("오늘의 뉴스 3 문제")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                
-                Spacer()
-                
-                Button("전체보기", action: {
-                    viewStore.send(.allNewsButtonTapped)
-                })
+            VStack(alignment: .leading){
+                    Text("최신 뉴스를 가져왔어요")
+                        .font(.subheadline)
+                        .foregroundStyle(.gray)
+                        .fontWeight(.semibold)
+                    
+                    HStack {
+                        Text("오늘의 뉴스 3 문제")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                        
+                    Spacer()
+                        
+                    Button("전체보기", action: {
+                        viewStore.send(.allNewsButtonTapped)
+                        }
+                    )
+                }
             }
-            
-            ForEachStore(self.store.scope(state: \.newsListItems, action: TodayMainStore.Action.newsListItems(id:action:))) {
-                NewsListItemCellView(store: $0)
-                    .padding(.vertical, 5)
+            .onTapGesture {
+                viewStore.send(.allNewsButtonTapped)
+                isPressing = false
             }
+            .onLongPressGesture(minimumDuration: .infinity,
+                                pressing: { pressing in
+                if pressing {
+                    withAnimation(.easeOut(duration: 0.3)){
+                        isPressing = pressing
+                    }
+                }
+                if !pressing{
+                    withAnimation(.easeOut(duration: 0.3)){
+                        isPressing = pressing
+                    }
+                }
+            }, perform: {
+                //TODO: 꾹 눌렀을 때 동작 추가
+                }
+            )
+            
+                ForEachStore(self.store.scope(state: \.newsListItems, action: TodayMainStore.Action.newsListItems(id:action:))) {
+                    NewsListItemCellView(store: $0)
+                        .padding(.vertical, 5)
+                }
         }
         .padding()
         .background(Color.white)
         .cornerRadius(20)
         .clipped()
         .shadow(color: Color(uiColor: .systemGray5), radius: 20)
-        .blur(radius: isPressing ? 3 : 0)
-        .scaleEffect(isPressing ? 1.05 : 1.0)
-        .simultaneousGesture(
-            LongPressGesture()
-                .onChanged{ _ in
-                    withAnimation {
-                        isPressing = true
-                    }
-                }
-                .onEnded { _ in
-                    withAnimation {
-                        isCompleted = true
-                        isPressing = false
-                    }
-                }
-        )
-        .simultaneousGesture(TapGesture().onEnded {
-            viewStore.send(.allNewsButtonTapped)
-            isPressing = false
-        })
+        .scaleEffect(isPressing ? 0.95 : 1.0)
     }
 }
