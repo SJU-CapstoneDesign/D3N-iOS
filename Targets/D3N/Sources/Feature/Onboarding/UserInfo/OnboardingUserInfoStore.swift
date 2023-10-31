@@ -13,7 +13,7 @@ import ComposableArchitecture
 public struct OnboardingUserInfoStore: Reducer {
     public struct State: Equatable {
         @BindingState var focus: Field? = .nickname
-        @BindingState var nickname: String = ""
+        @BindingState var date: Date = Date()
         
         public init() { }
         
@@ -45,10 +45,6 @@ public struct OnboardingUserInfoStore: Reducer {
                 return .none
                 // 닉네임, 생년, 성별, 관심카테고리
             case .confirmButtonTapped:
-                if !state.nickname.isEmpty {
-                    state.focus = nil
-                    return .send(.delegate(.confirm(state.nickname)))
-                }
                 return .none
                 
             default:

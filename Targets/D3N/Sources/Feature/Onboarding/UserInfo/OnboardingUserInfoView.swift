@@ -24,6 +24,10 @@ struct OnboardingUserInfoView: View {
                     .font(.title)
                     .fontWeight(.bold)
                 
+                DatePicker(selection: viewStore.$date) {
+                    
+                }
+                
                 Spacer()
             }
             .navigationBarBackButtonHidden()

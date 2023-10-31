@@ -87,7 +87,10 @@ public struct OnboardingSignUpView: View {
                             let email = appleIDCredential.email
                             let IdentityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
                             let AuthorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8)
-                            print(IdentityToken, AuthorizationCode)
+                            print("=======IdentityToken======")
+                            print(IdentityToken!)
+                            print("=======AuthorizationCode======")
+                            print(AuthorizationCode!)
                         default:
                             break
                         }
@@ -98,9 +101,9 @@ public struct OnboardingSignUpView: View {
                 })
                 .frame(height: 50, alignment: .center)
                 .padding()
-//                .onTapGesture {
-//                    viewStore.send(.signInWithAppleButtonTapped)
-//                }
+                .onTapGesture {
+                    viewStore.send(.signInWithAppleButtonTapped)
+                }
             }
         }
     }

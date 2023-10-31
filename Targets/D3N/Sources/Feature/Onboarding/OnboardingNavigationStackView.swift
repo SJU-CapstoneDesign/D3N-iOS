@@ -33,6 +33,12 @@ public struct OnboardingNavigationStackView: View {
                      action: OnboardingNavigationStackStore.Path.Action.nickname,
                      then: OnboardingNicknameView.init(store:)
                 )
+            case .userInfo:
+                CaseLet(
+                    /OnboardingNavigationStackStore.Path.State.userInfo,
+                     action: OnboardingNavigationStackStore.Path.Action.userInfo,
+                     then: OnboardingUserInfoView.init(store:)
+                )
             }
         }
     }

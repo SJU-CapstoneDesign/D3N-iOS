@@ -33,15 +33,20 @@ public struct OnboardingNavigationStackStore: Reducer {
     public struct Path: Reducer {
         public enum State: Equatable {
             case nickname(OnboardingNicknameStore.State)
+            case userInfo(OnboardingUserInfoStore.State)
         }
         
         public enum Action: Equatable {
             case nickname(OnboardingNicknameStore.Action)
+            case userInfo(OnboardingUserInfoStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
             Scope(state: /State.nickname, action: /Action.nickname) {
                 OnboardingNicknameStore()
+            }
+            Scope(state: /State.userInfo, action: /Action.userInfo) {
+                OnboardingUserInfoStore()
             }
         }
     }
@@ -58,6 +63,13 @@ public struct OnboardingNavigationStackStore: Reducer {
                 switch action {
                 case .signIn:
                     state.path.append(.nickname(.init()))
+                    return .none
+                }
+                
+            case let .path(.element(id: _, action: .nickname(.delegate(action)))):
+                switch action {
+                case .confirm:
+                    state.path.append(.userInfo(.init()))
                     return .none
                 }
                 
