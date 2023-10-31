@@ -43,7 +43,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-### Objective-C ###Swift.gitignore
+### Objective-C ###
+Swift.gitignore
 xcuserdata/
 *.xcscmblueprint
 *.xccheckout
@@ -122,3 +123,4 @@ Derived/
 master.key
 *.package.resolved
 GoogleService-Info.plist
+Targets/D3N/Sources/Config

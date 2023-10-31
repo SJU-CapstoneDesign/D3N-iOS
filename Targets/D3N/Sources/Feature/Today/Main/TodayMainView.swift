@@ -66,21 +66,14 @@ public struct TodayMainView: View {
                 isPressing = false
             }
             .onLongPressGesture(minimumDuration: .infinity,
-                                pressing: { pressing in
-                if pressing {
-                    withAnimation(.easeOut(duration: 0.3)){
-                        isPressing = pressing
-                    }
+                perform: {
+                    //TODO: 꾹 눌렀을 때 동작 추가
                 }
-                if !pressing{
-                    withAnimation(.easeOut(duration: 0.3)){
-                        isPressing = pressing
-                    }
+            ) { pressing in
+                withAnimation(.easeOut(duration: 0.3)){
+                    isPressing = pressing
                 }
-            }, perform: {
-                //TODO: 꾹 눌렀을 때 동작 추가
-                }
-            )
+            }
             
                 ForEachStore(self.store.scope(state: \.newsListItems, action: TodayMainStore.Action.newsListItems(id:action:))) {
                     NewsListItemCellView(store: $0)
