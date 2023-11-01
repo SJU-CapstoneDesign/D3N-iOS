@@ -123,4 +123,4 @@ Derived/
 master.key
 *.package.resolved
 GoogleService-Info.plist
-Targets/D3N/Sources/Config
+*.xcconfig
