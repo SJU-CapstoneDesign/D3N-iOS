@@ -118,6 +118,7 @@ Tuist/Dependencies
 Derived/
 *.xcworkspace
 *.xcodeproj
+*.xcconfig
 *.p12
 master.key
 *.package.resolved
