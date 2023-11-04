@@ -16,13 +16,13 @@ public enum NewsError: Error, Equatable {
 }
 
 struct NewsClient {
-    var fetchNewsList: (Int, Int) async -> Result<[NewsEntity], NewsError>
+    var fetchNewsList: (Int, Int) async -> Result<[NewsEntity], D3NAPIError>
     var fetchQuizList: (Int) async -> Result<[QuizEntity], NewsError>
 }
 
 extension NewsClient: TestDependencyKey {
     static let previewValue = Self(
-        fetchNewsList: { _, _ in .failure(.no) },
+        fetchNewsList: { _, _ in .failure(.none) },
         fetchQuizList: { _ in .failure(.no) }
     )
     
@@ -44,16 +44,20 @@ extension DependencyValues {
 extension NewsClient: DependencyKey {
     static let liveValue = NewsClient(
         fetchNewsList: { pageIndex, pageSize in
-            let provider = MoyaProvider<NewsService>(plugins: [NetworkLoggerPlugin()])
-            let response = await provider.request(.fetchNewsList(pageIndex: pageIndex, pageSize: pageSize))
-            switch response {
-            case .success(let success):
-                let model = try? JSONDecoder().decode(PageModel<NewsDTO>.self, from: success.data)
-                let news = model.map(\.result)?.map(\.content)?.map { $0.toDomain() } ?? []
-                return .success(news)
-            case .failure(let failure):
-                return .failure(.no)
-            }
+            let target: TargetType = NewsService.fetchNewsList(pageIndex: pageIndex, pageSize: pageSize)
+            let response: Result<PageResult<NewsDTO>, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+//            let provider = MoyaProvider<NewsService>(plugins: [NetworkLoggerPlugin()])
+//            let response = await provider.request(.fetchNewsList(pageIndex: pageIndex, pageSize: pageSize))
+//            let tt =
+            return response.map(\.content).map { $0.map { $0.toDomain() } }
+//            switch response {
+//            case .success(let success):
+//                let model = try? JSONDecoder().decode(PageModel<NewsDTO>.self, from: success.data)
+//                let news = model.map(\.result)?.map(\.content)?.map { $0.toDomain() } ?? []
+//                return .success(news)
+//            case .failure(let failure):
+//                return .failure(.no)
+//            }
         },
         fetchQuizList: { newsId in
             let provider = MoyaProvider<NewsService>(plugins: [NetworkLoggerPlugin()])

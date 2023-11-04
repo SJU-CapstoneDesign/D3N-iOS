@@ -8,18 +8,28 @@
 
 import Foundation
 
-public struct LocalStorageRepository {
-    enum Keys: String {
-        case alreadySolvedNewsIds
+public struct LocalStorageManager {
+    public enum Key: String {
+        case accessToken
+        case refreshToken
     }
     
-    public static func saveAlreadySolvedNewsIds(ids: [Int]) {
-        var newIds = loadAlreadySolvedNewsIds() + ids
-        UserDefaults.standard.set(newIds, forKey: Keys.alreadySolvedNewsIds.rawValue)
+    public static func save(_ key: Key, value: String) {
+        UserDefaults.standard.set(value, forKey: key.rawValue)
     }
     
-    public static func loadAlreadySolvedNewsIds() -> [Int] {
-        let ids = UserDefaults.standard.object(forKey: Keys.alreadySolvedNewsIds.rawValue) as? [Int]
-        return ids ?? []
+    public static func load(_ key: Key) -> String {
+        let value = UserDefaults.standard.object(forKey: key.rawValue) as? String
+        return value ?? ""
     }
+    
+//    public static func saveAlreadySolvedNewsIds(ids: [Int]) {
+//        var newIds = loadAlreadySolvedNewsIds() + ids
+//        UserDefaults.standard.set(newIds, forKey: Keys.alreadySolvedNewsIds.rawValue)
+//    }
+//    
+//    public static func loadAlreadySolvedNewsIds() -> [Int] {
+//        let ids = UserDefaults.standard.object(forKey: Keys.alreadySolvedNewsIds.rawValue) as? [Int]
+//        return ids ?? []
+//    }
 }

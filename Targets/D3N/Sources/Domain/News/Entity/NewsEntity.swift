@@ -20,7 +20,7 @@ public struct NewsEntity: Equatable {
     let mediaCompanyName: String
     
     //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
-    let isAlreadySolved: Bool
+    let isAlreadySolved: Bool = false
     
     init(
         id: Int,
@@ -44,6 +44,6 @@ public struct NewsEntity: Equatable {
         self.mediaCompanyName = mediaCompanyName
         
         //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
-        self.isAlreadySolved = LocalStorageRepository.loadAlreadySolvedNewsIds().contains(id)
+//        self.isAlreadySolved = LocalStorageRepository.loadAlreadySolvedNewsIds().contains(id)
     }
 }
