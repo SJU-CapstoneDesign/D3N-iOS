@@ -50,13 +50,8 @@ public struct OnboardingSignUpView: View {
                 SignInWithAppleButton(onRequest: {_ in }, onCompletion: { result in
                     switch result {
                     case .success(let authResults):
-                        print("Apple Login Successful")
                         switch authResults.credential{
                         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                            let UserIdentifier = appleIDCredential.user
-                            let fullName = appleIDCredential.fullName
-                            let name =  (fullName?.familyName ?? "") + (fullName?.givenName ?? "")
-                            let email = appleIDCredential.email
                             let idToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
                             let code = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
                             
@@ -66,7 +61,6 @@ public struct OnboardingSignUpView: View {
                         }
                     case .failure(let error):
                         print(error.localizedDescription)
-                        print("error")
                     }
                 })
                 .frame(height: 50, alignment: .center)
