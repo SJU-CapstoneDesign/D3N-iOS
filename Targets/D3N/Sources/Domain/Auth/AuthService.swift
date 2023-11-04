@@ -13,6 +13,7 @@ public enum AuthService {
     case appleLogin(code: String, idToken: String)
     case appleUnlink
     case refresh
+    case userOnboard(nickname: String, gender: Gender, birthYear: Int, categoryList: [NewsField])
 }
 
 extension AuthService: TargetType {
@@ -23,6 +24,7 @@ extension AuthService: TargetType {
         case .appleLogin: return "/apple/login"
         case .appleUnlink: return "/apple/unlink"
         case .refresh: return "/refresh"
+        case .userOnboard: return "/user/onboard"
         }
     }
     public var method: Moya.Method {
@@ -30,6 +32,7 @@ extension AuthService: TargetType {
         case .appleLogin: return .get
         case .appleUnlink: return .delete
         case .refresh: return .get
+        case .userOnboard: return .post
         }
     }
     public var task: Task {
@@ -40,6 +43,8 @@ extension AuthService: TargetType {
             return .requestPlain
         case .refresh:
             return .requestPlain
+        case let .userOnboard(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList):
+            return .requestJSONEncodable(UserOnboardRequestDTO(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList))
         }
     }
     

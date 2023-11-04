@@ -14,7 +14,12 @@ struct AppleLoginResponseDTO: Codable {
 }
 
 extension AppleLoginResponseDTO {
-    func toEntity() -> AuthEntity {
+    func toEntity(isShouldSaveAtLocalStorage: Bool = true) -> AuthEntity {
+        if isShouldSaveAtLocalStorage {
+            LocalStorageManager.save(.accessToken, value: self.appToken)
+            LocalStorageManager.save(.refreshToken, value: self.refreshToken)
+        }
+        
         return .init(
             accessToken: self.appToken,
             refreshToken: self.refreshToken
