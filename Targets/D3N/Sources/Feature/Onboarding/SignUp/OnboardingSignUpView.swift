@@ -53,17 +53,14 @@ public struct OnboardingSignUpView: View {
                         print("Apple Login Successful")
                         switch authResults.credential{
                         case let appleIDCredential as ASAuthorizationAppleIDCredential:
-                            // 계정 정보 가져오기
                             let UserIdentifier = appleIDCredential.user
                             let fullName = appleIDCredential.fullName
                             let name =  (fullName?.familyName ?? "") + (fullName?.givenName ?? "")
                             let email = appleIDCredential.email
-                            let IdentityToken = String(data: appleIDCredential.identityToken!, encoding: .utf8)
-                            let AuthorizationCode = String(data: appleIDCredential.authorizationCode!, encoding: .utf8)
-                            print("=======IdentityToken======")
-                            print(IdentityToken!)
-                            print("=======AuthorizationCode======")
-                            print(AuthorizationCode!)
+                            let idToken = String(data: appleIDCredential.identityToken!, encoding: .utf8) ?? ""
+                            let code = String(data: appleIDCredential.authorizationCode!, encoding: .utf8) ?? ""
+                            
+                            viewStore.send(.signIn(code: code, idToken: idToken))
                         default:
                             break
                         }
@@ -74,9 +71,6 @@ public struct OnboardingSignUpView: View {
                 })
                 .frame(height: 50, alignment: .center)
                 .padding()
-                .onTapGesture {
-                    viewStore.send(.signInWithAppleButtonTapped)
-                }
             }
         }
     }

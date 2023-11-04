@@ -17,19 +17,19 @@ public enum AuthService {
 }
 
 extension AuthService: TargetType {
-    public var baseURL: URL { URL(string: Environment.baseURL + "/auth")! }
+    public var baseURL: URL { URL(string: Environment.baseURL)! }
     
     public var path: String {
         switch self {
-        case .appleLogin: return "/apple/login"
-        case .appleUnlink: return "/apple/unlink"
-        case .refresh: return "/refresh"
-        case .userOnboard: return "/user/onboard"
+        case .appleLogin: return "auth/apple/login"
+        case .appleUnlink: return "auth/apple/unlink"
+        case .refresh: return "auth/refresh"
+        case .userOnboard: return "user/onboard"
         }
     }
     public var method: Moya.Method {
         switch self {
-        case .appleLogin: return .get
+        case .appleLogin: return .post
         case .appleUnlink: return .delete
         case .refresh: return .get
         case .userOnboard: return .post

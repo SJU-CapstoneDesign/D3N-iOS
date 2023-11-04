@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct AuthEntity: Codable {
+public struct AuthEntity: Codable, Equatable {
     let accessToken: String
     let refreshToken: String
 }

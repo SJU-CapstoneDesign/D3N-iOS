@@ -10,7 +10,6 @@ import Foundation
 
 import Foundation
 
-// MARK: - Welcome
 struct UserOnboardResponseDTO: Codable {
     let createdAt, modifiedAt, id, nickname: String
     let gender: Gender
@@ -21,7 +20,17 @@ struct UserOnboardResponseDTO: Codable {
     let solvedQuizList: [UserOnboardResponseSolvedQuizDTO]
 }
 
-struct UserOnboardResponseSolvedQuizDTO: Codable {
+extension UserOnboardResponseDTO {
+    func toEntity() -> UserEntity {
+        return .init(
+            nickname: self.nickname,
+            gender: self.gender,
+            birthYear: self.birthYear,
+            categoryList: self.categoryList)
+    }
+}
+
+internal struct UserOnboardResponseSolvedQuizDTO: Codable {
     let createdAt, modifiedAt: String
     let id: Int
     let user: String

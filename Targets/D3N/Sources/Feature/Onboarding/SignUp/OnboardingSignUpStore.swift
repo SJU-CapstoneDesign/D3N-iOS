@@ -18,7 +18,10 @@ public struct OnboardingSignUpStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case signInWithAppleButtonTapped
+        case signIn(code: String, idToken: String)
+        
+        case appleLoginRequest(code: String, idToken: String)
+        case appleLoginResponse(Result<AuthEntity, D3NAPIError>)
 
         case delegate(Delegate)
         
@@ -27,13 +30,24 @@ public struct OnboardingSignUpStore: Reducer {
         }
     }
     
+    @Dependency(\.authClient) var authClient
+    
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
                 return .none
                 
-            case .signInWithAppleButtonTapped:
+            case let .signIn(code: code, idToken: idToken):
+                return .send(.appleLoginRequest(code: code, idToken: idToken))
+                
+            case let .appleLoginRequest(code: code, idToken: idToken):
+                return .run { send in
+                    let response = await authClient.appleLogin(code, idToken)
+                    await send(.appleLoginResponse(response))
+                }
+                
+            case .appleLoginResponse(.success):
                 return .send(.delegate(.signIn))
                 
             default:
