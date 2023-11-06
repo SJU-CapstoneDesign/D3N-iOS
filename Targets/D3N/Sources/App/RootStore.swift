@@ -25,6 +25,8 @@ struct RootStore: Reducer {
     }
     
     enum Action: Equatable {
+        case onAppear
+        
         case onboarding(OnboardingNavigationStackStore.Action)
         case mainTab(MainTabStore.Action)
     }

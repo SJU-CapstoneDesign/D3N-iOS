@@ -18,7 +18,7 @@ struct RootApp: App {
         WindowGroup {
             RootView(
                 store: Store(initialState: RootStore.State()) {
-                    RootStore()
+                    RootStore()._printChanges()
                 }
             )
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in

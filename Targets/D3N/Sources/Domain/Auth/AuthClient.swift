@@ -13,7 +13,7 @@ import Moya
 
 struct AuthClient {
     var appleLogin: (_ code: String, _ idToken: String) async -> Result<AuthEntity, D3NAPIError>
-    var appleUnlink: () async -> Result<AuthEntity, Error>
+    var appleUnlink: () async -> Result<Bool, D3NAPIError>
     var refresh: () async -> Result<AuthEntity, Error>
 }
 
@@ -22,7 +22,7 @@ extension AuthClient: TestDependencyKey {
         appleLogin: { code, idToken in
             return .success(.init(accessToken: "", refreshToken: ""))
         },
-        appleUnlink: { .init(.success(.init(accessToken: "", refreshToken: ""))) },
+        appleUnlink: { .success(.init(true)) },
         refresh: { .init(.success(.init(accessToken: "", refreshToken: ""))) }
     )
     
@@ -54,11 +54,20 @@ extension AuthClient: DependencyKey {
             }
         },
         appleUnlink: {
-            return .success(.init(accessToken: "", refreshToken: ""))
+            let target: TargetType = AuthService.appleUnlink
+            let response: Result<EmptyDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+
+            LocalStorageManager.deleteAll()
             
+            return response.map { dto in
+                LocalStorageManager.deleteAll()
+                return true
+            }
         },
         refresh: {
             return .success(.init(accessToken: "", refreshToken: ""))
         }
     )
 }
+
+public struct EmptyDTO: Codable {}

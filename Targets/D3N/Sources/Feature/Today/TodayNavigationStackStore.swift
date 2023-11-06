@@ -62,13 +62,18 @@ public struct TodayNavigationStackStore: Reducer {
         }
     }
     
+    @Dependency(\.authClient) var authClient
+    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .none
+                return .run { send in
+                    await authClient.appleUnlink()
+                }
+//                return .none
                 
             case let .main(.delegate(action)):
                 switch action {

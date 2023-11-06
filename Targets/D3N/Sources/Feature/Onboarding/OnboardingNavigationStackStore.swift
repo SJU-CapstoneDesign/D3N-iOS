@@ -131,7 +131,7 @@ public struct OnboardingNavigationStackStore: Reducer {
                 switch action {
                 case let .submit(newsFields):
                     state.newsFields = newsFields
-                    return .none
+                    return .send(.userOnboardRequest)
                 }
                 
             case .userOnboardNeededRequest:
