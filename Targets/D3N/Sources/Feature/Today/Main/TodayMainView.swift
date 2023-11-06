@@ -80,8 +80,8 @@ public struct TodayMainView: View {
                     isPressing = pressing
                 }
             }
-                ForEachStore(self.store.scope(state: \.newsListItems, action: TodayMainStore.Action.newsListItems(id:action:))) {
-                    NewsListItemCellView(store: $0)
+                ForEachStore(self.store.scope(state: \.todayListItems, action: TodayMainStore.Action.todayListItems(id:action:))) {
+                    TodayListItemCellView(store: $0)
                         .padding(.vertical, 5)
                 }
         }
