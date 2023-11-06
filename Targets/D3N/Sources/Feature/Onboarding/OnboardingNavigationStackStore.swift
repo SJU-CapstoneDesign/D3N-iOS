@@ -13,6 +13,15 @@ public struct OnboardingNavigationStackStore: Reducer {
         var signUp: OnboardingSignUpStore.State = .init()
         
         var path: StackState<Path.State> = .init()
+        
+        init() {
+            let accessToken: String? = LocalStorageManager.load(.accessToken)
+            let refreshToken: String? = LocalStorageManager.load(.refreshToken)
+            
+            if accessToken != nil && refreshToken != nil {
+                path.append(.nickname(.init()))
+            }
+        }
     }
     
     public enum Action: BindableAction, Equatable {

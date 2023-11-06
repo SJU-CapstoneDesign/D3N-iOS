@@ -39,7 +39,6 @@ extension DependencyValues {
     }
 }
 
-// MARK: - Live API implementation
 
 extension NewsClient: DependencyKey {
     static let liveValue = NewsClient(

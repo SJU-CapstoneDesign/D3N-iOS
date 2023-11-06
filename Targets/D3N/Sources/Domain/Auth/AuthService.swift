@@ -13,7 +13,6 @@ public enum AuthService {
     case appleLogin(code: String, idToken: String)
     case appleUnlink
     case refresh
-    case userOnboard(nickname: String, gender: Gender, birthYear: Int, categoryList: [NewsField])
 }
 
 extension AuthService: TargetType {
@@ -24,7 +23,6 @@ extension AuthService: TargetType {
         case .appleLogin: return "auth/apple/login"
         case .appleUnlink: return "auth/apple/unlink"
         case .refresh: return "auth/refresh"
-        case .userOnboard: return "user/onboard"
         }
     }
     public var method: Moya.Method {
@@ -32,7 +30,6 @@ extension AuthService: TargetType {
         case .appleLogin: return .post
         case .appleUnlink: return .delete
         case .refresh: return .get
-        case .userOnboard: return .post
         }
     }
     public var task: Task {
@@ -43,12 +40,11 @@ extension AuthService: TargetType {
             return .requestPlain
         case .refresh:
             return .requestPlain
-        case let .userOnboard(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList):
-            return .requestJSONEncodable(UserOnboardRequestDTO(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList))
         }
     }
     
     public var headers: [String: String]? {
-        return ["Authorization": "Bearer \(LocalStorageManager.load(.accessToken))"]
+        let accessToken: String = LocalStorageManager.load(.accessToken) ?? ""
+        return ["Authorization": "Bearer \(accessToken)"]
     }
 }
