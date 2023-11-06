@@ -35,4 +35,19 @@ public enum NewsField: String, Codable, CaseIterable {
         case .entertainments: "연예"
         }
     }
+    
+    var icon: D3NIcon {
+        switch self {
+        case .politics: return .init(systemImageName: "building.columns.fill", color: .brown)
+        case .economy: return .init(systemImageName: "banknote.fill", color: .yellow)
+        case .society: return .init(systemImageName: "building.columns.fill", color: .green)
+        case .culture: return .init(systemImageName: "building.columns.fill", color: .green)
+        case .life: return .init(systemImageName: "leaf.fill", color: .green)
+        case .global: return .init(systemImageName: "globe.europe.africa.fill", color: .yellow)
+        case .sports: return .init(systemImageName: "basketball.fill", color: .blue)
+        case .it: return .init(systemImageName: "building.columns.fill", color: .green)
+        case .science: return .init(systemImageName: "building.columns.fill", color: .green)
+        case .entertainments: return .init(systemImageName: "building.columns.fill", color: .green)
+        }
+    }
 }

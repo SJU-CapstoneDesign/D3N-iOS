@@ -31,6 +31,12 @@ public struct TodayMainView: View {
                 VStack {
                     todayNewsView(viewStore: viewStore)
                         .padding()
+                    
+                    LazyVGrid(columns: .init(repeating: .init(), count: 5)) {
+                        ForEach(NewsField.allCases, id: \.self) { newsField in
+                            newsField.icon
+                        }
+                    }
                 }
             }
             .onAppear {
