@@ -12,14 +12,17 @@ import ComposableArchitecture
 struct RootStore: Reducer {
 
     enum State: Equatable {
+        case onboarding(OnboardingNavigationStackStore.State)
         case mainTab(MainTabStore.State)
         
         init() {
-            self = .mainTab(.init())
+            self = .onboarding(.init())
+//            self = .mainTab(.init())
         }
     }
     
     enum Action: Equatable {
+        case onboarding(OnboardingNavigationStackStore.Action)
         case mainTab(MainTabStore.Action)
     }
     
@@ -29,7 +32,9 @@ struct RootStore: Reducer {
             default: return .none
             }
         }
-        
+        .ifCaseLet(/State.onboarding, action: /Action.onboarding) {
+            OnboardingNavigationStackStore()
+        }
         .ifCaseLet(/State.mainTab, action: /Action.mainTab) {
             MainTabStore()
         }

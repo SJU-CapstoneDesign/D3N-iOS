@@ -14,7 +14,6 @@ enum MainScene: Hashable {
 }
 
 struct MainTabStore: Reducer {
-
     struct State: Equatable {
         var currentScene: MainScene = .question
         

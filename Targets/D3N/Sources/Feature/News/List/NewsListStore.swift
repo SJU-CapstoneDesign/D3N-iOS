@@ -34,7 +34,7 @@ public struct NewsListStore: Reducer {
         case onAppear
         
         case fetchNewsListRequest
-        case fetchNewsListResponse(Result<[NewsEntity], NewsError>)
+        case fetchNewsListResponse(Result<[NewsEntity], D3NAPIError>)
         
         case newsListItems(id: NewsListItemCellStore.State.ID, action: NewsListItemCellStore.Action)
         case delegate(Delegate)

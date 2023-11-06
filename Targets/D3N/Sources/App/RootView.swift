@@ -15,6 +15,10 @@ struct RootView: View {
     var body: some View {
         SwitchStore(self.store) {
             switch $0 {
+            case .onboarding:
+                CaseLet(/RootStore.State.onboarding, action: RootStore.Action.onboarding) {
+                    OnboardingNavigationStackView(store: $0)
+                }
             case .mainTab:
                 CaseLet(/RootStore.State.mainTab, action: RootStore.Action.mainTab) {
                     MainTabView(store: $0)
