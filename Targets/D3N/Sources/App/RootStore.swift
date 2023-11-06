@@ -16,9 +16,7 @@ struct RootStore: Reducer {
         case mainTab(MainTabStore.State)
         
         init() {
-            let isOnBoardingNeeded: Bool? = LocalStorageManager.load(.isOnBoardingNeeded)
-
-            if isOnBoardingNeeded == nil {
+            if LocalStorageManager.load(.isOnBoardingNeeded) != false {
                 self = .onboarding(.init())
             } else {
                 self = .mainTab(.init())
@@ -34,7 +32,12 @@ struct RootStore: Reducer {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            default: return .none
+            case .onboarding(.delegate(.complete)):
+                state = .mainTab(.init())
+                return .none
+                
+            default:
+                return .none
             }
         }
         .ifCaseLet(/State.onboarding, action: /Action.onboarding) {

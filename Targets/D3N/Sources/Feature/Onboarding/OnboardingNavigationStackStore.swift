@@ -8,20 +8,16 @@
 
 import ComposableArchitecture
 
+/// isOnboardNeeded 가 false이거나 한번도 업데이트 되지 않았을때 실행되는 Flow 입니다.
+/// 엑세스토큰과 리프레시 토큰을 체크하고 없다면 signUp Flow를 타고, 서드파티 로그인을 탑니다.
+/// 로그인 이후 온보딩 필요여부를 체크하고 온보딩이 필요하다면, 온보딩을 진행하고 그렇지 않다면 메인 탭뷰로 이동합니다.
 public struct OnboardingNavigationStackStore: Reducer {
     public struct State: Equatable {
         var signUp: OnboardingSignUpStore.State = .init()
         
         var path: StackState<Path.State> = .init()
         
-        init() {
-            let accessToken: String? = LocalStorageManager.load(.accessToken)
-            let refreshToken: String? = LocalStorageManager.load(.refreshToken)
-            
-            if accessToken != nil && refreshToken != nil {
-                path.append(.nickname(.init()))
-            }
-        }
+        init() { }
     }
     
     public enum Action: BindableAction, Equatable {
@@ -31,6 +27,9 @@ public struct OnboardingNavigationStackStore: Reducer {
         
         case signUp(OnboardingSignUpStore.Action)
         case path(StackAction<Path.State, Path.Action>)
+        
+        case userOnboardNeededRequest
+        case userOnboardNeededResponse(Result<Bool, D3NAPIError>)
         
         case delegate(Delegate)
         
@@ -60,6 +59,8 @@ public struct OnboardingNavigationStackStore: Reducer {
         }
     }
     
+    @Dependency(\.userClient) var userClient
+    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         
@@ -71,8 +72,7 @@ public struct OnboardingNavigationStackStore: Reducer {
             case let .signUp(.delegate(action)):
                 switch action {
                 case .signIn:
-                    state.path.append(.nickname(.init()))
-                    return .none
+                    return .send(.userOnboardNeededRequest)
                 }
                 
             case let .path(.element(id: _, action: .nickname(.delegate(action)))):
@@ -81,6 +81,19 @@ public struct OnboardingNavigationStackStore: Reducer {
                     state.path.append(.userInfo(.init()))
                     return .none
                 }
+                
+            case .userOnboardNeededRequest:
+                return .run { send in
+                    await send(.userOnboardNeededResponse(await userClient.onboardNeeded()))
+                }
+                
+            case let .userOnboardNeededResponse(.success(isNeededOnboard)):
+                if isNeededOnboard {
+                    state.path.append(.nickname(.init()))
+                } else {
+                    return .send(.delegate(.complete))
+                }
+                return .none
                 
             default:
                 return .none

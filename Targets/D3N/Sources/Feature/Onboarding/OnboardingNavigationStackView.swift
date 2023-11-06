@@ -24,6 +24,9 @@ public struct OnboardingNavigationStackView: View {
         ) {
             WithViewStore(self.store, observe: { $0 }) { viewStore in
                 OnboardingSignUpView(store: self.store.scope(state: \.signUp, action: OnboardingNavigationStackStore.Action.signUp))
+                    .onAppear {
+                        viewStore.send(.onAppear)
+                    }
             }
         } destination: {
             switch $0 {
