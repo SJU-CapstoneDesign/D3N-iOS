@@ -1,8 +1,8 @@
 //
-//  OnboardingUserInfoStore.swift
+//  OnboardingBirthStore.swift
 //  D3N
 //
-//  Created by 송영모 on 10/26/23.
+//  Created by 송영모 on 11/6/23.
 //  Copyright © 2023 sju. All rights reserved.
 //
 
@@ -10,15 +10,12 @@ import Foundation
 
 import ComposableArchitecture
 
-public struct OnboardingUserInfoStore: Reducer {
+public struct OnboardingBirthStore: Reducer {
     public struct State: Equatable {
-        @BindingState var focus: Field? = .nickname
-        @BindingState var date: Date = Date()
+        var birthDate: Date?
         
-        public init() { }
-        
-        enum Field: Hashable {
-          case nickname
+        public init(birthDate: Date? = nil) {
+            self.birthDate = birthDate
         }
     }
     
@@ -26,12 +23,14 @@ public struct OnboardingUserInfoStore: Reducer {
         case binding(BindingAction<State>)
         case onAppear
 
-        case confirmButtonTapped
+        case setBirthDate(Date)
+        case birthDateButtonTapped
+        case comfirmButtonTapped
         
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case confirm(String)
+            case submit(Date)
         }
     }
     
@@ -40,12 +39,16 @@ public struct OnboardingUserInfoStore: Reducer {
         
         Reduce { state, action in
             switch action {
-            case .onAppear:
-                state.focus = .nickname
+            case let .setBirthDate(date):
+                state.birthDate = date
                 return .none
-                // 닉네임, 생년, 성별, 관심카테고리
-            case .confirmButtonTapped:
-                return .none
+                
+            case .comfirmButtonTapped:
+                if let date = state.birthDate {
+                    return .send(.delegate(.submit(date)))
+                } else {
+                    return .none
+                }
                 
             default:
                 return .none

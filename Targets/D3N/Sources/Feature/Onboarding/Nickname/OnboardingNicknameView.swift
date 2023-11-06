@@ -48,6 +48,8 @@ struct OnboardingNicknameView: View {
                 Spacer()
             }
             .navigationBarBackButtonHidden()
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
             .padding()
             .padding(.vertical, 40)
             .bind(viewStore.$focus, to: self.$focus)

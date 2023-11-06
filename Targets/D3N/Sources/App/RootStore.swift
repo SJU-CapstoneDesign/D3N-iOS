@@ -16,12 +16,17 @@ struct RootStore: Reducer {
         case mainTab(MainTabStore.State)
         
         init() {
-            self = .onboarding(.init())
-//            self = .mainTab(.init())
+            if LocalStorageManager.load(.isOnBoardingNeeded) != false {
+                self = .onboarding(.init())
+            } else {
+                self = .mainTab(.init())
+            }
         }
     }
     
     enum Action: Equatable {
+        case onAppear
+        
         case onboarding(OnboardingNavigationStackStore.Action)
         case mainTab(MainTabStore.Action)
     }
@@ -29,7 +34,12 @@ struct RootStore: Reducer {
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            default: return .none
+            case .onboarding(.delegate(.complete)):
+                state = .mainTab(.init())
+                return .none
+                
+            default:
+                return .none
             }
         }
         .ifCaseLet(/State.onboarding, action: /Action.onboarding) {

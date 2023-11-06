@@ -31,7 +31,7 @@ public struct OnboardingNicknameStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case confirm(String)
+            case submit(String)
         }
     }
     
@@ -47,7 +47,7 @@ public struct OnboardingNicknameStore: Reducer {
             case .confirmButtonTapped:
                 if !state.nickname.isEmpty {
                     state.focus = nil
-                    return .send(.delegate(.confirm(state.nickname)))
+                    return .send(.delegate(.submit(state.nickname)))
                 }
                 return .none
                 

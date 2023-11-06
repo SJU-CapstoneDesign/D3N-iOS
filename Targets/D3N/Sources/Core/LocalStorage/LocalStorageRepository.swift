@@ -9,27 +9,24 @@
 import Foundation
 
 public struct LocalStorageManager {
-    public enum Key: String {
+    public enum Key: String, CaseIterable {
         case accessToken
         case refreshToken
+        case isOnBoardingNeeded
     }
     
-    public static func save(_ key: Key, value: String) {
+    public static func save<T>(_ key: Key, value: T) {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }
     
-    public static func load(_ key: Key) -> String {
-        let value = UserDefaults.standard.object(forKey: key.rawValue) as? String
-        return value ?? ""
+    public static func load<T>(_ key: Key) -> T? {
+        let value = UserDefaults.standard.object(forKey: key.rawValue) as? T
+        return value
     }
     
-//    public static func saveAlreadySolvedNewsIds(ids: [Int]) {
-//        var newIds = loadAlreadySolvedNewsIds() + ids
-//        UserDefaults.standard.set(newIds, forKey: Keys.alreadySolvedNewsIds.rawValue)
-//    }
-//    
-//    public static func loadAlreadySolvedNewsIds() -> [Int] {
-//        let ids = UserDefaults.standard.object(forKey: Keys.alreadySolvedNewsIds.rawValue) as? [Int]
-//        return ids ?? []
-//    }
+    public static func deleteAll() {
+        Key.allCases.forEach { key in
+            UserDefaults.standard.removeObject(forKey: key.rawValue)
+        }
+    }
 }

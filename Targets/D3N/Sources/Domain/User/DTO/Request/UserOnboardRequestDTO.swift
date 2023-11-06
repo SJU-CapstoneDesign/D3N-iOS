@@ -1,5 +1,5 @@
 //
-//  UserEntity.swift
+//  UserOnboardRequestDTO.swift
 //  D3N
 //
 //  Created by 송영모 on 11/4/23.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct UserEntity: Codable {
+struct UserOnboardRequestDTO: Codable {
     let nickname: String
     let gender: Gender
-    let birthYear: Int
-    let categoryList: [NewsField]
+    let birthDay: Double
+    let newsFields: [NewsField]
 }
