@@ -45,6 +45,13 @@ public struct OnboardingNewsFieldStore: Reducer {
                     state.newsFields.append(newsField)
                 }
                 return .none
+                
+            case .submitButtonTapped:
+                if !state.newsFields.isEmpty {
+                    return .send(.delegate(.submit(state.newsFields)))
+                } else {
+                    return .none
+                }
             default:
                 return .none
             }

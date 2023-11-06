@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserEntity: Codable {
+public struct UserEntity: Codable, Equatable {
     let nickname: String
     let gender: Gender
     let birthYear: Int

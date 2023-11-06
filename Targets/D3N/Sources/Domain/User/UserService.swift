@@ -11,7 +11,7 @@ import Moya
 
 public enum UserService {
     case onboardNeeded
-    case onboard(nickname: String, gender: Gender, birthYear: Int, categoryList: [NewsField])
+    case onboard(nickname: String, gender: Gender, birthDay: Date, newsFields: [NewsField])
 }
 
 extension UserService: TargetType {
@@ -34,8 +34,14 @@ extension UserService: TargetType {
         case .onboardNeeded:
             return .requestPlain
             
-        case let .onboard(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList):
-            return .requestJSONEncodable(UserOnboardRequestDTO(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList))
+        case let .onboard(nickname: nickname, gender: gender, birthDay: birthDay, newsFields: newsFields):
+            let dto = UserOnboardRequestDTO(
+                nickname: nickname,
+                gender: gender,
+                birthDay: birthDay.timeIntervalSince1970,
+                newsFields: newsFields
+            )
+            return .requestJSONEncodable(dto)
         }
     }
     

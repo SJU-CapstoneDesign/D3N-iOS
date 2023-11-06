@@ -29,6 +29,7 @@ struct OnboardingGenderView: View {
                 
                 Spacer()
             }
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .padding()
         }

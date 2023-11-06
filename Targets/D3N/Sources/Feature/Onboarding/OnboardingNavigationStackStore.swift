@@ -6,6 +6,8 @@
 //  Copyright © 2023 sju. All rights reserved.
 //
 
+import Foundation
+
 import ComposableArchitecture
 
 /// isOnboardNeeded 가 false이거나 한번도 업데이트 되지 않았을때 실행되는 Flow 입니다.
@@ -16,9 +18,21 @@ public struct OnboardingNavigationStackStore: Reducer {
         var signUp: OnboardingSignUpStore.State = .init()
         
         var path: StackState<Path.State> = .init()
+        var nickname: String?
+        var gender: Gender?
+        var birthDate: Date?
+        var newsFields: [NewsField]
         
-        init() {
-            path.append(.newsField(.init()))
+        init(
+            nickname: String? = nil,
+            gender: Gender? = nil,
+            birthDate: Date? = nil,
+            newsFields: [NewsField] = []
+        ) {
+            self.nickname = nickname
+            self.gender = gender
+            self.birthDate = birthDate
+            self.newsFields = newsFields
         }
     }
     
@@ -32,6 +46,8 @@ public struct OnboardingNavigationStackStore: Reducer {
         
         case userOnboardNeededRequest
         case userOnboardNeededResponse(Result<Bool, D3NAPIError>)
+        case userOnboardRequest
+        case userOnboardResponse(Result<UserEntity, D3NAPIError>)
         
         case delegate(Delegate)
         
@@ -89,8 +105,32 @@ public struct OnboardingNavigationStackStore: Reducer {
                 
             case let .path(.element(id: _, action: .nickname(.delegate(action)))):
                 switch action {
-                case .confirm:
+                case let .submit(nickname):
+                    state.nickname = nickname
                     state.path.append(.gender(.init()))
+                    return .none
+                }
+                
+            case let .path(.element(id: _, action: .gender(.delegate(action)))):
+                switch action {
+                case let .submit(gender):
+                    state.gender = gender
+                    state.path.append(.birth(.init()))
+                    return .none
+                }
+                
+            case let .path(.element(id: _, action: .birth(.delegate(action)))):
+                switch action {
+                case let .submit(birthDate):
+                    state.birthDate = birthDate
+                    state.path.append(.newsField(.init()))
+                    return .none
+                }
+                
+            case let .path(.element(id: _, action: .newsField(.delegate(action)))):
+                switch action {
+                case let .submit(newsFields):
+                    state.newsFields = newsFields
                     return .none
                 }
                 
@@ -106,6 +146,25 @@ public struct OnboardingNavigationStackStore: Reducer {
                     return .send(.delegate(.complete))
                 }
                 return .none
+                
+            case .userOnboardRequest:
+                return .run { [
+                    nickname = state.nickname,
+                    gender = state.gender,
+                    birthDay = state.birthDate,
+                    newsFields = state.newsFields
+                ] send in
+                    guard 
+                        let nickname = nickname,
+                        let gender = gender,
+                        let birthDay = birthDay
+                    else { return }
+                    let response = await userClient.onboard(nickname, gender, birthDay, newsFields)
+                    await send(.userOnboardResponse(response))
+                }
+                
+            case let .userOnboardResponse(.success(user)):
+                return .send(.delegate(.complete))
                 
             default:
                 return .none

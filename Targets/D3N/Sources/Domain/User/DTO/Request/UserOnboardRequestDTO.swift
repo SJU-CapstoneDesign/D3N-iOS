@@ -11,6 +11,6 @@ import Foundation
 struct UserOnboardRequestDTO: Codable {
     let nickname: String
     let gender: Gender
-    let birthYear: Int
-    let categoryList: [NewsField]
+    let birthDay: Double
+    let newsFields: [NewsField]
 }

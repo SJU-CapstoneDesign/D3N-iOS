@@ -30,7 +30,7 @@ public struct OnboardingBirthStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case confirm(Date)
+            case submit(Date)
         }
     }
     
@@ -45,7 +45,7 @@ public struct OnboardingBirthStore: Reducer {
                 
             case .comfirmButtonTapped:
                 if let date = state.birthDate {
-                    return .send(.delegate(.confirm(date)))
+                    return .send(.delegate(.submit(date)))
                 } else {
                     return .none
                 }

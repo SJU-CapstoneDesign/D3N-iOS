@@ -38,19 +38,10 @@ struct OnboardingBirthView: View {
                     viewStore.send(.comfirmButtonTapped)
                 }
             }
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .padding()
         }
         
-    }
-    
-    private func genderRadioButtonView(viewStore: ViewStoreOf<OnboardingGenderStore>) -> some View {
-        HStack {
-            ForEach(Gender.allCases, id: \.self) { gender in
-                D3NRadioButton(title: gender.title, isSelected: gender == viewStore.state.gender) {
-                    viewStore.send(.genderButtonTapped(gender))
-                }
-            }
-        }
     }
 }

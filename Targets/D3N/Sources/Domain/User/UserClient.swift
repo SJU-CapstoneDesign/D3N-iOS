@@ -16,8 +16,8 @@ struct UserClient {
     var onboard: (
         _ nickname: String,
         _ gender: Gender,
-        _ birthYear: Int,
-        _ categoryList: [NewsField]
+        _ birthDay: Date,
+        _ newsFields: [NewsField]
     ) async -> Result<UserEntity, D3NAPIError>
 }
 
@@ -51,8 +51,8 @@ extension UserClient: DependencyKey {
                 return entity
             }
         },
-        onboard: { nickname, gender, birthYear, categoryList in
-            let target: TargetType = UserService.onboard(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList)
+        onboard: { nickname, gender, birthDay, newsFields in
+            let target: TargetType = UserService.onboard(nickname: nickname, gender: gender, birthDay: birthDay, newsFields: newsFields)
             let response: Result<UserOnboardResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
             
             return response.map { dto in

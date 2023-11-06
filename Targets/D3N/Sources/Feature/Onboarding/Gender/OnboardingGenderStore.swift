@@ -28,7 +28,7 @@ public struct OnboardingGenderStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case confirm(Gender)
+            case submit(Gender)
         }
     }
     
@@ -40,7 +40,7 @@ public struct OnboardingGenderStore: Reducer {
                 
             case let .genderButtonTapped(gender):
                 state.gender = gender
-                return .send(.delegate(.confirm(gender)))
+                return .send(.delegate(.submit(gender)))
                 
             default:
                 return .none

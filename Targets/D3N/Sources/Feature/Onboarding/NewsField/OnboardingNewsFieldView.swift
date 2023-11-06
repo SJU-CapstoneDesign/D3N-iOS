@@ -39,9 +39,10 @@ struct OnboardingNewsFieldView: View {
                     inactiveTitle: "선택해주세요",
                     isActive: !viewStore.state.newsFields.isEmpty
                 ) { _ in
-                    
+                    viewStore.send(.submitButtonTapped)
                 }
             }
+            .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .padding()
         }
