@@ -45,6 +45,7 @@ extension AuthClient: DependencyKey {
         appleLogin: { code, idToken in
             let target: TargetType = AuthService.appleLogin(code: code, idToken: idToken)
             let response: Result<AppleLoginResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            
             return response.map { dto in
                 let entity = dto.toEntity()
                 LocalStorageManager.save(.accessToken, value: entity.accessToken)

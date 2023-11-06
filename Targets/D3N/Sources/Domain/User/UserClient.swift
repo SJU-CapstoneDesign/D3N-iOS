@@ -12,6 +12,7 @@ import ComposableArchitecture
 import Moya
 
 struct UserClient {
+    var onboardNeeded: () async -> Result<Bool, D3NAPIError>
     var onboard: (
         _ nickname: String,
         _ gender: Gender,
@@ -22,10 +23,12 @@ struct UserClient {
 
 extension UserClient: TestDependencyKey {
     static let previewValue = Self(
+        onboardNeeded: { return .failure(.none) },
         onboard: { nickname, gender, birthYear, categoryList in .failure(.none) }
     )
     
     static let testValue = Self(
+        onboardNeeded: unimplemented("\(Self.self).onboardNeeded"),
         onboard: unimplemented("\(Self.self).onboard")
     )
 }
@@ -39,10 +42,24 @@ extension DependencyValues {
 
 extension UserClient: DependencyKey {
     static let liveValue = UserClient(
+        onboardNeeded: {
+            let target: TargetType = UserService.onboardNeeded
+            let response: Result<UserOnboardNeededResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            return response.map { dto in
+                let entity = dto.isOnBoardingNeeded
+                LocalStorageManager.save(.isOnBoardingNeeded, value: entity)
+                return entity
+            }
+        },
         onboard: { nickname, gender, birthYear, categoryList in
             let target: TargetType = UserService.onboard(nickname: nickname, gender: gender, birthYear: birthYear, categoryList: categoryList)
             let response: Result<UserOnboardResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
-            return response.map { $0.toEntity() }
+            
+            return response.map { dto in
+                let entity = dto.toEntity()
+                LocalStorageManager.save(.isOnBoardingNeeded, value: false)
+                return entity
+            }
         }
     )
 }
