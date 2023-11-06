@@ -49,6 +49,12 @@ public struct OnboardingNavigationStackView: View {
                      action: OnboardingNavigationStackStore.Path.Action.birth,
                      then: OnboardingBirthView.init(store:)
                 )
+            case .newsField:
+                CaseLet(
+                    /OnboardingNavigationStackStore.Path.State.newsField,
+                     action: OnboardingNavigationStackStore.Path.Action.newsField,
+                     then: OnboardingNewsFieldView.init(store:)
+                )
             }
         }
         .accentColor(.black)

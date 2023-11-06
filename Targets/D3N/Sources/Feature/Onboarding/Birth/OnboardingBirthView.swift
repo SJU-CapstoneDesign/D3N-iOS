@@ -35,7 +35,7 @@ struct OnboardingBirthView: View {
                 Spacer()
                 
                 D3NSubmitButton(activeTitle: "선택 완료", inactiveTitle: "생일을 선택해주세요", isActive: viewStore.birthDate != nil) { _ in
-                    
+                    viewStore.send(.comfirmButtonTapped)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

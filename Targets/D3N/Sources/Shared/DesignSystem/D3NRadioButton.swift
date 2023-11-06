@@ -31,9 +31,11 @@ public struct D3NRadioButton: View {
             action()
         }, label: {
             HStack {
+                Spacer()
                 Text(self.title)
                     .fontWeight(.semibold)
                     .foregroundStyle(isSelected ? .white : .black)
+                Spacer()
             }
         })
         .padding(10)

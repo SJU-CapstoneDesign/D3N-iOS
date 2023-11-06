@@ -18,7 +18,7 @@ public struct OnboardingNavigationStackStore: Reducer {
         var path: StackState<Path.State> = .init()
         
         init() {
-            path.append(.birth(.init()))
+            path.append(.newsField(.init()))
         }
     }
     
@@ -45,12 +45,14 @@ public struct OnboardingNavigationStackStore: Reducer {
             case nickname(OnboardingNicknameStore.State)
             case gender(OnboardingGenderStore.State)
             case birth(OnboardingBirthStore.State)
+            case newsField(OnboardingNewsFieldStore.State)
         }
         
         public enum Action: Equatable {
             case nickname(OnboardingNicknameStore.Action)
             case gender(OnboardingGenderStore.Action)
             case birth(OnboardingBirthStore.Action)
+            case newsField(OnboardingNewsFieldStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
@@ -62,6 +64,9 @@ public struct OnboardingNavigationStackStore: Reducer {
             }
             Scope(state: /State.birth, action: /Action.birth) {
                 OnboardingBirthStore()
+            }
+            Scope(state: /State.newsField, action: /Action.newsField) {
+                OnboardingNewsFieldStore()
             }
         }
     }
