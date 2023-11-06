@@ -8,18 +8,18 @@
 
 import Foundation
 
-public struct QuizDTO: Codable {
-    let question: String
-    let choiceList: [String]
-    let answer: Int
-    let reason: String
-    
-    func toDomain() -> QuizEntity {
-        return .init(
-            question: self.question,
-            choiceList: self.choiceList,
-            answer: self.answer,
-            reason: self.reason
-        )
-    }
-}
+//public struct QuizDTO: Codable {
+//    let question: String
+//    let choiceList: [String]
+//    let answer: Int
+//    let reason: String
+//    
+//    func toDomain() -> QuizEntity {
+//        return .init(
+//            question: self.question,
+//            choiceList: self.choiceList,
+//            answer: self.answer,
+//            reason: self.reason
+//        )
+//    }
+//}

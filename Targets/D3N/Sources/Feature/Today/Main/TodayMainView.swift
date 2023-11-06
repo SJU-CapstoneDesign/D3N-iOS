@@ -74,7 +74,6 @@ public struct TodayMainView: View {
                     isPressing = pressing
                 }
             }
-            
                 ForEachStore(self.store.scope(state: \.newsListItems, action: TodayMainStore.Action.newsListItems(id:action:))) {
                     NewsListItemCellView(store: $0)
                         .padding(.vertical, 5)

@@ -20,17 +20,19 @@ extension NewsService: TargetType {
     public var path: String {
         switch self {
         case .fetchNewsList:
-            return "/api/v1/news/list"
+            return "news/list"
         case .fetchQuizList:
-            return "/api/v1/quiz/list"
+            return "quiz/list"
         }
     }
+    
     public var method: Moya.Method {
         switch self {
-        case .fetchNewsList, .fetchQuizList:
-            return .get
+        case .fetchNewsList: return .get
+        case .fetchQuizList: return .get
         }
     }
+    
     public var task: Task {
         switch self {
         case let .fetchNewsList(pageIndex: page, pageSize: size):
@@ -39,23 +41,9 @@ extension NewsService: TargetType {
             return .requestParameters(parameters: ["newsId": id], encoding: URLEncoding.queryString)
         }
     }
-    public var sampleData: Data {
-        switch self {
-        case .fetchNewsList:
-            return "".utf8Encoded
-        case .fetchQuizList:
-            return "".utf8Encoded
-        }
-    }
+    
     public var headers: [String: String]? {
-        return ["Content-type": "application/json"]
+        let accessToken: String = LocalStorageManager.load(.accessToken) ?? ""
+        return ["Authorization": "Bearer \(accessToken)"]
     }
-}
-// MARK: - Helpers
-private extension String {
-    var urlEscaped: String {
-        addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-    }
-
-    var utf8Encoded: Data { Data(self.utf8) }
 }

@@ -26,7 +26,7 @@ public struct QuizMainStore: Reducer {
         case onAppear
         
         case fetchQuizListRequest
-        case fetchQuizListResponse(Result<[QuizEntity], NewsError>)
+        case fetchQuizListResponse(Result<[QuizEntity], D3NAPIError>)
         
         case solveButtonTapped
         case quizList(PresentationAction<QuizListStore.Action>)

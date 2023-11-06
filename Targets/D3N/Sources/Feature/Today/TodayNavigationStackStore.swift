@@ -70,10 +70,10 @@ public struct TodayNavigationStackStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { send in
-                    await authClient.appleUnlink()
-                }
-//                return .none
+//                return .run { send in
+//                    await authClient.appleUnlink()
+//                }
+                return .none
                 
             case let .main(.delegate(action)):
                 switch action {
