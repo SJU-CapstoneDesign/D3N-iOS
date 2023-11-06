@@ -1,8 +1,8 @@
 //
-//  OnboardingUserInfoStore.swift
+//  OnboardingGenderStore.swift
 //  D3N
 //
-//  Created by 송영모 on 10/26/23.
+//  Created by 송영모 on 11/6/23.
 //  Copyright © 2023 sju. All rights reserved.
 //
 
@@ -10,15 +10,12 @@ import Foundation
 
 import ComposableArchitecture
 
-public struct OnboardingUserInfoStore: Reducer {
+public struct OnboardingGenderStore: Reducer {
     public struct State: Equatable {
-        @BindingState var focus: Field? = .nickname
-        @BindingState var date: Date = Date()
+        var gender: Gender?
         
-        public init() { }
-        
-        enum Field: Hashable {
-          case nickname
+        public init(gender: Gender? = nil) {
+            self.gender = gender
         }
     }
     
@@ -26,12 +23,12 @@ public struct OnboardingUserInfoStore: Reducer {
         case binding(BindingAction<State>)
         case onAppear
 
-        case confirmButtonTapped
+        case genderButtonTapped(Gender)
         
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case confirm(String)
+            case confirm(Gender)
         }
     }
     
@@ -40,12 +37,10 @@ public struct OnboardingUserInfoStore: Reducer {
         
         Reduce { state, action in
             switch action {
-            case .onAppear:
-                state.focus = .nickname
-                return .none
-                // 닉네임, 생년, 성별, 관심카테고리
-            case .confirmButtonTapped:
-                return .none
+                
+            case let .genderButtonTapped(gender):
+                state.gender = gender
+                return .send(.delegate(.confirm(gender)))
                 
             default:
                 return .none

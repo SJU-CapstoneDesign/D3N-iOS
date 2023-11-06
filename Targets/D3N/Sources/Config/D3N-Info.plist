@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIUserInterfaceStyle</key>
-	<string>Auto</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>Daily3News 앱에서 사용자에게 맞춤 광고를 위해 추적 권한을 요청합니다</string>
 	<key>UIRequiresFullScreen</key>

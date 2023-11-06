@@ -19,17 +19,8 @@ public struct LocalStorageManager {
         UserDefaults.standard.set(value, forKey: key.rawValue)
     }
     
-//    public static func save(_ key: Key, value: Bool) {
-//        UserDefaults.standard.set(value, forKey: key.rawValue)
-//    }
-    
     public static func load<T>(_ key: Key) -> T? {
         let value = UserDefaults.standard.object(forKey: key.rawValue) as? T
         return value
     }
-    
-//    public static func load(_ key: Key) -> Bool? {
-//        let value = UserDefaults.standard.object(forKey: key.rawValue) as? Bool
-//        return value
-//    }
 }

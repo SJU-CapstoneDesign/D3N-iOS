@@ -27,6 +27,7 @@ public struct OnboardingNavigationStackView: View {
                     .onAppear {
                         viewStore.send(.onAppear)
                     }
+                    .navigationTitle("")
             }
         } destination: {
             switch $0 {
@@ -36,13 +37,20 @@ public struct OnboardingNavigationStackView: View {
                      action: OnboardingNavigationStackStore.Path.Action.nickname,
                      then: OnboardingNicknameView.init(store:)
                 )
-            case .userInfo:
+            case .gender:
                 CaseLet(
-                    /OnboardingNavigationStackStore.Path.State.userInfo,
-                     action: OnboardingNavigationStackStore.Path.Action.userInfo,
-                     then: OnboardingUserInfoView.init(store:)
+                    /OnboardingNavigationStackStore.Path.State.gender,
+                     action: OnboardingNavigationStackStore.Path.Action.gender,
+                     then: OnboardingGenderView.init(store:)
+                )
+            case .birth:
+                CaseLet(
+                    /OnboardingNavigationStackStore.Path.State.birth,
+                     action: OnboardingNavigationStackStore.Path.Action.birth,
+                     then: OnboardingBirthView.init(store:)
                 )
             }
         }
+        .accentColor(.black)
     }
 }
