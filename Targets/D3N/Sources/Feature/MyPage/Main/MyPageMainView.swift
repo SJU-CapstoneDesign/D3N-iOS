@@ -17,21 +17,42 @@ public struct MyPageMainView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             List {
-                Section {
-                    if let url = URL(string: "https://tally.so/r/n9Z6rQ") {
-                        Link(destination: url, label: {
-                            Label(
-                                title: {
-                                    Text("매삼뉴 피드백 창구")
-                                }, icon: {
-                                    Image(systemName: "doc.text.image.fill")
-                                        .foregroundStyle(.blue)
-                                }
-                            )
-                        })
-                    }
-                }
+                feedbackSection()
+                
+                unlinkSection(viewStore: viewStore)
             }
+            .alert(
+                store: self.store.scope(
+                    state: \.$alert,
+                    action: { .alert($0) }
+                )
+            )
+        }
+    }
+    
+    private func feedbackSection() -> some View {
+        Section {
+            if let url = URL(string: "https://tally.so/r/n9Z6rQ") {
+                Link(destination: url, label: {
+                    Label(
+                        title: {
+                            Text("매삼뉴 피드백 창구")
+                        }, icon: {
+                            Image(systemName: "doc.text.image.fill")
+                                .foregroundStyle(.blue)
+                        }
+                    )
+                })
+            }
+        }
+    }
+    
+    private func unlinkSection(viewStore: ViewStoreOf<MyPageMainStore>) -> some View {
+        Section {
+            Button("회원탈퇴", action: {
+                viewStore.send(.unlinkButtonTapped)
+            })
+            .foregroundStyle(.red)
         }
     }
 }

@@ -9,8 +9,9 @@
 import Foundation
 
 public struct UserEntity: Codable, Equatable {
+    let id: String
     let nickname: String
     let gender: Gender
-    let birthYear: Int
+    let birthDay: Int
     let categoryList: [NewsField]
 }

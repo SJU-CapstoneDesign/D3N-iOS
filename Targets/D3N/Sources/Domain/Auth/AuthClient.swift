@@ -22,7 +22,7 @@ extension AuthClient: TestDependencyKey {
         appleLogin: { code, idToken in
             return .success(.init(accessToken: "", refreshToken: ""))
         },
-        appleUnlink: { .success(.init(true)) },
+        appleUnlink: { .success(true) },
         refresh: { .init(.success(.init(accessToken: "", refreshToken: ""))) }
     )
     
@@ -55,13 +55,11 @@ extension AuthClient: DependencyKey {
         },
         appleUnlink: {
             let target: TargetType = AuthService.appleUnlink
-            let response: Result<EmptyDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
-
-            LocalStorageManager.deleteAll()
+            let response: Result<Bool, D3NAPIError> = await D3NAPIkProvider.justRequest(target: target)
             
             return response.map { dto in
                 LocalStorageManager.deleteAll()
-                return true
+                return dto
             }
         },
         refresh: {

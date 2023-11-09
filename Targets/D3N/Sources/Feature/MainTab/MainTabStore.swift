@@ -17,8 +17,8 @@ struct MainTabStore: Reducer {
     struct State: Equatable {
         var currentScene: MainScene = .question
         
-        var today: TodayNavigationStackStore.State = .init()
-        var myPage: MyPageNavigationStackStore.State = .init()
+        var today: TodayNavigationStackStore.State? = .init()
+        var myPage: MyPageNavigationStackStore.State? = .init()
     }
     
     enum Action: BindableAction, Equatable {
@@ -28,6 +28,11 @@ struct MainTabStore: Reducer {
         
         case today(TodayNavigationStackStore.Action)
         case myPage(MyPageNavigationStackStore.Action)
+        case delegate(Delegate)
+        
+        public enum Delegate {
+            case appleUnlinked
+        }
     }
     
     public var body: some ReducerOf<Self> {
@@ -35,14 +40,19 @@ struct MainTabStore: Reducer {
         
         Reduce { state, action in
             switch action {
-            default: 
+            case let .myPage(.delegate(action)):
+                switch action {
+                case .unlinked:
+                    return .send(.delegate(.appleUnlinked))
+                }
+            default:
                 return .none
             }
         }
-        Scope(state: \.today, action: /Action.today) {
+        .ifLet(\.today, action: /Action.today) {
             TodayNavigationStackStore()
         }
-        Scope(state: \.myPage, action: /Action.myPage) {
+        .ifLet(\.myPage, action: /Action.myPage) {
             MyPageNavigationStackStore()
         }
     }

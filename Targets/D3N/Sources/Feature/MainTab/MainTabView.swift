@@ -15,17 +15,33 @@ struct MainTabView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             TabView {
-                TodayNavigationStackView(store: self.store.scope(state: \.today, action: MainTabStore.Action.today))
-                    .tabItem {
-                        Image(systemName: "doc.text.image")
-                        Text("투데이")
-                    }
+                IfLetStore(self.store.scope(state: \.today, action: MainTabStore.Action.today)) {
+                    TodayNavigationStackView(store: $0)
+                        .tabItem {
+                            Image(systemName: "doc.text.image")
+                            Text("투데이")
+                        }
+                }
                 
-                MyPageNavigationStackView(store: self.store.scope(state: \.myPage, action: MainTabStore.Action.myPage))
-                    .tabItem {
-                        Image(systemName: "person.circle")
-                        Text("마이")
-                    }
+                IfLetStore(self.store.scope(state: \.myPage, action: MainTabStore.Action.myPage)) {
+                    MyPageNavigationStackView(store: $0)
+                        .tabItem {
+                            Image(systemName: "person.circle")
+                            Text("마이")
+                        }
+                }
+                
+//                TodayNavigationStackView(store: self.store.scope(state: \.today, action: MainTabStore.Action.today))
+//                    .tabItem {
+//                        Image(systemName: "doc.text.image")
+//                        Text("투데이")
+//                    }
+                
+//                MyPageNavigationStackView(store: self.store.scope(state: \.myPage, action: MainTabStore.Action.myPage))
+//                    .tabItem {
+//                        Image(systemName: "person.circle")
+//                        Text("마이")
+//                    }
             }
         }
     }
