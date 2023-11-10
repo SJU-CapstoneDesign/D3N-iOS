@@ -22,7 +22,9 @@ public struct TodayListItemCellView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            Button(action: {}, label: {
+            Button(action: {
+                viewStore.send(.tapped)
+            }, label: {
                 HStack {
                     viewStore.state.newsEntity.field.icon
                     
@@ -55,7 +57,6 @@ public struct TodayListItemCellView: View {
                         withAnimation {
                             isPressed = false
                         }
-                        viewStore.send(.tapped)
                     }
                 )
             )
