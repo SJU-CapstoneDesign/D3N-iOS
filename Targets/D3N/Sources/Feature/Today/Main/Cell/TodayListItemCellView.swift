@@ -14,6 +14,8 @@ import ComposableArchitecture
 public struct TodayListItemCellView: View {
     let store: StoreOf<TodayListItemCellStore>
     
+    @State var isPressed: Bool = false
+    
     public init(store: StoreOf<TodayListItemCellStore>) {
         self.store = store
     }
@@ -26,7 +28,7 @@ public struct TodayListItemCellView: View {
                     
                     VStack(alignment: .leading, spacing: 5) {
                         Text(viewStore.state.newsEntity.title)
-                            .font(.headline)
+                            .fontWeight(.semibold)
                             .lineLimit(1)
                         
                         Text(viewStore.state.newsEntity.summary)
@@ -39,21 +41,28 @@ public struct TodayListItemCellView: View {
             .buttonStyle(
                 ScrollViewGestureButtonStyle(
                     pressAction: {
-                        print("[D] press")
+                        withAnimation {
+                            isPressed = true
+                        }
                     },
                     doubleTapTimeoutout: 1,
                     doubleTapAction: {
-                        print("double tap")
                     },
                     longPressTime: 0,
                     longPressAction: {
-                        print("long press")
                     },
                     endAction: {
-                        print("[D] end")
+                        withAnimation {
+                            isPressed = false
+                        }
                     }
                 )
             )
+            .padding(10)
+            .background(isPressed ? Color.systemGray6 : Color.background)
+            .cornerRadius(20)
+            .clipped()
+            .scaleEffect(isPressed ? 0.95 : 1)
 //            .task {
 //                viewStore.send(.onAppear)
 //            }
