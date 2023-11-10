@@ -55,6 +55,7 @@ public struct TodayListItemCellView: View {
                         withAnimation {
                             isPressed = false
                         }
+                        viewStore.send(.tapped)
                     }
                 )
             )
@@ -63,9 +64,9 @@ public struct TodayListItemCellView: View {
             .cornerRadius(20)
             .clipped()
             .scaleEffect(isPressed ? 0.95 : 1)
-//            .task {
-//                viewStore.send(.onAppear)
-//            }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
     }
 }

@@ -13,14 +13,7 @@ import ComposableArchitecture
 
 public struct TodayMainView: View {
     let store: StoreOf<TodayMainStore>
-    @State private var isPressing = false
-    
-    public func toggleIsPressing() {
-        withAnimation(.easeOut(duration: 0.3)){
-            isPressing.toggle()
-        }
-    }
-    
+
     public init(store: StoreOf<TodayMainStore>) {
         self.store = store
     }
@@ -33,7 +26,7 @@ public struct TodayMainView: View {
                         .padding()
                 }
             }
-            .task {
+            .onAppear {
                 viewStore.send(.onAppear, animation: .default)
             }
             .navigationTitle("Today")
@@ -64,7 +57,6 @@ public struct TodayMainView: View {
             .padding([.horizontal, .top])
             .onTapGesture {
                 viewStore.send(.allNewsButtonTapped)
-                isPressing = false
             }
             
             VStack(alignment: .leading, spacing: .zero) {
