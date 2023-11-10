@@ -29,12 +29,28 @@ struct RootStore: Reducer {
         
         case onboarding(OnboardingNavigationStackStore.Action)
         case mainTab(MainTabStore.Action)
+        
+        case navigateOnboarding
+        case navigateMainTab
     }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onboarding(.delegate(.complete)):
+                return .send(.navigateMainTab)
+                
+            case let .mainTab(.delegate(action)):
+                switch action {
+                case .appleUnlinked:
+                    return .send(.navigateOnboarding)
+                }
+                
+            case .navigateOnboarding:
+                state = .onboarding(.init())
+                return .none
+                
+            case .navigateMainTab:
                 state = .mainTab(.init())
                 return .none
                 

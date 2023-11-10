@@ -9,6 +9,7 @@
 import Foundation
 
 public struct QuizEntity: Equatable {
+    let id: Int
     let question: String
     let choiceList: [String]
     let answer: Int

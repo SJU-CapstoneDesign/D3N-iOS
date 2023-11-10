@@ -17,13 +17,13 @@ public enum NewsError: Error, Equatable {
 
 struct NewsClient {
     var fetchNewsList: (Int, Int) async -> Result<[NewsEntity], D3NAPIError>
-    var fetchQuizList: (Int) async -> Result<[QuizEntity], NewsError>
+    var fetchQuizList: (Int) async -> Result<[QuizEntity], D3NAPIError>
 }
 
 extension NewsClient: TestDependencyKey {
     static let previewValue = Self(
         fetchNewsList: { _, _ in .failure(.none) },
-        fetchQuizList: { _ in .failure(.no) }
+        fetchQuizList: { _ in .failure(.none) }
     )
     
     static let testValue = Self(
@@ -44,31 +44,15 @@ extension NewsClient: DependencyKey {
     static let liveValue = NewsClient(
         fetchNewsList: { pageIndex, pageSize in
             let target: TargetType = NewsService.fetchNewsList(pageIndex: pageIndex, pageSize: pageSize)
-            let response: Result<PageResult<NewsDTO>, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
-//            let provider = MoyaProvider<NewsService>(plugins: [NetworkLoggerPlugin()])
-//            let response = await provider.request(.fetchNewsList(pageIndex: pageIndex, pageSize: pageSize))
-//            let tt =
-            return response.map(\.content).map { $0.map { $0.toDomain() } }
-//            switch response {
-//            case .success(let success):
-//                let model = try? JSONDecoder().decode(PageModel<NewsDTO>.self, from: success.data)
-//                let news = model.map(\.result)?.map(\.content)?.map { $0.toDomain() } ?? []
-//                return .success(news)
-//            case .failure(let failure):
-//                return .failure(.no)
-//            }
+            let response: Result<FetchNewsListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            
+            return response.map(\.content).map { $0.map { $0.toEntity() } }
         },
         fetchQuizList: { newsId in
-            let provider = MoyaProvider<NewsService>(plugins: [NetworkLoggerPlugin()])
-            let response = await provider.request(.fetchQuizList(newsId: newsId))
-            switch response {
-            case .success(let success):
-                let model = try? JSONDecoder().decode(BaseModel<[QuizDTO]>.self, from: success.data)
-                let quizs = model.flatMap(\.result)?.compactMap { $0.toDomain() } ?? []
-                return .success(quizs)
-            case .failure(let failure):
-                return .failure(.no)
-            }
+            let target: TargetType = NewsService.fetchQuizList(newsId: newsId)
+            let response: Result<FetchQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            
+            return response.map { $0.map { $0.toEntity() } }
         }
     )
 }

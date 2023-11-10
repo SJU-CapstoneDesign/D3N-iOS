@@ -1,21 +1,27 @@
 //
-//  QuizDTO.swift
+//  FetchQuizListResponseDTO.swift
 //  D3N
 //
-//  Created by 송영모 on 10/17/23.
+//  Created by 송영모 on 11/6/23.
 //  Copyright © 2023 sju. All rights reserved.
 //
 
 import Foundation
 
-public struct QuizDTO: Codable {
+typealias FetchQuizListResponseDTO = [FetchQuizListResponseElement]
+
+struct FetchQuizListResponseElement: Codable {
+    let id: Int
     let question: String
     let choiceList: [String]
     let answer: Int
     let reason: String
-    
-    func toDomain() -> QuizEntity {
+}
+
+extension FetchQuizListResponseElement {
+    func toEntity() -> QuizEntity {
         return .init(
+            id: self.id,
             question: self.question,
             choiceList: self.choiceList,
             answer: self.answer,

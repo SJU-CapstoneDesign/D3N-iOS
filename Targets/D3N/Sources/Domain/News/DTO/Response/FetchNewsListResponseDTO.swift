@@ -1,14 +1,16 @@
 //
-//  NewsDTO.swift
+//  FetchNewsListResponseDTO.swift
 //  D3N
 //
-//  Created by 송영모 on 10/17/23.
+//  Created by 송영모 on 11/6/23.
 //  Copyright © 2023 sju. All rights reserved.
 //
 
 import Foundation
 
-struct NewsDTO: Codable {
+typealias FetchNewsListResponseDTO = PageResult<FetchNewsListResponseElement>
+
+struct FetchNewsListResponseElement: Codable {
     let id: Int
     let field: NewsField
     let newsType: NewsType
@@ -18,8 +20,10 @@ struct NewsDTO: Codable {
     let mediaCompanyId: String
     let mediaCompanyLogo: String
     let mediaCompanyName: String
-    
-    func toDomain() -> NewsEntity {
+}
+
+extension FetchNewsListResponseElement {
+    func toEntity() -> NewsEntity {
         return .init(
             id: self.id,
             field: self.field,

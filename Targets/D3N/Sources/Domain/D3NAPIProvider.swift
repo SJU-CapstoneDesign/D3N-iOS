@@ -40,6 +40,24 @@ final class D3NAPIkProvider {
         }
     }
     
+    static func justRequest(target: TargetType) async -> Result<Bool, D3NAPIError> {
+        let response = await self.request(target: target)
+        
+        switch response {
+        case .success(let success):
+            switch success.statusCode {
+            case 200..<300: break
+            case 300..<400: return .failure(.none)
+            case 401: return .failure(.unAuth)
+            default: break
+            }
+            
+            return .success(true)
+        case .failure(let failure):
+            return .failure(.none)
+        }
+    }
+    
     private static func request<T: TargetType>(target: T) async -> Result<Response, MoyaError> {
         await withCheckedContinuation { continuation in
             provider.request(MultiTarget(target)) { result in

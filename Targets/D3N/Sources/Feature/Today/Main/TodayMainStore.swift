@@ -15,13 +15,13 @@ public struct TodayMainStore: Reducer {
     let TODAY_NEWS_PAGE_SIZE = 3
     
     public struct State: Equatable {
-        var newsEntityList: [NewsEntity] = [] {
+        var newses: [NewsEntity] = [] {
             didSet {
-                self.newsListItems = makeNewsListItems(from: newsEntityList)
+                self.todayListItems = makeTodayListItems(from: newses)
             }
         }
         
-        var newsListItems: IdentifiedArrayOf<NewsListItemCellStore.State> = []
+        var todayListItems: IdentifiedArrayOf<TodayListItemCellStore.State> = []
         
         public init() { }
     }
@@ -34,7 +34,7 @@ public struct TodayMainStore: Reducer {
         case fetchNewsListRequest
         case fetchNewsListResponse(Result<[NewsEntity], D3NAPIError>)
         
-        case newsListItems(id: NewsListItemCellStore.State.ID, action: NewsListItemCellStore.Action)
+        case todayListItems(id: TodayListItemCellStore.State.ID, action: TodayListItemCellStore.Action)
         
         case delegate(Delegate)
         
@@ -63,12 +63,12 @@ public struct TodayMainStore: Reducer {
                     await send(.fetchNewsListResponse(response))
                 }
                 
-            case let .fetchNewsListResponse(.success(newsEntityList)):
-                state.newsEntityList = newsEntityList
+            case let .fetchNewsListResponse(.success(newses)):
+                state.newses = newses
                 return .none
                 
-            case let .newsListItems(id: id, action: .delegate(.tapped)):
-                if let newsEntity = state.newsListItems[id: id]?.newsEntity {
+            case let .todayListItems(id: id, action: .delegate(.tapped)):
+                if let newsEntity = state.todayListItems[id: id]?.newsEntity {
                     return .send(.delegate(.select(newsEntity)))
                 }
                 return .none
@@ -77,16 +77,16 @@ public struct TodayMainStore: Reducer {
                 return .none
             }
         }
-        .forEach(\.newsListItems, action: /Action.newsListItems(id:action:)) {
-            NewsListItemCellStore()
+        .forEach(\.todayListItems, action: /Action.todayListItems(id:action:)) {
+            TodayListItemCellStore()
         }
     }
 }
 
 public extension TodayMainStore.State {
-    func makeNewsListItems(from newsEntityList: [NewsEntity]) -> IdentifiedArrayOf<NewsListItemCellStore.State> {
+    func makeTodayListItems(from newses: [NewsEntity]) -> IdentifiedArrayOf<TodayListItemCellStore.State> {
         return .init(
-            uniqueElements: newsEntityList.map { newsEntity in
+            uniqueElements: newses.map { newsEntity in
                 return .init(newsEntity: newsEntity)
             }
         )

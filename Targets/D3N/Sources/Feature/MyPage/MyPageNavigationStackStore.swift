@@ -19,6 +19,11 @@ public struct MyPageNavigationStackStore: Reducer {
         case binding(BindingAction<State>)
         
         case main(MyPageMainStore.Action)
+        case delegate(Delegate)
+        
+        public enum Delegate {
+            case unlinked
+        }
     }
     
     public var body: some ReducerOf<Self> {
@@ -26,6 +31,12 @@ public struct MyPageNavigationStackStore: Reducer {
         
         Reduce { state, action in
             switch action {
+            case let .main(.delegate(action)):
+                switch action {
+                case .unlinked:
+                    return .send(.delegate(.unlinked))
+                }
+                
             default:
                 return .none
             }
