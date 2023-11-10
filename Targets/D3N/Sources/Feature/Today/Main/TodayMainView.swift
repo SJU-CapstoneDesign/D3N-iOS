@@ -14,7 +14,7 @@ import ComposableArchitecture
 public struct TodayMainView: View {
     let store: StoreOf<TodayMainStore>
     @State private var isPressing = false
-    @State private var homeViewActive = false
+    
     public func toggleIsPressing() {
         withAnimation(.easeOut(duration: 0.3)){
             isPressing.toggle()
@@ -54,14 +54,11 @@ public struct TodayMainView: View {
                             .fontWeight(.semibold)
                         
                     Spacer()
-                    
+                        
                     Button("전체보기", action: {
-                        homeViewActive = true
+                        viewStore.send(.allNewsButtonTapped)
                         }
                     )
-                    .fullScreenCover(isPresented: $homeViewActive) {
-                        HomeView()
-                    }
                 }
             }
             .onTapGesture {
