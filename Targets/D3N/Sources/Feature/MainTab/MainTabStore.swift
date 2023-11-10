@@ -43,6 +43,8 @@ struct MainTabStore: Reducer {
             case let .myPage(.delegate(action)):
                 switch action {
                 case .unlinked:
+                    state.today = nil
+                    state.myPage = nil
                     return .send(.delegate(.appleUnlinked))
                 }
             default:

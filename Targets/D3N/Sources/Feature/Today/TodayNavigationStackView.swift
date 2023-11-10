@@ -24,7 +24,7 @@ public struct TodayNavigationStackView: View {
             action: TodayNavigationStackStore.Action.path)) {
                 WithViewStore(self.store, observe: { $0 }) { viewStore in
                     TodayMainView(store: self.store.scope(state: \.main, action: TodayNavigationStackStore.Action.main))
-                        .onAppear {
+                        .task {
                             viewStore.send(.onAppear)
                         }
                 }

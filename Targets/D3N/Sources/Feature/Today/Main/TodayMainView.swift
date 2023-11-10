@@ -39,7 +39,7 @@ public struct TodayMainView: View {
                     }
                 }
             }
-            .onAppear {
+            .task {
                 viewStore.send(.onAppear, animation: .default)
             }
             .navigationTitle("Today")

@@ -54,9 +54,9 @@ public struct TodayListItemCellView: View {
                     }
                 )
             )
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
+//            .task {
+//                viewStore.send(.onAppear)
+//            }
         }
     }
 }
