@@ -55,10 +55,9 @@ public struct TodayMainView: View {
                         
                     Spacer()
                         
-                    Button("전체보기", action: {
-                        viewStore.send(.allNewsButtonTapped)
+                        NavigationLink(destination: HomeView()){
+                            Text("Home")
                         }
-                    )
                 }
             }
             .onTapGesture {
@@ -78,10 +77,10 @@ public struct TodayMainView: View {
                 ForEachStore(self.store.scope(state: \.newsListItems, action: TodayMainStore.Action.newsListItems(id:action:))) { store in
                     NewsListItemCellView(store: store)
                         .padding(.vertical, 5)
-                        .anchorPreference(key: MAnchorKey.self, value: .bounds, transform: { anchor in
-                            return [store.id: anchor]
+//                        .anchorPreference(key: MAnchorKey.self, value: .bounds, transform: { anchor in
+//                            return [store.id: anchor]
                             //FIXME: store id를 어떻게 호출할 수 있을까?
-                        })
+//                        })
                 }
         }
         .padding()

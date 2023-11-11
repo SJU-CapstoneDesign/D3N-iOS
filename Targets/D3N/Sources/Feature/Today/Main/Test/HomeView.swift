@@ -292,6 +292,7 @@ extension HomeView {
                 }
             }
         }
+        .navigationBarBackButtonHidden()
         .coordinateSpace(name: "SCROLL")
         .overlay(alignment: .topTrailing) {
             Button {
