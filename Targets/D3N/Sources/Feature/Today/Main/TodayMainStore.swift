@@ -15,6 +15,7 @@ public struct TodayMainStore: Reducer {
     let TODAY_NEWS_PAGE_SIZE = 3
     
     public struct State: Equatable {
+        public var id: UUID
         var newsEntityList: [NewsEntity] = [] {
             didSet {
                 self.newsListItems = makeNewsListItems(from: newsEntityList)
@@ -23,7 +24,11 @@ public struct TodayMainStore: Reducer {
         
         var newsListItems: IdentifiedArrayOf<NewsListItemCellStore.State> = []
         
-        public init() { }
+        public init(
+            id: UUID = .init()
+        ) {
+            self.id = id
+        }
     }
     
     public enum Action: Equatable {

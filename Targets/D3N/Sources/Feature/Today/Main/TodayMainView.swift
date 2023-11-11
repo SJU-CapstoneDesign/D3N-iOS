@@ -47,6 +47,9 @@ public struct TodayMainView: View {
                         .font(.subheadline)
                         .foregroundStyle(.gray)
                         .fontWeight(.semibold)
+                        .anchorPreference(key: MAnchorKey.self, value: .bounds, transform: { anchor in
+                            return [viewStore.state.id.uuidString: anchor]
+                        })
                     
                     HStack {
                         Text("오늘의 뉴스 3 문제")
@@ -78,8 +81,8 @@ public struct TodayMainView: View {
                     NewsListItemCellView(store: store)
                         .padding(.vertical, 5)
 //                        .anchorPreference(key: MAnchorKey.self, value: .bounds, transform: { anchor in
-//                            return [store.id: anchor]
-                            //FIXME: store id를 어떻게 호출할 수 있을까?
+//                            return [viewStore.state.id: anchor]
+//                            FIXME: store id를 어떻게 호출할 수 있을까?
 //                        })
                 }
         }
@@ -89,5 +92,10 @@ public struct TodayMainView: View {
         .clipped()
         .shadow(color: Color(uiColor: .systemGray5), radius: 20)
         .scaleEffect(isPressing ? 0.95 : 1.0)
+        .overlayPreferenceValue(MAnchorKey.self, { value in
+            GeometryReader(content: { geometry in
+                ForEach()
+            })
+        })
     }
 }
