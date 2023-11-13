@@ -23,6 +23,14 @@ struct MainTabView: View {
                         }
                 }
                 
+                IfLetStore(self.store.scope(state: \.allNews, action: MainTabStore.Action.allNews)){
+                    AllNewsNavigationStackView(store: $0)
+                        .tabItem {
+                            Image(systemName: "text.justify.left")
+                            Text("전체 뉴스")
+                        }
+                }
+                
                 IfLetStore(self.store.scope(state: \.myPage, action: MainTabStore.Action.myPage)) {
                     MyPageNavigationStackView(store: $0)
                         .tabItem {

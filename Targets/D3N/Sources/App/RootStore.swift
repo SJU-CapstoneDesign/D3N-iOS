@@ -16,11 +16,11 @@ struct RootStore: Reducer {
         case mainTab(MainTabStore.State)
         
         init() {
-            if LocalStorageManager.load(.isOnBoardingNeeded) != false {
-                self = .onboarding(.init())
-            } else {
+//            if LocalStorageManager.load(.isOnBoardingNeeded) != false {
+//                self = .onboarding(.init())
+//            } else {
                 self = .mainTab(.init())
-            }
+//            }
         }
     }
     

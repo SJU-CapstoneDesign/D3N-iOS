@@ -18,6 +18,7 @@ struct MainTabStore: Reducer {
         var currentScene: MainScene = .question
         
         var today: TodayNavigationStackStore.State? = .init()
+        var allNews: AllNewsNavigationStackStore.State? = .init()
         var myPage: MyPageNavigationStackStore.State? = .init()
     }
     
@@ -27,6 +28,7 @@ struct MainTabStore: Reducer {
         case selectTab(MainScene)
         
         case today(TodayNavigationStackStore.Action)
+        case allNews(AllNewsNavigationStackStore.Action)
         case myPage(MyPageNavigationStackStore.Action)
         case delegate(Delegate)
         
@@ -51,6 +53,9 @@ struct MainTabStore: Reducer {
         }
         .ifLet(\.today, action: /Action.today) {
             TodayNavigationStackStore()
+        }
+        .ifLet(\.allNews, action: /Action.allNews) {
+            AllNewsNavigationStackStore()
         }
         .ifLet(\.myPage, action: /Action.myPage) {
             MyPageNavigationStackStore()
