@@ -24,6 +24,7 @@ struct OnboardingNicknameView: View {
                 Text("닉네임을 입력해주세요.")
                     .font(.title)
                     .fontWeight(.bold)
+                    .padding(.top, 40)
                 
                 TextField("닉네임", text: viewStore.$nickname)
                     .focused(
@@ -62,7 +63,6 @@ struct OnboardingNicknameView: View {
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .padding()
-            .padding(.vertical, 40)
             .bind(viewStore.$focus, to: self.$focus)
         }
     }
