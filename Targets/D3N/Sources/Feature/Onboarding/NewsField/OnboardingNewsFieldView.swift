@@ -35,7 +35,7 @@ struct OnboardingNewsFieldView: View {
                 Spacer()
                 
                 D3NSubmitButton(
-                    activeTitle: "선택 완료",
+                    activeTitle: "이제 끝이에요!",
                     inactiveTitle: "선택해주세요",
                     isActive: !viewStore.state.newsFields.isEmpty
                 ) { _ in
