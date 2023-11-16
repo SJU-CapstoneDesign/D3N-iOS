@@ -23,12 +23,14 @@ extension UserService: TargetType {
         case .onboard: return "user/onboard"
         }
     }
+    
     public var method: Moya.Method {
         switch self {
         case .onboardNeeded: return .get
         case .onboard: return .post
         }
     }
+    
     public var task: Task {
         switch self {
         case .onboardNeeded:
@@ -46,7 +48,10 @@ extension UserService: TargetType {
     }
     
     public var headers: [String: String]? {
-        let accessToken: String = LocalStorageManager.load(.accessToken) ?? ""
-        return ["Authorization": "Bearer \(accessToken)"]
+        return nil
+    }
+    
+    public var validationType: ValidationType {
+        return .successCodes
     }
 }

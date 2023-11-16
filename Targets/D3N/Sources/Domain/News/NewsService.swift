@@ -43,7 +43,10 @@ extension NewsService: TargetType {
     }
     
     public var headers: [String: String]? {
-        let accessToken: String = LocalStorageManager.load(.accessToken) ?? ""
-        return ["Authorization": "Bearer \(accessToken)"]
+        return nil
+    }
+    
+    public var validationType: ValidationType {
+        return .successCodes
     }
 }
