@@ -44,10 +44,10 @@ public struct AllNewsNavigationStackView: View {
                          then: QuizResultView.init(store:)
                     )
                     
-                case .newsList:
+                case .allNews:
                     CaseLet(
-                        /AllNewsNavigationStackStore.Path.State.newsList,
-                         action: TodayNavigationStackStore.Path.Action.newsList,
+                        /AllNewsNavigationStackStore.Path.State.allNews,
+                         action: TodayNavigationStackStore.Path.Action.allNews,
                          then: AllNewsView.init(store:)
                     )
                 }

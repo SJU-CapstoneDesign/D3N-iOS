@@ -35,13 +35,13 @@ public struct AllNewsNavigationStackStore: Reducer {
         public enum State: Equatable {
             case quizMain(QuizMainStore.State)
             case quizResult(QuizResultStore.State)
-            case newsList(AllNewsStore.State)
+            case allNews(AllNewsStore.State)
         }
         
         public enum Action: Equatable {
             case quizMain(QuizMainStore.Action)
             case quizResult(QuizResultStore.Action)
-            case newsList(AllNewsStore.Action)
+            case allNews(AllNewsStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
@@ -51,7 +51,7 @@ public struct AllNewsNavigationStackStore: Reducer {
             Scope(state: /State.quizResult, action: /Action.quizResult) {
                 QuizResultStore()
             }
-            Scope(state: /State.newsList, action: /Action.newsList) {
+            Scope(state: /State.allNews, action: /Action.allNews) {
                 AllNewsStore()
             }
         }
@@ -85,7 +85,7 @@ public struct AllNewsNavigationStackStore: Reducer {
                     return .send(.popToRoot)
                 }
                 
-            case let .path(.element(id: _, action: .newsList(.delegate(action)))):
+            case let .path(.element(id: _, action: .allNews(.delegate(action)))):
                 switch action {
                 case let .select(newsEntity):
                     state.path.append(.quizMain(.init(newsEntity: newsEntity)))
