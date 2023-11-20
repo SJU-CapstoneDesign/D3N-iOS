@@ -25,14 +25,15 @@ public struct QuizMainView: View {
                 
                 VStack {
                     Spacer()
-                    
                     HStack {
                         Spacer()
-                        
-                        Button("풀기", action: {
+                        D3NTextButton(
+                            activeTitle: "풀기",
+                            inactiveTitle: "풀기",
+                            isActive: true
+                        ) {
                             viewStore.send(.solveButtonTapped)
-                        })
-                        .minimalBackgroundStyle()
+                        }
                     }
                 }
                 .padding()
@@ -40,6 +41,7 @@ public struct QuizMainView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
+            .ignoresSafeArea(edges: .bottom)
             .sheet(
                 store: self.store.scope(
                     state: \.$quizList,
@@ -52,4 +54,8 @@ public struct QuizMainView: View {
             .toolbar(.hidden, for: .tabBar)
         }
     }
+}
+
+#Preview {
+    QuizMainView(store: .init(initialState: QuizMainStore.State(newsEntity: .mock), reducer: { QuizMainStore() }))
 }

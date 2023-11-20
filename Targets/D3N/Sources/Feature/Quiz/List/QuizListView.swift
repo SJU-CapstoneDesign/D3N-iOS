@@ -31,6 +31,14 @@ public struct QuizListView: View {
                     viewStore.send(.solvedButtonTapped)
                 })
                 .padding()
+                
+                D3NSubmitButton(
+                    activeTitle: "답을 선택해주세요.",
+                    inactiveTitle: "제출하기",
+                    isActive: false
+                ) {
+                    
+                }
             }
         }
     }
@@ -51,4 +59,8 @@ public struct QuizListView: View {
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
     }
+}
+
+#Preview {
+    QuizListView(store: .init(initialState: QuizListStore.State(quizEntityList: []), reducer: { QuizListStore() }))
 }
