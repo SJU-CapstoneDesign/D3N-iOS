@@ -21,24 +21,26 @@ public struct QuizListView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading) {
-                titleView(current: viewStore.state.currentIndex, whole: viewStore.state.quizListItems.count)
+                D3NProgressBar(
+                    progress: viewStore.state.quizListItems.map { $0.quizEntity.answer == $0.quizEntity.userAnswer },
+                    currentIndex: viewStore.state.currentIndex
+                )
+                .padding(.horizontal)
                 
-                quizListItemView(tab: viewStore.binding(get: \.currentTab, send: QuizListStore.Action.setTab))
+                quizListItemView(
+                    tab: viewStore.binding(get: \.currentTab, send: QuizListStore.Action.setTab)
+                )
                 
                 Spacer()
                 
-                MinimalButton(title: "완료", isActive: viewStore.state.isActive, action: {
-                    viewStore.send(.solvedButtonTapped)
-                })
-                .padding()
-                
                 D3NSubmitButton(
-                    activeTitle: "답을 선택해주세요.",
-                    inactiveTitle: "제출하기",
-                    isActive: false
+                    activeTitle: "제출하기",
+                    inactiveTitle: "답을 선택해주세요",
+                    isActive: viewStore.state.isActive
                 ) {
-                    
+                    viewStore.send(.solvedButtonTapped)
                 }
+                .padding()
             }
         }
     }
