@@ -51,7 +51,7 @@ public struct OnboardingNicknameStore: Reducer {
                 return .none
 
             case .confirmButtonTapped:
-                if !state.nickname.isEmpty {
+                if state.isConfirmButtonActive {
                     state.focus = nil
                     return .send(.delegate(.submit(state.nickname)))
                 }

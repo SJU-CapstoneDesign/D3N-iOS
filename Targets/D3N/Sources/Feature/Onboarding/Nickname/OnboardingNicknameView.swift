@@ -52,10 +52,8 @@ struct OnboardingNicknameView: View {
                     activeTitle: "다음으로",
                     inactiveTitle: "닉네임을 입력해주세요",
                     isActive: viewStore.state.isConfirmButtonActive,
-                    action: { isActive in
-                        if isActive {
-                            viewStore.send(.confirmButtonTapped)
-                        }
+                    action: {
+                        viewStore.send(.confirmButtonTapped)
                     }
                 )
             }

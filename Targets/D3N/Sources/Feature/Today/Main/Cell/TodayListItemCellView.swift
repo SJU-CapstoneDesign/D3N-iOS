@@ -48,11 +48,9 @@ public struct TodayListItemCellView: View {
                         }
                     },
                     doubleTapTimeoutout: 1,
-                    doubleTapAction: {
-                    },
+                    doubleTapAction: { },
                     longPressTime: 0,
-                    longPressAction: {
-                    },
+                    longPressAction: { },
                     endAction: {
                         withAnimation {
                             isPressed = false
