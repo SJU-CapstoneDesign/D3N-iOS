@@ -39,7 +39,7 @@ extension QuizService: TargetType {
         case let .submit(quizs):
             let dto: SubmitQuizListRequestDTO = quizs.compactMap {
                 if let userAnswer = $0.userAnswer {
-                    return .init(quizID: $0.id, selectedAnswer: userAnswer)
+                    return .init(quizId: $0.id, selectedAnswer: userAnswer)
                 } else {
                     return nil
                 }

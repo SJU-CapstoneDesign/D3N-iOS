@@ -44,6 +44,9 @@ public struct QuizListStore: Reducer {
         case setTab(Int)
         case solvedButtonTapped
         
+        case submitQuizListRequest([QuizEntity])
+        case submitQuizListResponse(Result<[Int], D3NAPIError>)
+        
         case quizListItems(id: QuizListItemCellStore.State.ID, action: QuizListItemCellStore.Action)
         case delegate(Delegate)
         
@@ -51,6 +54,8 @@ public struct QuizListStore: Reducer {
             case solved([QuizEntity])
         }
     }
+    
+    @Dependency(\.quizClient) var quizClient
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -62,29 +67,20 @@ public struct QuizListStore: Reducer {
                 state.currentTab = tab
                 return .none
                 
+            case let .submitQuizListRequest(quizs):
+                return .run { send in
+                    await send(.submitQuizListResponse(quizClient.submit(quizs)))
+                }
+                
             case let .quizListItems(id: id, action: .delegate(action)):
                 switch action {
                 case let .submit(userAnswer):
                     if let index = state.quizEntityList.firstIndex(where: { $0.id == id }) {
                         state.quizEntityList[index].userAnswer = userAnswer
+                        return .send(.submitQuizListRequest(state.quizEntityList))
                     }
                     return .none
                 }
-                
-//            case .solvedButtonTapped:
-//                if state.isActive {
-//                    let quizEntityList = state.quizListItems.map { return $0.quizEntity }
-//                    return .send(.delegate(.solved(quizEntityList)))
-//                }
-//                return .none
-//                
-//            case let .quizListItems(id: id, action: .delegate(action)):
-//                switch action {
-//                case let .userAnswered(answer):
-//                    state.quizListItems[id: id]?.quizEntity.userAnswer = answer
-//                    state.isActive = !state.quizListItems.contains(where: { $0.quizEntity.userAnswer == nil })
-//                    return .none
-//                }
                 
             default:
                 return .none
