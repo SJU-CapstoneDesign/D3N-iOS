@@ -9,29 +9,41 @@
 import Foundation
 import SwiftUI
 
+public struct ProgressItem {
+    let secondTime: Int?
+}
+
 public struct D3NProgressBar: View {
-    let progress: [Bool]
+    let items: [ProgressItem]
     let currentIndex: Int
     
     init(
-        progress: [Bool] = [],
+        items: [ProgressItem] = [],
         currentIndex: Int = 0
     ) {
-        self.progress = progress
+        self.items = items
         self.currentIndex = 0
     }
     
     public var body: some View {
         HStack {
-            ForEach(Array(self.progress.enumerated()), id: \.offset) { index, isSolved in
-                item(index: index)
+            ForEach(Array(self.items.enumerated()), id: \.offset) { index, item in
+                progressItemView(index: index, item: item)
             }
         }
     }
     
-    private func item(index: Int) -> some View {
-        RoundedRectangle(cornerRadius: 4)
-            .fill(index == currentIndex ? Color.black : Color.gray)
-            .frame(height: 8)
+    private func progressItemView(index: Int, item: ProgressItem) -> some View {
+        VStack {
+            RoundedRectangle(cornerRadius: 4)
+                .fill(index == currentIndex ? Color.black : Color.gray)
+                .frame(height: 8)
+            
+            if let secondTime = item.secondTime {
+                Text("\(secondTime)")
+                    .font(.caption2)
+                    .foregroundStyle(index == currentIndex ? Color.black : Color.gray)
+            }
+        }
     }
 }
