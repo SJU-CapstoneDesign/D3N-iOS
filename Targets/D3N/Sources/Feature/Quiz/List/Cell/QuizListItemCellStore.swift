@@ -35,21 +35,6 @@ public struct QuizListItemCellStore: Reducer {
             self.reason = reason
             self.userAnswer = userAnswer
         }
-        
-//        var choiceListItems: IdentifiedArrayOf<ChoiceListItemCellStore.State> = []
-        
-//        public init(
-//            id: UUID = .init(),
-//            quizEntity: QuizEntity
-//        ) {
-//            self.id = id
-//            self.quizEntity = quizEntity
-//            self.choiceListItems = .init(
-//                uniqueElements: quizEntity.choiceList.map { choice in
-//                    return .init(choice: choice)
-//                }
-//            )
-//        }
     }
     
     public enum Action: Equatable {
@@ -58,10 +43,9 @@ public struct QuizListItemCellStore: Reducer {
         case answered(Int)
         
         case delegate(Delegate)
-//        case choiceListItems(id: ChoiceListItemCellStore.State.ID, action: ChoiceListItemCellStore.Action)
         
         public enum Delegate: Equatable {
-            case userAnswered(Int)
+            case answered(Int)
         }
     }
     
@@ -73,28 +57,11 @@ public struct QuizListItemCellStore: Reducer {
                 
             case let .answered(userAnswer):
                 state.userAnswer = userAnswer
-                return .none
-                
-                
-//            case let .choiceListItems(id: id, action: .delegate(action)):
-//                switch action {
-//                case .tapped:
-//                    for id in state.choiceListItems.ids {
-//                        state.choiceListItems[id: id]?.isSelected = false
-//                    }
-//                    state.choiceListItems[id: id]?.isSelected = true
-//                    if let index = state.choiceListItems.index(id: id) {
-//                        return .send(.delegate(.userAnswered(index)))
-//                    }
-//                    return .none
-//                }
+                return .send(.delegate(.answered(userAnswer)))
                 
             default:
                 return .none
             }
         }
-//        .forEach(\.choiceListItems, action: /Action.choiceListItems(id:action:)) {
-//            ChoiceListItemCellStore()
-//        }
     }
 }

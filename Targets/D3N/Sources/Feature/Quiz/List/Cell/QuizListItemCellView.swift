@@ -32,7 +32,7 @@ public struct QuizListItemCellView: View {
                         title: choice,
                         isSelected: index == viewStore.state.userAnswer
                     ) {
-                        
+                        viewStore.send(.answered(index), animation: .default)
                     }
                 }
             }

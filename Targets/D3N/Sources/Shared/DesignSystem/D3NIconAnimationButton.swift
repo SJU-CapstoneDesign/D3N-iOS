@@ -31,6 +31,7 @@ struct D3NIconAnimationButton: View {
         self.title = title
         self.content = content
         self.isSelected = isSelected
+//        self.isPressed = isSelected
         
         self.action = action
     }
@@ -80,9 +81,9 @@ struct D3NIconAnimationButton: View {
             )
         )
         .padding(10)
-        .background(isPressed ? Color.systemGray6 : Color.background)
+        .background(isSelected ? Color.systemGray6 : Color.background)
         .cornerRadius(20)
         .clipped()
-        .scaleEffect(isPressed ? 0.95 : 1)
+        .scaleEffect(isSelected ? 0.95 : 1)
     }
 }
