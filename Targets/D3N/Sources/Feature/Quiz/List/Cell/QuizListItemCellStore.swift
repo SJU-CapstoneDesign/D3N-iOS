@@ -12,7 +12,7 @@ import ComposableArchitecture
 
 public struct QuizListItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
-        public var id: UUID
+        public var id: Int
         
         var question: String
         var choices: [String]
@@ -21,7 +21,7 @@ public struct QuizListItemCellStore: Reducer {
         var userAnswer: Int?
         
         init(
-            id: UUID = .init(),
+            id: Int = .init(),
             question: String,
             choices: [String],
             answer: Int,
@@ -41,11 +41,12 @@ public struct QuizListItemCellStore: Reducer {
         case onAppear
         
         case answered(Int)
+        case submitButtonTappped
         
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case answered(Int)
+            case submit(Int)
         }
     }
     
@@ -56,8 +57,18 @@ public struct QuizListItemCellStore: Reducer {
                 return .none
                 
             case let .answered(userAnswer):
-                state.userAnswer = userAnswer
-                return .send(.delegate(.answered(userAnswer)))
+                if state.userAnswer == userAnswer {
+                    state.userAnswer = nil
+                } else {
+                    state.userAnswer = userAnswer
+                }
+                return .none
+                
+            case .submitButtonTappped:
+                if let userAnswer = state.userAnswer {
+                    return .send(.delegate(.submit(userAnswer)))
+                }
+                return .none
                 
             default:
                 return .none

@@ -46,17 +46,6 @@ public struct QuizListView: View {
                     }
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
-                
-                Spacer()
-                
-                D3NSubmitButton(
-                    activeTitle: "제출하기",
-                    inactiveTitle: "답을 선택해주세요",
-                    isActive: viewStore.state.isActive
-                ) {
-                    viewStore.send(.solvedButtonTapped)
-                }
-                .padding()
             }
         }
     }

@@ -35,6 +35,15 @@ public struct QuizListItemCellView: View {
                         viewStore.send(.answered(index), animation: .default)
                     }
                 }
+                
+                D3NSubmitButton(
+                    activeTitle: "제출하기",
+                    inactiveTitle: "답을 선택해주세요",
+                    isActive: viewStore.state.userAnswer != nil
+                ) {
+                    viewStore.send(.submitButtonTappped)
+                }
+                .padding()
             }
         }
     }
