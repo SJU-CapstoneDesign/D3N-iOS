@@ -25,6 +25,7 @@ extension AuthService: TargetType {
         case .refresh: return "auth/refresh"
         }
     }
+    
     public var method: Moya.Method {
         switch self {
         case .appleLogin: return .post
@@ -32,6 +33,7 @@ extension AuthService: TargetType {
         case .refresh: return .get
         }
     }
+    
     public var task: Task {
         switch self {
         case let .appleLogin(code: code, idToken: idToken):
@@ -39,12 +41,15 @@ extension AuthService: TargetType {
         case .appleUnlink:
             return .requestPlain
         case .refresh:
-            return .requestPlain
+            return .requestParameters(parameters: ["refreshToken": LocalStorageManager.load(.refreshToken) ?? ""], encoding: URLEncoding.queryString)
         }
     }
     
     public var headers: [String: String]? {
-        let accessToken: String = LocalStorageManager.load(.accessToken) ?? ""
-        return ["Authorization": "Bearer \(accessToken)"]
+        return nil
+    }
+    
+    public var validationType: ValidationType {
+        return .successCodes
     }
 }

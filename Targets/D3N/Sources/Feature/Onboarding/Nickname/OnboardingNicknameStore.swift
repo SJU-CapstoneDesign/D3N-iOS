@@ -15,6 +15,8 @@ public struct OnboardingNicknameStore: Reducer {
         @BindingState var focus: Field? = .nickname
         @BindingState var nickname: String = ""
         
+        var isConfirmButtonActive: Bool = false
+        
         public init() { }
         
         enum Field: Hashable {
@@ -40,10 +42,14 @@ public struct OnboardingNicknameStore: Reducer {
         
         Reduce { state, action in
             switch action {
+            case .binding(\.$nickname):
+                state.isConfirmButtonActive = !state.nickname.isEmpty
+                return .none
+                
             case .onAppear:
                 state.focus = .nickname
                 return .none
-                // 닉네임, 생년, 성별, 관심카테고리
+
             case .confirmButtonTapped:
                 if !state.nickname.isEmpty {
                     state.focus = nil

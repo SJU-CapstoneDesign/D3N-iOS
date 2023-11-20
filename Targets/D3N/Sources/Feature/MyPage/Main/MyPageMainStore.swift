@@ -61,7 +61,7 @@ public struct MyPageMainStore: Reducer {
                     await send(.appleUnlinkResponse(await authClient.appleUnlink()))
                 }
                 
-            case let .appleUnlinkResponse(.success(isUnlinked)):
+            case .appleUnlinkResponse(.success), .appleUnlinkResponse(.failure):
                 return .send(.delegate(.unlinked))
                 
             case let .alert(.presented(alert)):

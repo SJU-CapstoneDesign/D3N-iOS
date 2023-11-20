@@ -17,7 +17,10 @@ public enum D3NAPIError: Error {
 }
 
 final class D3NAPIkProvider {
-    private static let provider = MoyaProvider<MultiTarget>(plugins: [D3NNetworkLoggerPlugin()])
+    private static let provider = MoyaProvider<MultiTarget>(
+        session: Session(interceptor: AuthInterceptor()),
+        plugins: [D3NNetworkLoggerPlugin()]
+    )
     
     static func reqeust<R: Codable>(target: TargetType) async -> Result<R, D3NAPIError>{
         let response = await self.request(target: target)

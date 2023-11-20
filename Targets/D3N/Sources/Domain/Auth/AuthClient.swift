@@ -14,7 +14,7 @@ import Moya
 struct AuthClient {
     var appleLogin: (_ code: String, _ idToken: String) async -> Result<AuthEntity, D3NAPIError>
     var appleUnlink: () async -> Result<Bool, D3NAPIError>
-    var refresh: () async -> Result<AuthEntity, Error>
+    var refresh: () async -> Result<AuthEntity, D3NAPIError>
 }
 
 extension AuthClient: TestDependencyKey {
@@ -23,7 +23,7 @@ extension AuthClient: TestDependencyKey {
             return .success(.init(accessToken: "", refreshToken: ""))
         },
         appleUnlink: { .success(true) },
-        refresh: { .init(.success(.init(accessToken: "", refreshToken: ""))) }
+        refresh: { .failure(.none) }
     )
     
     static let testValue = Self(
@@ -63,7 +63,14 @@ extension AuthClient: DependencyKey {
             }
         },
         refresh: {
-            return .success(.init(accessToken: "", refreshToken: ""))
+            let target: TargetType = AuthService.refresh
+            let response: Result<AuthEntity, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            
+            return response.map { dto in
+                LocalStorageManager.save(.accessToken, value: dto.accessToken)
+                LocalStorageManager.save(.accessToken, value: dto.refreshToken)
+                return dto
+            }
         }
     )
 }

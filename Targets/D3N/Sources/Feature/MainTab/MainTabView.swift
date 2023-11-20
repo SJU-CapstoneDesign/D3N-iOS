@@ -38,18 +38,9 @@ struct MainTabView: View {
                             Text("마이")
                         }
                 }
-                
-//                TodayNavigationStackView(store: self.store.scope(state: \.today, action: MainTabStore.Action.today))
-//                    .tabItem {
-//                        Image(systemName: "doc.text.image")
-//                        Text("투데이")
-//                    }
-                
-//                MyPageNavigationStackView(store: self.store.scope(state: \.myPage, action: MainTabStore.Action.myPage))
-//                    .tabItem {
-//                        Image(systemName: "person.circle")
-//                        Text("마이")
-//                    }
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
             }
         }
     }

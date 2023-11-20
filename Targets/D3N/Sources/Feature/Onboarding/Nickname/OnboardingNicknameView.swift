@@ -24,6 +24,7 @@ struct OnboardingNicknameView: View {
                 Text("닉네임을 입력해주세요.")
                     .font(.title)
                     .fontWeight(.bold)
+                    .padding(.top, 40)
                 
                 TextField("닉네임", text: viewStore.$nickname)
                     .focused(
@@ -46,12 +47,22 @@ struct OnboardingNicknameView: View {
                     }
                 
                 Spacer()
+                
+                D3NSubmitButton(
+                    activeTitle: "다음으로",
+                    inactiveTitle: "닉네임을 입력해주세요",
+                    isActive: viewStore.state.isConfirmButtonActive,
+                    action: { isActive in
+                        if isActive {
+                            viewStore.send(.confirmButtonTapped)
+                        }
+                    }
+                )
             }
             .navigationBarBackButtonHidden()
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
             .padding()
-            .padding(.vertical, 40)
             .bind(viewStore.$focus, to: self.$focus)
         }
     }

@@ -25,7 +25,11 @@ struct MainTabStore: Reducer {
     enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         
+        case onAppear
         case selectTab(MainScene)
+        
+        case authRefreshRequest
+        case authRefreshResponse(Result<AuthEntity, D3NAPIError>)
         
         case today(TodayNavigationStackStore.Action)
         case allNews(AllNewsNavigationStackStore.Action)
@@ -37,11 +41,21 @@ struct MainTabStore: Reducer {
         }
     }
     
+    @Dependency(\.authClient) var authClient
+    
     public var body: some ReducerOf<Self> {
         BindingReducer()
         
         Reduce { state, action in
             switch action {
+            case .onAppear:
+                return .send(.authRefreshRequest)
+                
+            case .authRefreshRequest:
+                return .run { send in
+                    await send(.authRefreshResponse(await authClient.refresh()))
+                }
+                
             case let .myPage(.delegate(action)):
                 switch action {
                 case .unlinked:
@@ -49,6 +63,7 @@ struct MainTabStore: Reducer {
                     state.myPage = nil
                     return .send(.delegate(.appleUnlinked))
                 }
+                
             default:
                 return .none
             }
