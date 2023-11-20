@@ -22,7 +22,7 @@ public struct D3NProgressBar: View {
         currentIndex: Int = 0
     ) {
         self.items = items
-        self.currentIndex = 0
+        self.currentIndex = currentIndex
     }
     
     public var body: some View {

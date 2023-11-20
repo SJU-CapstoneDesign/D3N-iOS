@@ -40,8 +40,8 @@ public extension D3NIcon {
         }
     }
     
-    static let one: D3NIcon = .init(systemImageName: "1.circle.fill", color: .black)
-    static let two: D3NIcon = .init(systemImageName: "2.circle.fill", color: .black)
-    static let three: D3NIcon = .init(systemImageName: "3.circle.fill", color: .black)
-    static let four: D3NIcon = .init(systemImageName: "4.circle.fill", color: .black)
+    static let one: D3NIcon = .init(systemImageName: "1.circle.fill", color: .pink)
+    static let two: D3NIcon = .init(systemImageName: "2.circle.fill", color: .mint)
+    static let three: D3NIcon = .init(systemImageName: "3.circle.fill", color: .orange)
+    static let four: D3NIcon = .init(systemImageName: "4.circle.fill", color: .purple)
 }
