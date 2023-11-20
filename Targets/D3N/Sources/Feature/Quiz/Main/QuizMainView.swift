@@ -49,7 +49,7 @@ public struct QuizMainView: View {
                 )
             ) {
                 QuizListView(store: $0)
-                    .presentationDetents([.medium])
+                    .presentationDetents([.large])
             }
             .toolbar(.hidden, for: .tabBar)
         }

@@ -24,8 +24,14 @@ public struct QuizListStore: Reducer {
             self.quizEntityList = quizEntityList
             
             self.quizListItems = .init(
-                uniqueElements: quizEntityList.map { quizEntity in
-                    return .init(quizEntity: quizEntity)
+                uniqueElements: quizEntityList.map {
+                    return .init(
+                        question: $0.question,
+                        choices: $0.choiceList,
+                        answer: $0.answer,
+                        reason: $0.reason,
+                        userAnswer: $0.userAnswer
+                    )
                 }
             )
         }
@@ -56,20 +62,20 @@ public struct QuizListStore: Reducer {
                 state.currentIndex = state.quizListItems.index(id: tab) ?? 0
                 return .none
                 
-            case .solvedButtonTapped:
-                if state.isActive {
-                    let quizEntityList = state.quizListItems.map { return $0.quizEntity }
-                    return .send(.delegate(.solved(quizEntityList)))
-                }
-                return .none
-                
-            case let .quizListItems(id: id, action: .delegate(action)):
-                switch action {
-                case let .userAnswered(answer):
-                    state.quizListItems[id: id]?.quizEntity.userAnswer = answer
-                    state.isActive = !state.quizListItems.contains(where: { $0.quizEntity.userAnswer == nil })
-                    return .none
-                }
+//            case .solvedButtonTapped:
+//                if state.isActive {
+//                    let quizEntityList = state.quizListItems.map { return $0.quizEntity }
+//                    return .send(.delegate(.solved(quizEntityList)))
+//                }
+//                return .none
+//                
+//            case let .quizListItems(id: id, action: .delegate(action)):
+//                switch action {
+//                case let .userAnswered(answer):
+//                    state.quizListItems[id: id]?.quizEntity.userAnswer = answer
+//                    state.isActive = !state.quizListItems.contains(where: { $0.quizEntity.userAnswer == nil })
+//                    return .none
+//                }
                 
             default:
                 return .none
