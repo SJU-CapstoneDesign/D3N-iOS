@@ -1,15 +1,15 @@
 //
-//  D3NSubmitButton.swift
+//  D3NTextButton.swift
 //  D3N
 //
-//  Created by 송영모 on 11/6/23.
+//  Created by 송영모 on 11/20/23.
 //  Copyright © 2023 sju. All rights reserved.
 //
 
 import Foundation
 import SwiftUI
 
-public struct D3NSubmitButton: View {
+public struct D3NTextButton: View {
     public let activeTitle: LocalizedStringKey
     public let inactiveTitle: LocalizedStringKey
     public let isActive: Bool
@@ -33,11 +33,9 @@ public struct D3NSubmitButton: View {
             action()
         }, label: {
             HStack {
-                Spacer()
                 Text(self.isActive ? self.activeTitle : self.inactiveTitle)
                     .fontWeight(.semibold)
                     .foregroundStyle(isActive ? .white : .black)
-                Spacer()
             }
         })
         .padding(10)

@@ -12,9 +12,9 @@ import ComposableArchitecture
 
 public struct QuizListStore: Reducer {
     public struct State: Equatable {
-        let quizEntityList: [QuizEntity]
+        var quizEntityList: [QuizEntity]
         
-        var currentTab: UUID = .init()
+        var currentTab: Int = 0
         var currentIndex: Int = 0
         var isActive: Bool = false
         
@@ -24,8 +24,15 @@ public struct QuizListStore: Reducer {
             self.quizEntityList = quizEntityList
             
             self.quizListItems = .init(
-                uniqueElements: quizEntityList.map { quizEntity in
-                    return .init(quizEntity: quizEntity)
+                uniqueElements: quizEntityList.map {
+                    return .init(
+                        id: $0.id,
+                        question: $0.question,
+                        choices: $0.choiceList,
+                        answer: $0.answer,
+                        reason: $0.reason,
+                        userAnswer: $0.userAnswer
+                    )
                 }
             )
         }
@@ -34,8 +41,11 @@ public struct QuizListStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case setTab(UUID)
+        case setTab(Int)
         case solvedButtonTapped
+        
+        case submitQuizListRequest([QuizEntity])
+        case submitQuizListResponse(Result<[Int], D3NAPIError>)
         
         case quizListItems(id: QuizListItemCellStore.State.ID, action: QuizListItemCellStore.Action)
         case delegate(Delegate)
@@ -45,6 +55,8 @@ public struct QuizListStore: Reducer {
         }
     }
     
+    @Dependency(\.quizClient) var quizClient
+    
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -53,21 +65,20 @@ public struct QuizListStore: Reducer {
                 
             case let .setTab(tab):
                 state.currentTab = tab
-                state.currentIndex = state.quizListItems.index(id: tab) ?? 0
                 return .none
                 
-            case .solvedButtonTapped:
-                if state.isActive {
-                    let quizEntityList = state.quizListItems.map { return $0.quizEntity }
-                    return .send(.delegate(.solved(quizEntityList)))
+            case let .submitQuizListRequest(quizs):
+                return .run { send in
+                    await send(.submitQuizListResponse(quizClient.submit(quizs)))
                 }
-                return .none
                 
             case let .quizListItems(id: id, action: .delegate(action)):
                 switch action {
-                case let .userAnswered(answer):
-                    state.quizListItems[id: id]?.quizEntity.userAnswer = answer
-                    state.isActive = !state.quizListItems.contains(where: { $0.quizEntity.userAnswer == nil })
+                case let .submit(userAnswer):
+                    if let index = state.quizEntityList.firstIndex(where: { $0.id == id }) {
+                        state.quizEntityList[index].userAnswer = userAnswer
+                        return .send(.submitQuizListRequest(state.quizEntityList))
+                    }
                     return .none
                 }
                 

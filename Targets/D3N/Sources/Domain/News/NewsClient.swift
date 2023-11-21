@@ -11,10 +11,6 @@ import Foundation
 import ComposableArchitecture
 import Moya
 
-public enum NewsError: Error, Equatable {
-    case no
-}
-
 struct NewsClient {
     var fetchNewsList: (Int, Int) async -> Result<[NewsEntity], D3NAPIError>
     var fetchQuizList: (Int) async -> Result<[QuizEntity], D3NAPIError>

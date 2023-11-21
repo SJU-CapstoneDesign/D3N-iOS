@@ -20,35 +20,37 @@ public struct QuizListView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(alignment: .leading) {
-                titleView(current: viewStore.state.currentIndex, whole: viewStore.state.quizListItems.count)
+            VStack {
+                D3NProgressBar(
+                    items: viewStore.state.quizEntityList.map {
+                        return .init(secondTime: $0.secondTime)
+                    },
+                    currentIndex: viewStore.state.currentIndex
+                )
+                .padding([.horizontal, .top])
                 
-                quizListItemView(tab: viewStore.binding(get: \.currentTab, send: QuizListStore.Action.setTab))
-                
-                Spacer()
-                
-                MinimalButton(title: "완료", isActive: viewStore.state.isActive, action: {
-                    viewStore.send(.solvedButtonTapped)
-                })
-                .padding()
+                TabView(
+                    selection: viewStore.binding(
+                        get: \.currentTab,
+                        send: QuizListStore.Action.setTab
+                    )
+                ) {
+                    ForEachStore(
+                        self.store.scope(
+                            state: \.quizListItems,
+                            action: QuizListStore.Action.quizListItems(id:action:)
+                        )
+                    ) {
+                        QuizListItemCellView(store: $0)
+                            .padding(.horizontal)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
     }
-    
-    private func titleView(current: Int, whole: Int) -> some View {
-        Text("\(current + 1) / \(whole)")
-            .font(.title)
-            .fontWeight(.semibold)
-            .padding([.top, .horizontal])
-    }
-    
-    private func quizListItemView(tab: Binding<UUID>) -> some View {
-        TabView(selection: tab) {
-            ForEachStore(self.store.scope(state: \.quizListItems, action: QuizListStore.Action.quizListItems(id:action:))) {
-                QuizListItemCellView(store: $0)
-                    .padding(.horizontal)
-            }
-        }
-        .tabViewStyle(.page(indexDisplayMode: .never))
-    }
+}
+
+#Preview {
+    QuizListView(store: .init(initialState: QuizListStore.State(quizEntityList: []), reducer: { QuizListStore() }))
 }

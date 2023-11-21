@@ -24,3 +24,24 @@ public struct D3NIcon: View {
         }
     }
 }
+
+public extension D3NIcon {
+    static func resolved(index: Int) -> D3NIcon {
+        self.resolved(number: index + 1)
+    }
+    
+    static func resolved(number: Int) -> D3NIcon {
+        switch number {
+        case 1: return .one
+        case 2: return .two
+        case 3: return .three
+        case 4: return .four
+        default: return .one
+        }
+    }
+    
+    static let one: D3NIcon = .init(systemImageName: "1.circle.fill", color: .pink)
+    static let two: D3NIcon = .init(systemImageName: "2.circle.fill", color: .mint)
+    static let three: D3NIcon = .init(systemImageName: "3.circle.fill", color: .orange)
+    static let four: D3NIcon = .init(systemImageName: "4.circle.fill", color: .purple)
+}

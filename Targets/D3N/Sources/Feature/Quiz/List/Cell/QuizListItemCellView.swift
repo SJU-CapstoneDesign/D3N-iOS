@@ -20,37 +20,30 @@ public struct QuizListItemCellView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(spacing: 15) {
-                titleView(viewStore: viewStore)
-                
-                choiceListItemView()
-            }
-            .minimalBackgroundStyle()
-        }
-    }
-    
-    private func headerView(viewStore: ViewStoreOf<QuizListItemCellStore>) -> some View {
-        HStack {
-            Text("")
-        }
-    }
-    
-    private func titleView(viewStore: ViewStoreOf<QuizListItemCellStore>) -> some View {
-        VStack(alignment: .leading) {
-            HStack {
-                Text(viewStore.state.quizEntity.question)
-                    .font(.title3)
-                    .fontWeight(.semibold)
+            VStack {
+                Text(viewStore.state.question)
+                    .padding(.top, 40)
                 
                 Spacer()
-            }
-        }
-    }
-    
-    private func choiceListItemView() -> some View {
-        VStack(spacing: 10) {
-            ForEachStore(self.store.scope(state: \.choiceListItems, action: QuizListItemCellStore.Action.choiceListItems(id:action:))) {
-                ChoiceListItemCellView(store: $0)
+                
+                ForEach(Array(viewStore.choices.enumerated()), id: \.offset) { index, choice in
+                    D3NIconAnimationButton(
+                        icon: .resolved(index: index),
+                        title: choice,
+                        isSelected: index == viewStore.state.userAnswer
+                    ) {
+                        viewStore.send(.answered(index), animation: .default)
+                    }
+                }
+                
+                D3NSubmitButton(
+                    activeTitle: "제출하기",
+                    inactiveTitle: "답을 선택해주세요",
+                    isActive: viewStore.state.userAnswer != nil
+                ) {
+                    viewStore.send(.submitButtonTappped)
+                }
+                .padding()
             }
         }
     }
