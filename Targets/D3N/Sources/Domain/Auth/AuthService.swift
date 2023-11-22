@@ -48,8 +48,4 @@ extension AuthService: TargetType {
     public var headers: [String: String]? {
         return nil
     }
-    
-    public var validationType: ValidationType {
-        return .successCodes
-    }
 }
