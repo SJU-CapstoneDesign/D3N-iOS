@@ -106,13 +106,16 @@ public struct QuizMainStore: Reducer {
                 }
                 
             case .quizList(.dismiss):
-                return .run { [isTimerActive = state.isTimerActive] send in
-                    guard isTimerActive else { return }
-                    for await _ in self.clock.timer(interval: .seconds(1)) {
-                        await send(.timerTicked)
+                return .concatenate([
+                    .send(.fetchQuizListRequest),
+                    .run { [isTimerActive = state.isTimerActive] send in
+                        guard isTimerActive else { return }
+                        for await _ in self.clock.timer(interval: .seconds(1)) {
+                            await send(.timerTicked)
+                        }
                     }
-                }
-                .cancellable(id: CancelID.timer, cancelInFlight: true)
+                    .cancellable(id: CancelID.timer, cancelInFlight: true)
+                ])
                 
             default:
                 return .none
