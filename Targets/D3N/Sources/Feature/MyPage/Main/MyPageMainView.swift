@@ -17,6 +17,8 @@ public struct MyPageMainView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             List {
+                personalSection(viewStore: viewStore)
+                
                 feedbackSection()
                 
                 unlinkSection(viewStore: viewStore)
@@ -27,6 +29,15 @@ public struct MyPageMainView: View {
                     action: { .alert($0) }
                 )
             )
+        }
+    }
+    
+    private func personalSection(viewStore: ViewStoreOf<MyPageMainStore>) -> some View {
+        Section {
+            Button("내가 푼 뉴스 보기", action: {
+                viewStore.send(.solvedNewsButtonTapped)
+            })
+            .foregroundStyle(.blue)
         }
     }
     

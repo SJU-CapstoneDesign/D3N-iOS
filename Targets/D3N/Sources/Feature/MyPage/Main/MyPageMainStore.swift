@@ -18,6 +18,8 @@ public struct MyPageMainStore: Reducer {
     public enum Action: BindableAction, Equatable {
         case binding(BindingAction<State>)
         
+        case solvedNewsButtonTapped
+        
         case unlinkButtonTapped
         
         case appleUnlinkRequest
@@ -43,6 +45,10 @@ public struct MyPageMainStore: Reducer {
         
         Reduce { state, action in
             switch action {
+            
+            case .solvedNewsButtonTapped:
+                return .none
+            
             case .unlinkButtonTapped:
                 state.alert = AlertState {
                     TextState("회원탈퇴는 되돌릴 수 없습니다.")
