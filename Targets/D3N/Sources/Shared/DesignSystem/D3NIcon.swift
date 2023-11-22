@@ -11,37 +11,62 @@ import SwiftUI
 
 public struct D3NIcon: View {
     public let systemImageName: String
-    public let color: Color
+    public let inactiveColor: Color
+    public let activeColor: Color
+    public let isActive: Bool
+    
+    init(
+        systemImageName: String,
+        inactiveColor: Color = .gray,
+        activeColor: Color = .blue,
+        isActive: Bool = false
+    ) {
+        self.systemImageName = systemImageName
+        self.inactiveColor = inactiveColor
+        self.activeColor = activeColor
+        self.isActive = isActive
+    }
     
     public var body: some View {
         ZStack {
             Circle()
                 .frame(width: 40, height: 40)
-                .foregroundStyle(color.opacity(0.1))
+                .foregroundStyle(isActive ? activeColor.opacity(0.1) : inactiveColor.opacity(0.1))
             
             Image(systemName: systemImageName)
-                .foregroundStyle(color)
+                .foregroundStyle(isActive ? activeColor : inactiveColor)
         }
     }
 }
 
 public extension D3NIcon {
-    static func resolved(index: Int) -> D3NIcon {
-        self.resolved(number: index + 1)
+    static func resolved(index: Int, isActive: Bool) -> D3NIcon {
+        self.resolved(number: index + 1, isActive: isActive)
     }
     
-    static func resolved(number: Int) -> D3NIcon {
+    static func resolved(number: Int, isActive: Bool) -> D3NIcon {
         switch number {
-        case 1: return .one
-        case 2: return .two
-        case 3: return .three
-        case 4: return .four
-        default: return .one
+        case 1: return .one(isActive: isActive)
+        case 2: return .two(isActive: isActive)
+        case 3: return .three(isActive: isActive)
+        case 4: return .four(isActive: isActive)
+        default: return .one(isActive: isActive)
         }
     }
     
-    static let one: D3NIcon = .init(systemImageName: "1.circle.fill", color: .pink)
-    static let two: D3NIcon = .init(systemImageName: "2.circle.fill", color: .mint)
-    static let three: D3NIcon = .init(systemImageName: "3.circle.fill", color: .orange)
-    static let four: D3NIcon = .init(systemImageName: "4.circle.fill", color: .purple)
+    static func one(isActive: Bool) -> D3NIcon {
+        return .init(systemImageName: "1.circle.fill", isActive: isActive)
+    }
+    
+    static func two(isActive: Bool) -> D3NIcon {
+        return .init(systemImageName: "2.circle.fill", isActive: isActive)
+    }
+    
+    static func three(isActive: Bool) -> D3NIcon {
+        return .init(systemImageName: "3.circle.fill", isActive: isActive)
+    }
+    
+    static func four(isActive: Bool) -> D3NIcon {
+        return .init(systemImageName: "4.circle.fill", isActive: isActive)
+    }
 }

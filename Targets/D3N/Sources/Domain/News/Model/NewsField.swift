@@ -38,16 +38,16 @@ public enum NewsField: String, Codable, CaseIterable {
     
     var icon: D3NIcon {
         switch self {
-        case .politics: return .init(systemImageName: "building.columns.fill", color: .brown)
-        case .economy: return .init(systemImageName: "banknote.fill", color: .yellow)
-        case .society: return .init(systemImageName: "figure.dress.line.vertical.figure", color: .teal)
-        case .culture: return .init(systemImageName: "theatermasks.fill", color: .orange)
-        case .life: return .init(systemImageName: "house.lodge.fill", color: .green)
-        case .global: return .init(systemImageName: "globe.europe.africa.fill", color: .indigo)
-        case .sports: return .init(systemImageName: "basketball.fill", color: .blue)
-        case .it: return .init(systemImageName: "esim.fill", color: .purple)
-        case .science: return .init(systemImageName: "cube.transparent.fill", color: .mint)
-        case .entertainments: return .init(systemImageName: "music.quarternote.3", color: .pink)
+        case .politics: return .init(systemImageName: "building.columns.fill", inactiveColor: .brown)
+        case .economy: return .init(systemImageName: "banknote.fill", inactiveColor: .yellow)
+        case .society: return .init(systemImageName: "figure.dress.line.vertical.figure", inactiveColor: .teal)
+        case .culture: return .init(systemImageName: "theatermasks.fill", inactiveColor: .orange)
+        case .life: return .init(systemImageName: "house.lodge.fill", inactiveColor: .green)
+        case .global: return .init(systemImageName: "globe.europe.africa.fill", inactiveColor: .indigo)
+        case .sports: return .init(systemImageName: "basketball.fill", inactiveColor: .blue)
+        case .it: return .init(systemImageName: "esim.fill", inactiveColor: .purple)
+        case .science: return .init(systemImageName: "cube.transparent.fill", inactiveColor: .mint)
+        case .entertainments: return .init(systemImageName: "music.quarternote.3", inactiveColor: .pink)
         }
     }
 }

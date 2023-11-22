@@ -21,13 +21,19 @@ public struct QuizListItemCellView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
-                questionView(question: viewStore.state.question, answer: viewStore.state.answer, selectedAnswer: viewStore.state.selectedAnswer)
+                questionView(
+                    question: viewStore.state.question,
+                    reason: viewStore.state.reason,
+                    answer: viewStore.state.answer,
+                    selectedAnswer: viewStore.state.selectedAnswer
+                )
+                .padding(.top, 40)
                 
                 Spacer()
                 
                 ForEach(Array(viewStore.choices.enumerated()), id: \.offset) { index, choice in
                     D3NIconAnimationButton(
-                        icon: .resolved(index: index),
+                        icon: .resolved(index: index, isActive: index == viewStore.state.selectedAnswer),
                         title: choice,
                         isSelected: index == viewStore.state.selectedAnswer
                     ) {
@@ -53,32 +59,33 @@ public struct QuizListItemCellView: View {
     @ViewBuilder
     private func questionView(
         question: String,
+        reason: String,
         answer: Int,
         selectedAnswer: Int?
     ) -> some View {
-        HStack {
+        VStack {
+            Text(question)
+            
+            Spacer()
+            
             if let selectedAnswer {
                 if answer == selectedAnswer {
                     D3NIcon(
                         systemImageName: "checkmark.circle.fill",
-                        color: .green
+                        inactiveColor: .green
                     )
-                    
-                    Text(question)
-                        .padding(.top, 40)
                 } else {
                     D3NIcon(
                         systemImageName: "xmark.circle.fill",
-                        color: .pink
+                        inactiveColor: .pink
                     )
-                    
-                    Text(question)
-                        .padding(.top, 40)
                 }
+                
+                Text(reason)
+                    .font(.callout)
+                
+                Spacer()
             }
-            
-            Text(question)
-                .padding(.top, 40)
         }
     }
 }

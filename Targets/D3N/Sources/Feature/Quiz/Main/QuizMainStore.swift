@@ -101,10 +101,10 @@ public struct QuizMainStore: Reducer {
                 
             case let .quizList(.presented(.delegate(action))):
                 switch action {
-                case let .solved(quizEntityList):
-                    state.quizs = quizEntityList
+                case let .solved(quizs):
+                    state.quizs = quizs
                     state.quizList = nil
-                    return .send(.delegate(.solved(quizEntityList)))
+                    return .send(.delegate(.solved(quizs)))
                 }
                 
             default:
