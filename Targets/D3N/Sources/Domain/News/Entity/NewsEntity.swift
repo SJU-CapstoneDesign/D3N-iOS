@@ -18,7 +18,7 @@ public struct NewsEntity: Equatable {
     let mediaCompanyId: String
     let mediaCompanyLogo: String
     let mediaCompanyName: String
-    let secondTime: Int
+    var secondTime: Int
     
     init(
         id: Int,

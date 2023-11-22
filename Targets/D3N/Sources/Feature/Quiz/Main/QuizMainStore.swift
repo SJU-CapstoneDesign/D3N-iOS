@@ -15,24 +15,28 @@ public struct QuizMainStore: Reducer {
         var newsEntity: NewsEntity
         var quizEntityList: [QuizEntity] = []
         
+        var secondTime: Int
         var isTimerActive = true
         
         @PresentationState var quizList: QuizListStore.State?
         
         public init(newsEntity: NewsEntity) {
             self.newsEntity = newsEntity
+            self.secondTime = newsEntity.secondTime
         }
     }
     
     public enum Action: Equatable {
         case onAppear
         
+        case solveButtonTapped
+        
+        case timerTicked
+        
         case fetchQuizListRequest
         case fetchQuizListResponse(Result<[QuizEntity], D3NAPIError>)
         
-        case solveButtonTapped
         case quizList(PresentationAction<QuizListStore.Action>)
-        
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
@@ -41,14 +45,32 @@ public struct QuizMainStore: Reducer {
     }
     
     @Dependency(\.newsClient) var newsClient
+    @Dependency(\.continuousClock) var clock
+    
+    private enum CancelID { case timer }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
                 return .concatenate([
-                    .send(.fetchQuizListRequest)
+                    .send(.fetchQuizListRequest),
+                    .run { [isTimerActive = state.isTimerActive] send in
+                        guard isTimerActive else { return }
+                        for await _ in self.clock.timer(interval: .seconds(1)) {
+                            await send(.timerTicked)
+                        }
+                    }
+                    .cancellable(id: CancelID.timer, cancelInFlight: true)
                 ])
+                
+            case .solveButtonTapped:
+                state.quizList = .init(quizEntityList: state.quizEntityList)
+                return .none
+                
+            case .timerTicked:
+                state.secondTime += 1
+                return .none
                 
             case .fetchQuizListRequest:
                 return .run { [newsId = state.newsEntity.id] send in
@@ -60,17 +82,11 @@ public struct QuizMainStore: Reducer {
                 state.quizEntityList = quizEntityList
                 return .none
                 
-            case .solveButtonTapped:
-                state.quizList = .init(quizEntityList: state.quizEntityList)
-                return .none
-                
             case let .quizList(.presented(.delegate(action))):
                 switch action {
                 case let .solved(quizEntityList):
                     state.quizEntityList = quizEntityList
                     state.quizList = nil
-                    //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
-//                    LocalStorageRepository.saveAlreadySolvedNewsIds(ids: [state.newsEntity.id])
                     return .send(.delegate(.solved(quizEntityList)))
                 }
                 
