@@ -21,7 +21,7 @@ public struct QuizListItemCellStore: Reducer {
         var secondTime: Int
         var selectedAnswer: Int?
         
-        var isTimerActive = true
+        var isTimerActive = false
         
         init(
             id: Int = .init(),

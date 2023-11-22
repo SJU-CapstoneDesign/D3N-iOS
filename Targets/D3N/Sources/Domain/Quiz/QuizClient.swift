@@ -38,7 +38,7 @@ extension DependencyValues {
 extension QuizClient: DependencyKey {
     static let liveValue = QuizClient(
         fetch: { newsId in
-            let target: TargetType = NewsService.fetchQuizList(newsId: newsId)
+            let target: TargetType = QuizService.fetch(newsId: newsId)
             let response: Result<FetchQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
             
             return response.map { $0.map { $0.toEntity() } }

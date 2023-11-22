@@ -12,19 +12,19 @@ import ComposableArchitecture
 import Moya
 
 struct NewsClient {
-    var fetchNewsList: (Int, Int) async -> Result<[NewsEntity], D3NAPIError>
-    var fetchQuizList: (Int) async -> Result<[QuizEntity], D3NAPIError>
+    var fetch: (Int, Int) async -> Result<[NewsEntity], D3NAPIError>
+    var updateTime: (Int, Int) async -> Result<Bool, D3NAPIError>
 }
 
 extension NewsClient: TestDependencyKey {
     static let previewValue = Self(
-        fetchNewsList: { _, _ in .failure(.none) },
-        fetchQuizList: { _ in .failure(.none) }
+        fetch: { _, _ in .failure(.none) },
+        updateTime: { _, _ in .failure(.none) }
     )
     
     static let testValue = Self(
-        fetchNewsList: unimplemented("\(Self.self).fetchNewsList"),
-        fetchQuizList: unimplemented("\(Self.self).fetchQuizList")
+        fetch: unimplemented("\(Self.self).fetch"),
+        updateTime: unimplemented("\(Self.self).updateTime")
     )
 }
 
@@ -38,17 +38,19 @@ extension DependencyValues {
 
 extension NewsClient: DependencyKey {
     static let liveValue = NewsClient(
-        fetchNewsList: { pageIndex, pageSize in
+        fetch: { pageIndex, pageSize in
             let target: TargetType = NewsService.fetchNewsList(pageIndex: pageIndex, pageSize: pageSize)
             let response: Result<FetchNewsListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
             
             return response.map(\.content).map { $0.map { $0.toEntity() } }
         },
-        fetchQuizList: { newsId in
-            let target: TargetType = NewsService.fetchQuizList(newsId: newsId)
-            let response: Result<FetchQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+        updateTime: { newsId, secondTime in
+            let target: TargetType = NewsService.updateNewsTime(newsId: newsId, secondTime: secondTime)
+            let response: Result<UpdateNewsTimeResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
             
-            return response.map { $0.map { $0.toEntity() } }
+            return response.map { _ in
+                return true
+            }
         }
     )
 }

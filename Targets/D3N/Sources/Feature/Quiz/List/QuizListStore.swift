@@ -12,26 +12,26 @@ import ComposableArchitecture
 
 public struct QuizListStore: Reducer {
     public struct State: Equatable {
-        var quizEntityList: [QuizEntity]
+        var quizs: [QuizEntity]
         
         var currentTab: Int = 0
         var isActive: Bool = false
         
         var quizListItems: IdentifiedArrayOf<QuizListItemCellStore.State> = []
         
-        public init(quizEntityList: [QuizEntity]) {
-            self.quizEntityList = quizEntityList
+        public init(quizs: [QuizEntity]) {
+            self.quizs = quizs
             
             self.quizListItems = .init(
-                uniqueElements: quizEntityList.map {
+                uniqueElements: quizs.enumerated().map { index, quiz in
                     return .init(
-                        id: $0.id,
-                        question: $0.question,
-                        choices: $0.choiceList,
-                        answer: $0.answer,
-                        reason: $0.reason,
-                        secondTime: $0.secondTime,
-                        selectedAnswer: $0.selectedAnswer
+                        id: index,
+                        question: quiz.question,
+                        choices: quiz.choiceList,
+                        answer: quiz.answer,
+                        reason: quiz.reason,
+                        secondTime: quiz.secondTime,
+                        selectedAnswer: quiz.selectedAnswer
                     )
                 }
             )
@@ -75,9 +75,9 @@ public struct QuizListStore: Reducer {
             case let .quizListItems(id: id, action: .delegate(action)):
                 switch action {
                 case let .submit(userAnswer):
-                    if let index = state.quizEntityList.firstIndex(where: { $0.id == id }) {
-                        state.quizEntityList[index].selectedAnswer = userAnswer
-                        return .send(.submitQuizListRequest(state.quizEntityList))
+                    if let index = state.quizs.firstIndex(where: { $0.id == id }) {
+                        state.quizs[index].selectedAnswer = userAnswer
+                        return .send(.submitQuizListRequest(state.quizs))
                     }
                     return .none
                 }

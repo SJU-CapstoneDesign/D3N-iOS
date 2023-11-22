@@ -59,7 +59,7 @@ public struct TodayMainStore: Reducer {
                 
             case .fetchNewsListRequest:
                 return .run { send in
-                    let response = await newsClient.fetchNewsList(TODAY_NEWS_PAGE_INDEX, TODAY_NEWS_PAGE_SIZE)
+                    let response = await newsClient.fetch(TODAY_NEWS_PAGE_INDEX, TODAY_NEWS_PAGE_SIZE)
                     await send(.fetchNewsListResponse(response))
                 }
                 

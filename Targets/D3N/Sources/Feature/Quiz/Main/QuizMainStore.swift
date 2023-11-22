@@ -13,7 +13,7 @@ import ComposableArchitecture
 public struct QuizMainStore: Reducer {
     public struct State: Equatable { 
         var newsEntity: NewsEntity
-        var quizEntityList: [QuizEntity] = []
+        var quizs: [QuizEntity] = []
         
         var secondTime: Int
         var isTimerActive = true
@@ -35,6 +35,8 @@ public struct QuizMainStore: Reducer {
         
         case fetchQuizListRequest
         case fetchQuizListResponse(Result<[QuizEntity], D3NAPIError>)
+        case updateNewsTimeRequest
+        case updateNewsTimeResponse(Result<Bool, D3NAPIError>)
         
         case quizList(PresentationAction<QuizListStore.Action>)
         case delegate(Delegate)
@@ -44,8 +46,9 @@ public struct QuizMainStore: Reducer {
         }
     }
     
-    @Dependency(\.newsClient) var newsClient
     @Dependency(\.continuousClock) var clock
+    @Dependency(\.newsClient) var newsClient
+    @Dependency(\.quizClient) var quizClient
     
     private enum CancelID { case timer }
     
@@ -65,27 +68,41 @@ public struct QuizMainStore: Reducer {
                 ])
                 
             case .solveButtonTapped:
-                state.quizList = .init(quizEntityList: state.quizEntityList)
+                state.quizList = .init(quizs: state.quizs)
                 return .none
                 
             case .timerTicked:
                 state.secondTime += 1
-                return .none
+                
+                if state.secondTime % 10 == 0 {
+                    return .send(.updateNewsTimeRequest)
+                } else {
+                    return .none
+                }
                 
             case .fetchQuizListRequest:
                 return .run { [newsId = state.newsEntity.id] send in
-                    let response = await newsClient.fetchQuizList(newsId)
+                    let response = await quizClient.fetch(newsId)
                     await send(.fetchQuizListResponse(response))
                 }
                 
             case let .fetchQuizListResponse(.success(quizEntityList)):
-                state.quizEntityList = quizEntityList
+                state.quizs = quizEntityList
+                return .none
+                
+            case .updateNewsTimeRequest:
+                return .run { [newsId = state.newsEntity.id, secondTime = state.secondTime ]send in
+                    let response = await newsClient.updateTime(newsId, secondTime)
+                    await send(.updateNewsTimeResponse(response))
+                }
+                
+            case .updateNewsTimeResponse(.success):
                 return .none
                 
             case let .quizList(.presented(.delegate(action))):
                 switch action {
                 case let .solved(quizEntityList):
-                    state.quizEntityList = quizEntityList
+                    state.quizs = quizEntityList
                     state.quizList = nil
                     return .send(.delegate(.solved(quizEntityList)))
                 }
