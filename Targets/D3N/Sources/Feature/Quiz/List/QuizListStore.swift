@@ -30,6 +30,7 @@ public struct QuizListStore: Reducer {
                         choices: $0.choiceList,
                         answer: $0.answer,
                         reason: $0.reason,
+                        secondTime: $0.secondTime,
                         selectedAnswer: $0.selectedAnswer
                     )
                 }
