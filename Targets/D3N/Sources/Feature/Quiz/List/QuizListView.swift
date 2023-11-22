@@ -47,6 +47,9 @@ public struct QuizListView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
     }
 }

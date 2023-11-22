@@ -16,6 +16,7 @@ public struct QuizListStore: Reducer {
         
         var currentTab: Int = 0
         var isActive: Bool = false
+        var isTimerActive = false
         
         var quizListItems: IdentifiedArrayOf<QuizListItemCellStore.State> = []
         
@@ -47,6 +48,10 @@ public struct QuizListStore: Reducer {
         
         case submitQuizListRequest([QuizEntity])
         case submitQuizListResponse(Result<[Int], D3NAPIError>)
+        case updateQuizTimeRequest(quizId: Int, secondTime: Int)
+        case updateQuizTimeResponse(Result<Bool, D3NAPIError>)
+        
+        case timerTicked
         
         case quizListItems(id: QuizListItemCellStore.State.ID, action: QuizListItemCellStore.Action)
         case delegate(Delegate)
@@ -56,18 +61,44 @@ public struct QuizListStore: Reducer {
         }
     }
     
+    @Dependency(\.continuousClock) var clock
     @Dependency(\.quizClient) var quizClient
+    
+    private enum CancelID { case timer }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .none
+                state.isTimerActive = true
+                return .run { [isTimerActive = state.isTimerActive] send in
+                    guard isTimerActive else { return }
+                    for await _ in self.clock.timer(interval: .seconds(1)) {
+                        await send(.timerTicked)
+                    }
+                }
+                .cancellable(id: CancelID.timer, cancelInFlight: true)
                 
             case let .setTab(tab):
                 state.currentTab = tab
-                state.quizListItems[id: tab]?.isTimerActive = true
-                return .none
+                return .send(.quizListItems(id: tab, action: .onAppear))
+                
+            case .timerTicked:
+                let quizIndex = state.currentTab
+                let quiz = state.quizs[quizIndex]
+                let updatedSecondTime = quiz.secondTime + 1
+                
+                state.quizs[quizIndex].secondTime = updatedSecondTime
+                if updatedSecondTime % 10 == 0 {
+                    return .send(
+                        .updateQuizTimeRequest(
+                            quizId: quiz.id,
+                            secondTime: updatedSecondTime
+                        )
+                    )
+                } else {
+                    return .none
+                }
                 
             case let .submitQuizListRequest(quizs):
                 return .run { send in
@@ -77,11 +108,8 @@ public struct QuizListStore: Reducer {
             case let .quizListItems(id: id, action: .delegate(action)):
                 switch action {
                 case let .submit(userAnswer):
-                    if let index = state.quizs.firstIndex(where: { $0.id == id }) {
-                        state.quizs[index].selectedAnswer = userAnswer
-                        return .send(.submitQuizListRequest(state.quizs))
-                    }
-                    return .none
+                    state.quizs[id].selectedAnswer = userAnswer
+                    return .send(.submitQuizListRequest(state.quizs))
                 }
                 
             default:

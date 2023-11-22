@@ -22,9 +22,6 @@ public struct QuizListItemCellStore: Reducer {
         var secondTime: Int
         var selectedAnswer: Int?
         
-        var isTimerActive = false
-        
-        
         init(
             id: Int = .init(),
             isSolved: Bool,
@@ -52,8 +49,6 @@ public struct QuizListItemCellStore: Reducer {
         case answered(Int)
         case submitButtonTappped
         
-        case timerTicked
-        
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
@@ -61,21 +56,11 @@ public struct QuizListItemCellStore: Reducer {
         }
     }
     
-    @Dependency(\.continuousClock) var clock
-    
-    private enum CancelID { case timer }
-    
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .run { [isTimerActive = state.isTimerActive] send in
-                    guard isTimerActive else { return }
-                    for await _ in self.clock.timer(interval: .seconds(1)) {
-                        await send(.timerTicked)
-                    }
-                }
-                .cancellable(id: CancelID.timer, cancelInFlight: true)
+                return .none
                 
             case let .answered(userAnswer):
                 if state.selectedAnswer == userAnswer {
@@ -89,10 +74,6 @@ public struct QuizListItemCellStore: Reducer {
                 if let userAnswer = state.selectedAnswer {
                     return .send(.delegate(.submit(userAnswer)))
                 }
-                return .none
-                
-            case .timerTicked:
-                state.secondTime += 1
                 return .none
                 
             default:

@@ -69,7 +69,7 @@ public struct QuizMainStore: Reducer {
                 
             case .solveButtonTapped:
                 state.quizList = .init(quizs: state.quizs)
-                return .none
+                return .cancel(id: CancelID.timer)
                 
             case .timerTicked:
                 state.secondTime += 1
@@ -106,6 +106,15 @@ public struct QuizMainStore: Reducer {
                     state.quizList = nil
                     return .send(.delegate(.solved(quizs)))
                 }
+                
+            case .quizList(.dismiss):
+                return .run { [isTimerActive = state.isTimerActive] send in
+                    guard isTimerActive else { return }
+                    for await _ in self.clock.timer(interval: .seconds(1)) {
+                        await send(.timerTicked)
+                    }
+                }
+                .cancellable(id: CancelID.timer, cancelInFlight: true)
                 
             default:
                 return .none
