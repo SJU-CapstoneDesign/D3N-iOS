@@ -43,9 +43,9 @@ public struct QuizListItemCellView: View {
                 }
                 
                 D3NSubmitButton(
-                    activeTitle: "제출하기",
+                    activeTitle: viewStore.state.isSolved ? "이미 제출했습니다." : "제출하기",
                     inactiveTitle: viewStore.state.isSolved ? "이미 제출했습니다." : "답을 선택해주세요",
-                    isActive: viewStore.state.isSolved ? false : (viewStore.state.selectedAnswer != nil)
+                    isActive: viewStore.state.isSolved ? true : (viewStore.state.selectedAnswer != nil)
                 ) {
                     viewStore.send(.submitButtonTappped)
                 }
