@@ -71,7 +71,8 @@ public struct QuizListItemCellStore: Reducer {
                 return .none
                 
             case .submitButtonTappped:
-                if let userAnswer = state.selectedAnswer {
+                if let userAnswer = state.selectedAnswer, !state.isSolved {
+                    state.isSolved = true
                     return .send(.delegate(.submit(userAnswer)))
                 }
                 return .none
