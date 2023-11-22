@@ -13,6 +13,7 @@ import ComposableArchitecture
 public struct QuizListItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: Int
+        var isSolved: Bool
         
         var question: String
         var choices: [String]
@@ -23,8 +24,10 @@ public struct QuizListItemCellStore: Reducer {
         
         var isTimerActive = false
         
+        
         init(
             id: Int = .init(),
+            isSolved: Bool,
             question: String,
             choices: [String],
             answer: Int,
@@ -33,6 +36,7 @@ public struct QuizListItemCellStore: Reducer {
             selectedAnswer: Int? = nil
         ) {
             self.id = id
+            self.isSolved = isSolved
             self.question = question
             self.choices = choices
             self.answer = answer

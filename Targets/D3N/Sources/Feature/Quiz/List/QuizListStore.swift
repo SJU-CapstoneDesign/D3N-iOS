@@ -26,6 +26,7 @@ public struct QuizListStore: Reducer {
                 uniqueElements: quizs.enumerated().map { index, quiz in
                     return .init(
                         id: index,
+                        isSolved: quiz.selectedAnswer != nil,
                         question: quiz.question,
                         choices: quiz.choiceList,
                         answer: quiz.answer,
@@ -65,6 +66,7 @@ public struct QuizListStore: Reducer {
                 
             case let .setTab(tab):
                 state.currentTab = tab
+                state.quizListItems[id: tab]?.isTimerActive = true
                 return .none
                 
             case let .submitQuizListRequest(quizs):

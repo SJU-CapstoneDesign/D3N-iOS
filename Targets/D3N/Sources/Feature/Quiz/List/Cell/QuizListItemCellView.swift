@@ -25,7 +25,8 @@ public struct QuizListItemCellView: View {
                     question: viewStore.state.question,
                     reason: viewStore.state.reason,
                     answer: viewStore.state.answer,
-                    selectedAnswer: viewStore.state.selectedAnswer
+                    selectedAnswer: viewStore.state.selectedAnswer,
+                    isSolved: viewStore.state.isSolved
                 )
                 .padding(.top, 40)
                 
@@ -43,8 +44,8 @@ public struct QuizListItemCellView: View {
                 
                 D3NSubmitButton(
                     activeTitle: "제출하기",
-                    inactiveTitle: "답을 선택해주세요",
-                    isActive: viewStore.state.selectedAnswer != nil
+                    inactiveTitle: viewStore.state.isSolved ? "이미 제출했습니다." : "답을 선택해주세요",
+                    isActive: viewStore.state.isSolved ? false : (viewStore.state.selectedAnswer != nil)
                 ) {
                     viewStore.send(.submitButtonTappped)
                 }
@@ -61,14 +62,15 @@ public struct QuizListItemCellView: View {
         question: String,
         reason: String,
         answer: Int,
-        selectedAnswer: Int?
+        selectedAnswer: Int?,
+        isSolved: Bool
     ) -> some View {
         VStack {
             Text(question)
             
             Spacer()
             
-            if let selectedAnswer {
+            if isSolved {
                 if answer == selectedAnswer {
                     D3NIcon(
                         systemImageName: "checkmark.circle.fill",
