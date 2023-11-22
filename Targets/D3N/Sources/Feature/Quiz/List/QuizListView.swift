@@ -23,7 +23,7 @@ public struct QuizListView: View {
             VStack {
                 D3NProgressBar(
                     items: viewStore.state.quizs.map {
-                        return .init(secondTime: $0.secondTime)
+                        return .init(description: $0.timeString)
                     },
                     currentIndex: viewStore.state.currentTab
                 )

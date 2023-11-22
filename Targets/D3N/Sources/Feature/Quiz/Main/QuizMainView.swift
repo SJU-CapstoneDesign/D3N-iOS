@@ -38,7 +38,7 @@ public struct QuizMainView: View {
                 }
                 .padding()
             }
-            .navigationTitle("\(viewStore.state.secondTime)")
+            .navigationTitle(viewStore.state.newsEntity.timeString)
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 viewStore.send(.onAppear)

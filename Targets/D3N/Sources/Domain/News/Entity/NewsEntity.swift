@@ -43,6 +43,15 @@ public struct NewsEntity: Equatable {
         self.mediaCompanyName = mediaCompanyName
         self.secondTime = secondTime
     }
+    
+    var timeString: String {
+        let (h, m, s) = (secondTime / 3600, (secondTime % 3600) / 60, (secondTime % 3600) % 60)
+        let hour = h > 0 ? "\(h)시간" : ""
+        let minute = m > 0 ? "\(m)분" : ""
+        let second = s > 0 ? "\(s)초" : ""
+        
+        return String(describing: "\(hour) \(minute) \(second)")
+    }
 }
 
 public extension NewsEntity {

@@ -27,7 +27,7 @@ public struct QuizListStore: Reducer {
                 uniqueElements: quizs.enumerated().map { index, quiz in
                     return .init(
                         id: index,
-                        isSolved: quiz.selectedAnswer != nil,
+                        isSolved: quiz.isSolved,
                         question: quiz.question,
                         choices: quiz.choiceList,
                         answer: quiz.answer,
@@ -81,7 +81,7 @@ public struct QuizListStore: Reducer {
                 
             case let .setTab(tab):
                 state.currentTab = tab
-                return .send(.quizListItems(id: tab, action: .onAppear))
+                return .none
                 
             case .timerTicked:
                 let quizIndex = state.currentTab
@@ -89,7 +89,7 @@ public struct QuizListStore: Reducer {
                 let updatedSecondTime = quiz.secondTime + 1
                 
                 state.quizs[quizIndex].secondTime = updatedSecondTime
-                if updatedSecondTime % 10 == 0 {
+                if updatedSecondTime % 5 == 0 && !quiz.isSolved {
                     return .send(
                         .updateQuizTimeRequest(
                             quizId: quiz.id,
@@ -103,6 +103,12 @@ public struct QuizListStore: Reducer {
             case let .submitQuizListRequest(quizs):
                 return .run { send in
                     await send(.submitQuizListResponse(quizClient.submit(quizs)))
+                }
+                
+            case let .updateQuizTimeRequest(quizId: id, secondTime: time):
+                return .run { send in
+                    let response = await quizClient.updateTime(id, time)
+                    await send(.updateQuizTimeResponse(response))
                 }
                 
             case let .quizListItems(id: id, action: .delegate(action)):

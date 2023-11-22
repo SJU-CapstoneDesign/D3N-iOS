@@ -15,14 +15,12 @@ public struct QuizMainStore: Reducer {
         var newsEntity: NewsEntity
         var quizs: [QuizEntity] = []
         
-        var secondTime: Int
         var isTimerActive = true
         
         @PresentationState var quizList: QuizListStore.State?
         
         public init(newsEntity: NewsEntity) {
             self.newsEntity = newsEntity
-            self.secondTime = newsEntity.secondTime
         }
     }
     
@@ -72,9 +70,9 @@ public struct QuizMainStore: Reducer {
                 return .cancel(id: CancelID.timer)
                 
             case .timerTicked:
-                state.secondTime += 1
+                state.newsEntity.secondTime += 1
                 
-                if state.secondTime % 10 == 0 {
+                if state.newsEntity.secondTime % 10 == 0 {
                     return .send(.updateNewsTimeRequest)
                 } else {
                     return .none
@@ -91,7 +89,7 @@ public struct QuizMainStore: Reducer {
                 return .none
                 
             case .updateNewsTimeRequest:
-                return .run { [newsId = state.newsEntity.id, secondTime = state.secondTime ]send in
+                return .run { [newsId = state.newsEntity.id, secondTime = state.newsEntity.secondTime] send in
                     let response = await newsClient.updateTime(newsId, secondTime)
                     await send(.updateNewsTimeResponse(response))
                 }
