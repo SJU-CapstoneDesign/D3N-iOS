@@ -38,6 +38,8 @@ public struct QuizMainView: View {
                 }
                 .padding()
             }
+            .navigationTitle("아아")
+            .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 viewStore.send(.onAppear)
             }

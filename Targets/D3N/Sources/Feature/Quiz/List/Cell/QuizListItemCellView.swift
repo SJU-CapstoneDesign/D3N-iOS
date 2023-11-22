@@ -44,6 +44,9 @@ public struct QuizListItemCellView: View {
                 }
                 .padding()
             }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
     }
     

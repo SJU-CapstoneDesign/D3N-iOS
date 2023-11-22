@@ -15,6 +15,8 @@ public struct QuizMainStore: Reducer {
         var newsEntity: NewsEntity
         var quizEntityList: [QuizEntity] = []
         
+        var isTimerActive = true
+        
         @PresentationState var quizList: QuizListStore.State?
         
         public init(newsEntity: NewsEntity) {

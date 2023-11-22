@@ -18,9 +18,7 @@ public struct NewsEntity: Equatable {
     let mediaCompanyId: String
     let mediaCompanyLogo: String
     let mediaCompanyName: String
-    
-    //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
-    let isAlreadySolved: Bool = false
+    let secondTime: Int
     
     init(
         id: Int,
@@ -31,7 +29,8 @@ public struct NewsEntity: Equatable {
         url: String,
         mediaCompanyId: String,
         mediaCompanyLogo: String,
-        mediaCompanyName: String
+        mediaCompanyName: String,
+        secondTime: Int
     ) {
         self.id = id
         self.field = field
@@ -42,9 +41,7 @@ public struct NewsEntity: Equatable {
         self.mediaCompanyId = mediaCompanyId
         self.mediaCompanyLogo = mediaCompanyLogo
         self.mediaCompanyName = mediaCompanyName
-        
-        //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
-        //        self.isAlreadySolved = LocalStorageRepository.loadAlreadySolvedNewsIds().contains(id)
+        self.secondTime = secondTime
     }
 }
 
@@ -58,7 +55,8 @@ public extension NewsEntity {
         url: "https://n.news.naver.com/mnews/article/056/0011605391?sid=101",
         mediaCompanyId: "056",
         mediaCompanyLogo: "https://mimgnews.pstatic.net/image/upload/office_logo/056/2021/07/15/logo_056_57_20210715101841.png",
-        mediaCompanyName: "KBS"
+        mediaCompanyName: "KBS",
+        secondTime: 0
     )
     
     static let mocks = [
@@ -71,7 +69,8 @@ public extension NewsEntity {
             url: "https://n.news.naver.com/mnews/article/018/0005622923?sid=110",
             mediaCompanyId: "018",
             mediaCompanyLogo: "https://mimgnews.pstatic.net/image/upload/office_logo/018/2018/08/08/logo_018_57_20180808174308.png",
-            mediaCompanyName: "이데일리"
+            mediaCompanyName: "이데일리",
+            secondTime: 0
           ),
         NewsEntity(
             id: 11605391,
@@ -82,7 +81,8 @@ public extension NewsEntity {
             url: "https://n.news.naver.com/mnews/article/056/0011605391?sid=101",
             mediaCompanyId: "056",
             mediaCompanyLogo: "https://mimgnews.pstatic.net/image/upload/office_logo/056/2021/07/15/logo_056_57_20210715101841.png",
-            mediaCompanyName: "KBS"
+            mediaCompanyName: "KBS",
+            secondTime: 0
         )
     ]
 }
