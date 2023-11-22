@@ -62,6 +62,8 @@ struct MainTabStore: Reducer {
                     state.today = nil
                     state.myPage = nil
                     return .send(.delegate(.appleUnlinked))
+                default:
+                    return .none
                 }
                 
             default:

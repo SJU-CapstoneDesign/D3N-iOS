@@ -34,10 +34,17 @@ public struct MyPageMainView: View {
     
     private func personalSection(viewStore: ViewStoreOf<MyPageMainStore>) -> some View {
         Section {
-            Button("내가 푼 뉴스 보기", action: {
+            Button( action: {
                 viewStore.send(.solvedNewsButtonTapped)
+            }, label:{
+                Label(
+                    title:{
+                        Text("내가 푼 뉴스 보기")
+                    }, icon: {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundStyle(.blue)
+                    })
             })
-            .foregroundStyle(.blue)
         }
     }
     
