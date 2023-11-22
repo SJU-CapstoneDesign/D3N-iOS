@@ -54,7 +54,7 @@ public struct QuizResultItemCellView: View {
                     quizResultItemImage(
                         current: index,
                         answer: viewStore.state.quizEntity.answer,
-                        userAnswer: viewStore.state.quizEntity.userAnswer ?? 0
+                        userAnswer: viewStore.state.quizEntity.selectedAnswer ?? 0
                     )
                 })
                 .font(.subheadline)

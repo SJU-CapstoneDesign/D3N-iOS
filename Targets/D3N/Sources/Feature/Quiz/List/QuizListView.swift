@@ -25,7 +25,7 @@ public struct QuizListView: View {
                     items: viewStore.state.quizEntityList.map {
                         return .init(secondTime: $0.secondTime)
                     },
-                    currentIndex: viewStore.state.currentIndex
+                    currentIndex: viewStore.state.currentTab
                 )
                 .padding([.horizontal, .top])
                 

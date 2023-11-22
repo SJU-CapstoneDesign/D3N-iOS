@@ -14,8 +14,6 @@ public struct QuizEntity: Equatable {
     let choiceList: [String]
     let answer: Int
     let reason: String
-    
-    let secondTime: Int = 70
-    
-    var userAnswer: Int? = nil
+    let secondTime: Int
+    var selectedAnswer: Int? = nil
 }

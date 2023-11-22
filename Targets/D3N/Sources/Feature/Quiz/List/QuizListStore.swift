@@ -15,7 +15,6 @@ public struct QuizListStore: Reducer {
         var quizEntityList: [QuizEntity]
         
         var currentTab: Int = 0
-        var currentIndex: Int = 0
         var isActive: Bool = false
         
         var quizListItems: IdentifiedArrayOf<QuizListItemCellStore.State> = []
@@ -31,7 +30,7 @@ public struct QuizListStore: Reducer {
                         choices: $0.choiceList,
                         answer: $0.answer,
                         reason: $0.reason,
-                        userAnswer: $0.userAnswer
+                        selectedAnswer: $0.selectedAnswer
                     )
                 }
             )
@@ -76,7 +75,7 @@ public struct QuizListStore: Reducer {
                 switch action {
                 case let .submit(userAnswer):
                     if let index = state.quizEntityList.firstIndex(where: { $0.id == id }) {
-                        state.quizEntityList[index].userAnswer = userAnswer
+                        state.quizEntityList[index].selectedAnswer = userAnswer
                         return .send(.submitQuizListRequest(state.quizEntityList))
                     }
                     return .none

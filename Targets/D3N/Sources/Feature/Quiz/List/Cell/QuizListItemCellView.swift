@@ -21,8 +21,7 @@ public struct QuizListItemCellView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
-                Text(viewStore.state.question)
-                    .padding(.top, 40)
+                questionView(question: viewStore.state.question, answer: viewStore.state.answer, selectedAnswer: viewStore.state.selectedAnswer)
                 
                 Spacer()
                 
@@ -30,7 +29,7 @@ public struct QuizListItemCellView: View {
                     D3NIconAnimationButton(
                         icon: .resolved(index: index),
                         title: choice,
-                        isSelected: index == viewStore.state.userAnswer
+                        isSelected: index == viewStore.state.selectedAnswer
                     ) {
                         viewStore.send(.answered(index), animation: .default)
                     }
@@ -39,12 +38,44 @@ public struct QuizListItemCellView: View {
                 D3NSubmitButton(
                     activeTitle: "제출하기",
                     inactiveTitle: "답을 선택해주세요",
-                    isActive: viewStore.state.userAnswer != nil
+                    isActive: viewStore.state.selectedAnswer != nil
                 ) {
                     viewStore.send(.submitButtonTappped)
                 }
                 .padding()
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func questionView(
+        question: String,
+        answer: Int,
+        selectedAnswer: Int?
+    ) -> some View {
+        HStack {
+            if let selectedAnswer {
+                if answer == selectedAnswer {
+                    D3NIcon(
+                        systemImageName: "checkmark.circle.fill",
+                        color: .green
+                    )
+                    
+                    Text(question)
+                        .padding(.top, 40)
+                } else {
+                    D3NIcon(
+                        systemImageName: "xmark.circle.fill",
+                        color: .pink
+                    )
+                    
+                    Text(question)
+                        .padding(.top, 40)
+                }
+            }
+            
+            Text(question)
+                .padding(.top, 40)
         }
     }
 }
