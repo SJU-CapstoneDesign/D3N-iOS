@@ -14,7 +14,6 @@ public struct NewsListItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: UUID
         public var newsEntity: NewsEntity
-        
         public init(
             id: UUID = .init(),
             newsEntity: NewsEntity

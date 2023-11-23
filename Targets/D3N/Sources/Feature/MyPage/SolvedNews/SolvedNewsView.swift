@@ -36,11 +36,25 @@ public struct SolvedNewsView: View {
     }
     
     private var newsListItemsView: some View {
-        LazyVStack {
-            ForEachStore(self.store.scope(state: \.newsListItems, action: SolvedNewsStore.Action.newsListItems(id:action:))) {
-                NewsListItemCellView(store: $0)
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            if viewStore.state.isEmptyNewsEntityList() {
+                return AnyView(
+                    Text("아직 풀어본 뉴스가 없어요")
+                        .font(.title2)
+                        .foregroundColor(.gray)
+                        .padding()
+                )
+            } else {
+                return AnyView(
+                    LazyVStack {
+                        ForEachStore(self.store.scope(state: \.newsListItems, action: SolvedNewsStore.Action.newsListItems(id:action:))) {
+                            NewsListItemCellView(store: $0)
+                        }
+                    }
+                )
             }
         }
     }
+
 }
 

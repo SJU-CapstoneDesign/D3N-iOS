@@ -34,7 +34,7 @@ public struct SolvedNewsStore: Reducer {
         case onAppear
         
         case fetchNewsListRequest
-        case fetchNewsListResponse(Result<[NewsEntity], D3NAPIError>)
+        case fetchSolvedNewsListResponse(Result<[NewsEntity], D3NAPIError>)
         
         case newsListItems(id: NewsListItemCellStore.State.ID, action: NewsListItemCellStore.Action)
         case delegate(Delegate)
@@ -55,10 +55,10 @@ public struct SolvedNewsStore: Reducer {
             case .fetchNewsListRequest:
                 return .run { [pageIndex = state.pageIndex] send in
                     let response = await newsClient.fetchNewsList(pageIndex, FIXED_PAGE_SIZE)
-                    await send(.fetchNewsListResponse(response))
+                    await send(.fetchSolvedNewsListResponse(response))
                 }
                 
-            case let .fetchNewsListResponse(.success(newsEntityList)):
+            case let .fetchSolvedNewsListResponse(.success(newsEntityList)):
                 let newsListItems = state.makeSolvedNewsListItems(from: newsEntityList)
                 state.newsListItems.append(contentsOf: newsListItems)
                 state.pageIndex += 1
@@ -88,12 +88,21 @@ public struct SolvedNewsStore: Reducer {
 }
 
 public extension SolvedNewsStore.State {
-    func makeSolvedNewsListItems(from newsEntityList: [NewsEntity]) -> IdentifiedArrayOf<NewsListItemCellStore.State> {
+    func makeSolvedNewsListItems(from newsEntityList: [NewsEntity]) -> IdentifiedArrayOf<NewsListItemCellStore.State> { // 푼 뉴스만 반환하는 함수 구현
         return .init(
-            uniqueElements: newsEntityList.map { newsEntity in
-                return .init(newsEntity: newsEntity)
-            }
-        )
+                    uniqueElements: newsEntityList.compactMap { newsEntity in
+                        guard newsEntity.isAlreadySolved else {
+                            return nil // isAlreadySolved가 false이면 무시하고 nil 반환
+                        }
+                        return .init(newsEntity: newsEntity)
+                    }
+                )
+    }
+    func isEmptyNewsEntityList() -> Bool {
+        if(newsEntityList.isEmpty){
+            return true
+        }
+        return false
     }
 }
 
