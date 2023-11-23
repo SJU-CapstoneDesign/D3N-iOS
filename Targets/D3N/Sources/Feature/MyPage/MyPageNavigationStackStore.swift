@@ -13,7 +13,6 @@ import ComposableArchitecture
 public struct MyPageNavigationStackStore: Reducer {
     public struct State: Equatable {
         var main: MyPageMainStore.State = .init()
-        var solvedNews: SolvedNewsNavigationStackStore.State? = .init()
         var path: StackState<Path.State> = .init()
     }
     
@@ -21,8 +20,8 @@ public struct MyPageNavigationStackStore: Reducer {
         case binding(BindingAction<State>)
         case popToRoot
         case path(StackAction<Path.State, Path.Action>)
-        
-        case solvedNews(SolvedNewsNavigationStackStore.Action)
+        case onAppear
+        case solvedNews(SolvedNewsStore.Action)
         
         case main(MyPageMainStore.Action)
         case delegate(Delegate)
@@ -30,23 +29,21 @@ public struct MyPageNavigationStackStore: Reducer {
         public enum Delegate: Equatable {
             case unlinked
             case select(NewsEntity)
+            case complete
         }
     }
     
     public struct Path: Reducer {
         public enum State: Equatable {
-            case detail(TodayDetailStore.State)
             case quizMain(QuizMainStore.State)
             case quizResult(QuizResultStore.State)
             case solvedNews(SolvedNewsStore.State)
         }
         
         public enum Action: Equatable {
-            case detail(TodayDetailStore.Action)
             case quizMain(QuizMainStore.Action)
             case quizResult(QuizResultStore.Action)
             case solvedNews(SolvedNewsStore.Action)
-            case popToRoot
         }
         
         public var body: some Reducer<State, Action> {
@@ -67,6 +64,9 @@ public struct MyPageNavigationStackStore: Reducer {
         
         Reduce { state, action in
             switch action {
+            case .onAppear:
+                return .none
+                
             case let .main(.delegate(action)):
                 switch action {
                 case let .select(newsEntity):
@@ -107,11 +107,11 @@ public struct MyPageNavigationStackStore: Reducer {
                 return .none
             }
         }
-        .ifLet(\.solvedNews, action: /Action.solvedNews) {
-            SolvedNewsNavigationStackStore()
-        }
         Scope(state: \.main, action: /Action.main) {
             MyPageMainStore()
+        }
+        .forEach(\.path, action: /Action.path) {
+            Path()
         }
     }
 }
