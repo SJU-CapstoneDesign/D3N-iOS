@@ -16,6 +16,8 @@ struct FetchQuizListResponseElement: Codable {
     let choiceList: [String]
     let answer: Int
     let reason: String
+    let secondTime: Int
+    let selectedAnswer: Int?
 }
 
 extension FetchQuizListResponseElement {
@@ -25,7 +27,9 @@ extension FetchQuizListResponseElement {
             question: self.question,
             choiceList: self.choiceList,
             answer: self.answer,
-            reason: self.reason
+            reason: self.reason,
+            secondTime: self.secondTime,
+            selectedAnswer: self.selectedAnswer
         )
     }
 }

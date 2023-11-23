@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 public struct ProgressItem {
-    let secondTime: Int?
+    let description: String
 }
 
 public struct D3NProgressBar: View {
@@ -39,8 +39,8 @@ public struct D3NProgressBar: View {
                 .fill(index == currentIndex ? Color.black : Color.gray)
                 .frame(height: 8)
             
-            if let secondTime = item.secondTime {
-                Text("\(secondTime)")
+            if !item.description.isEmpty {
+                Text(item.description)
                     .font(.caption2)
                     .foregroundStyle(index == currentIndex ? Color.black : Color.gray)
             }

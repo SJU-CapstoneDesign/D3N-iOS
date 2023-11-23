@@ -13,27 +13,33 @@ import ComposableArchitecture
 public struct QuizListItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: Int
+        var isSolved: Bool
         
         var question: String
         var choices: [String]
         var answer: Int
         var reason: String
-        var userAnswer: Int?
+        var secondTime: Int
+        var selectedAnswer: Int?
         
         init(
             id: Int = .init(),
+            isSolved: Bool,
             question: String,
             choices: [String],
             answer: Int,
             reason: String,
-            userAnswer: Int? = nil
+            secondTime: Int,
+            selectedAnswer: Int? = nil
         ) {
             self.id = id
+            self.isSolved = isSolved
             self.question = question
             self.choices = choices
             self.answer = answer
             self.reason = reason
-            self.userAnswer = userAnswer
+            self.secondTime = secondTime
+            self.selectedAnswer = selectedAnswer
         }
     }
     
@@ -57,15 +63,16 @@ public struct QuizListItemCellStore: Reducer {
                 return .none
                 
             case let .answered(userAnswer):
-                if state.userAnswer == userAnswer {
-                    state.userAnswer = nil
+                if state.selectedAnswer == userAnswer {
+                    state.selectedAnswer = nil
                 } else {
-                    state.userAnswer = userAnswer
+                    state.selectedAnswer = userAnswer
                 }
                 return .none
                 
             case .submitButtonTappped:
-                if let userAnswer = state.userAnswer {
+                if let userAnswer = state.selectedAnswer, !state.isSolved {
+                    state.isSolved = true
                     return .send(.delegate(.submit(userAnswer)))
                 }
                 return .none

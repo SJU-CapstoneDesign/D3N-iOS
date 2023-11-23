@@ -21,7 +21,7 @@ public struct NewsListItemCellView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             HStack {
-                newsLogoView(url: viewStore.state.newsEntity.mediaCompanyLogo, isAlreadySolved: viewStore.state.newsEntity.isAlreadySolved)
+                newsLogoView(url: viewStore.state.newsEntity.mediaCompanyLogo, isAlreadySolved: false)
                 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(viewStore.state.newsEntity.title)
@@ -39,7 +39,7 @@ public struct NewsListItemCellView: View {
                 Button("풀기", action: {
                     viewStore.send(.tapped)
                 })
-                .foregroundStyle(viewStore.state.newsEntity.isAlreadySolved ? Color.gray : Color.blue)
+                .foregroundStyle(Color.blue)
                 .minimalBackgroundStyle()
             }
             .onAppear {

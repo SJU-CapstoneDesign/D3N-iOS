@@ -11,7 +11,7 @@ import Moya
 
 public enum NewsService {
     case fetchNewsList(pageIndex: Int,pageSize: Int)
-    case fetchQuizList(newsId: Int)
+    case updateNewsTime(newsId: Int, secondTime: Int)
 }
 
 extension NewsService: TargetType {
@@ -21,15 +21,15 @@ extension NewsService: TargetType {
         switch self {
         case .fetchNewsList:
             return "news/list"
-        case .fetchQuizList:
-            return "quiz/list"
+        case .updateNewsTime:
+            return "news/time"
         }
     }
     
     public var method: Moya.Method {
         switch self {
         case .fetchNewsList: return .get
-        case .fetchQuizList: return .get
+        case .updateNewsTime: return .patch
         }
     }
     
@@ -37,16 +37,13 @@ extension NewsService: TargetType {
         switch self {
         case let .fetchNewsList(pageIndex: page, pageSize: size):
             return .requestParameters(parameters: ["pageIndex": page, "pageSize": size], encoding: URLEncoding.queryString)
-        case let .fetchQuizList(newsId: id):
-            return .requestParameters(parameters: ["newsId": id], encoding: URLEncoding.queryString)
+        case let .updateNewsTime(newsId: id, secondTime: time):
+            let dto = UpdateNewsTimeRequestDTO(newsId: id, secondTime: time)
+            return .requestJSONEncodable(dto)
         }
     }
     
     public var headers: [String: String]? {
         return nil
-    }
-    
-    public var validationType: ValidationType {
-        return .successCodes
     }
 }

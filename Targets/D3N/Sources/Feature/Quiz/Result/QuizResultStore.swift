@@ -19,7 +19,7 @@ public struct QuizResultStore: Reducer {
         
         public init(quizEntityList: [QuizEntity]) {
             self.quizEntityList = quizEntityList
-            self.collectCount = quizEntityList.filter({ $0.userAnswer == $0.answer }).count
+            self.collectCount = quizEntityList.filter({ $0.selectedAnswer == $0.answer }).count
             self.quizResultItems = .init(
                 uniqueElements: quizEntityList.map { quizEntity in
                     return .init(quizEntity: quizEntity)

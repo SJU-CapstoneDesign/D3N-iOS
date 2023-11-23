@@ -54,7 +54,7 @@ public struct AllNewsStore: Reducer {
                 
             case .fetchNewsListRequest:
                 return .run { [pageIndex = state.pageIndex] send in
-                    let response = await newsClient.fetchNewsList(pageIndex, FIXED_PAGE_SIZE)
+                    let response = await newsClient.fetch(pageIndex, FIXED_PAGE_SIZE)
                     await send(.fetchNewsListResponse(response))
                 }
                 

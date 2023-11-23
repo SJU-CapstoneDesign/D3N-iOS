@@ -13,7 +13,9 @@ import ComposableArchitecture
 public struct QuizMainStore: Reducer {
     public struct State: Equatable { 
         var newsEntity: NewsEntity
-        var quizEntityList: [QuizEntity] = []
+        var quizs: [QuizEntity] = []
+        
+        var isTimerActive = true
         
         @PresentationState var quizList: QuizListStore.State?
         
@@ -25,12 +27,16 @@ public struct QuizMainStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
+        case solveButtonTapped
+        
+        case timerTicked
+        
         case fetchQuizListRequest
         case fetchQuizListResponse(Result<[QuizEntity], D3NAPIError>)
+        case updateNewsTimeRequest
+        case updateNewsTimeResponse(Result<Bool, D3NAPIError>)
         
-        case solveButtonTapped
         case quizList(PresentationAction<QuizListStore.Action>)
-        
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
@@ -38,39 +44,78 @@ public struct QuizMainStore: Reducer {
         }
     }
     
+    @Dependency(\.continuousClock) var clock
     @Dependency(\.newsClient) var newsClient
+    @Dependency(\.quizClient) var quizClient
+    
+    private enum CancelID { case timer }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
                 return .concatenate([
-                    .send(.fetchQuizListRequest)
+                    .send(.fetchQuizListRequest),
+                    .run { [isTimerActive = state.isTimerActive] send in
+                        guard isTimerActive else { return }
+                        for await _ in self.clock.timer(interval: .seconds(1)) {
+                            await send(.timerTicked)
+                        }
+                    }
+                    .cancellable(id: CancelID.timer, cancelInFlight: true)
                 ])
+                
+            case .solveButtonTapped:
+                state.quizList = .init(quizs: state.quizs)
+                return .cancel(id: CancelID.timer)
+                
+            case .timerTicked:
+                state.newsEntity.secondTime += 1
+                
+                if state.newsEntity.secondTime % 10 == 0 {
+                    return .send(.updateNewsTimeRequest)
+                } else {
+                    return .none
+                }
                 
             case .fetchQuizListRequest:
                 return .run { [newsId = state.newsEntity.id] send in
-                    let response = await newsClient.fetchQuizList(newsId)
+                    let response = await quizClient.fetch(newsId)
                     await send(.fetchQuizListResponse(response))
                 }
                 
             case let .fetchQuizListResponse(.success(quizEntityList)):
-                state.quizEntityList = quizEntityList
+                state.quizs = quizEntityList
                 return .none
                 
-            case .solveButtonTapped:
-                state.quizList = .init(quizEntityList: state.quizEntityList)
+            case .updateNewsTimeRequest:
+                return .run { [newsId = state.newsEntity.id, secondTime = state.newsEntity.secondTime] send in
+                    let response = await newsClient.updateTime(newsId, secondTime)
+                    await send(.updateNewsTimeResponse(response))
+                }
+                
+            case .updateNewsTimeResponse(.success):
                 return .none
                 
             case let .quizList(.presented(.delegate(action))):
                 switch action {
-                case let .solved(quizEntityList):
-                    state.quizEntityList = quizEntityList
+                case let .solved(quizs):
+                    state.quizs = quizs
                     state.quizList = nil
-                    //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
-//                    LocalStorageRepository.saveAlreadySolvedNewsIds(ids: [state.newsEntity.id])
-                    return .send(.delegate(.solved(quizEntityList)))
+                    return .send(.delegate(.solved(quizs)))
                 }
+                
+            case .quizList(.dismiss):
+                return .concatenate([
+                    .send(.fetchQuizListRequest),
+                    .run { [isTimerActive = state.isTimerActive] send in
+                        guard isTimerActive else { return }
+                        for await _ in self.clock.timer(interval: .seconds(1)) {
+                            await send(.timerTicked)
+                        }
+                    }
+                    .cancellable(id: CancelID.timer, cancelInFlight: true)
+                ])
                 
             default:
                 return .none

@@ -13,6 +13,7 @@ import Moya
 public enum QuizService {
     case fetch(newsId: Int)
     case submit(quizs: [QuizEntity])
+    case updateTime(quizId: Int, secondTime: Int)
 }
 
 extension QuizService: TargetType {
@@ -22,6 +23,7 @@ extension QuizService: TargetType {
         switch self {
         case .fetch: return "quiz/list"
         case .submit: return "quiz/list/submit"
+        case .updateTime: return "quiz/time"
         }
     }
     
@@ -29,6 +31,7 @@ extension QuizService: TargetType {
         switch self {
         case .fetch: return .get
         case .submit: return .post
+        case .updateTime: return .patch
         }
     }
     
@@ -36,14 +39,19 @@ extension QuizService: TargetType {
         switch self {
         case let .fetch(newsId: id):
             return .requestParameters(parameters: ["newsId": id], encoding: URLEncoding.queryString)
+            
         case let .submit(quizs):
             let dto: SubmitQuizListRequestDTO = quizs.compactMap {
-                if let userAnswer = $0.userAnswer {
+                if let userAnswer = $0.selectedAnswer {
                     return .init(quizId: $0.id, selectedAnswer: userAnswer)
                 } else {
                     return nil
                 }
             }
+            return .requestJSONEncodable(dto)
+            
+        case let .updateTime(quizId: id, secondTime: time):
+            let dto: UpdateQuizTimeRequestDTO = .init(quizId: id, secondTime: time)
             return .requestJSONEncodable(dto)
         }
     }

@@ -22,10 +22,10 @@ public struct QuizListView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
                 D3NProgressBar(
-                    items: viewStore.state.quizEntityList.map {
-                        return .init(secondTime: $0.secondTime)
+                    items: viewStore.state.quizs.map {
+                        return .init(description: $0.timeString)
                     },
-                    currentIndex: viewStore.state.currentIndex
+                    currentIndex: viewStore.state.currentTab
                 )
                 .padding([.horizontal, .top])
                 
@@ -47,10 +47,13 @@ public struct QuizListView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
         }
     }
 }
 
 #Preview {
-    QuizListView(store: .init(initialState: QuizListStore.State(quizEntityList: []), reducer: { QuizListStore() }))
+    QuizListView(store: .init(initialState: QuizListStore.State(quizs: []), reducer: { QuizListStore() }))
 }
