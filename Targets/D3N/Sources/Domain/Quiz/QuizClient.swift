@@ -49,6 +49,7 @@ extension QuizClient: DependencyKey {
         fetchSolved: { newsId in
             let target: TargetType = NewsService.fetchSolvedQuizList
             let response: Result<FetchSolvedQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.request(target: target)
+            //FIXME: 이 부분에서 왜 오류가 발생하는지 궁금합니다! quiz/list/solved는 따로 parameter 값이 없어 requestPlain을 통해 불러왔는데, 그 부분에서 오류가 생긴걸까요?
         },
         submit: { quizs in
             let target: TargetType = QuizService.submit(quizs: quizs)
