@@ -40,13 +40,13 @@ extension NewsClient: DependencyKey {
     static let liveValue = NewsClient(
         fetch: { pageIndex, pageSize in
             let target: TargetType = NewsService.fetchNewsList(pageIndex: pageIndex, pageSize: pageSize)
-            let response: Result<FetchNewsListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<FetchNewsListResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map(\.content).map { $0.map { $0.toEntity() } }
         },
         updateTime: { newsId, secondTime in
             let target: TargetType = NewsService.updateNewsTime(newsId: newsId, secondTime: secondTime)
-            let response: Result<UpdateNewsTimeResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<UpdateNewsTimeResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map { _ in
                 return true

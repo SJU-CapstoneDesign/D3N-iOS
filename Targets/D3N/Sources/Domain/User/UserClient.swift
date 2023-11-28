@@ -44,7 +44,7 @@ extension UserClient: DependencyKey {
     static let liveValue = UserClient(
         onboardNeeded: {
             let target: TargetType = UserService.onboardNeeded
-            let response: Result<UserOnboardNeededResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<UserOnboardNeededResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             return response.map { dto in
                 let entity = dto.isOnBoardingNeeded
                 LocalStorageManager.save(.isOnBoardingNeeded, value: entity)
@@ -53,7 +53,7 @@ extension UserClient: DependencyKey {
         },
         onboard: { nickname, gender, birthDay, newsFields in
             let target: TargetType = UserService.onboard(nickname: nickname, gender: gender, birthDay: birthDay, newsFields: newsFields)
-            let response: Result<UserOnboardResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<UserOnboardResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map { dto in
                 let entity = dto.toEntity()

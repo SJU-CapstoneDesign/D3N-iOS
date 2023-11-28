@@ -44,7 +44,7 @@ extension AuthClient: DependencyKey {
     static let liveValue = AuthClient(
         appleLogin: { code, idToken in
             let target: TargetType = AuthService.appleLogin(code: code, idToken: idToken)
-            let response: Result<AppleLoginResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<AppleLoginResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map { dto in
                 let entity = dto.toEntity()
@@ -55,7 +55,7 @@ extension AuthClient: DependencyKey {
         },
         appleUnlink: {
             let target: TargetType = AuthService.appleUnlink
-            let response: Result<Bool, D3NAPIError> = await D3NAPIkProvider.justRequest(target: target)
+            let response: Result<Bool, D3NAPIError> = await D3NAPIProvider.justRequest(target: target)
             
             return response.map { dto in
                 LocalStorageManager.deleteAll()
@@ -64,7 +64,7 @@ extension AuthClient: DependencyKey {
         },
         refresh: {
             let target: TargetType = AuthService.refresh
-            let response: Result<AuthEntity, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<AuthEntity, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map { dto in
                 LocalStorageManager.save(.accessToken, value: dto.accessToken)

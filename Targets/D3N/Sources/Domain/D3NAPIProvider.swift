@@ -16,7 +16,7 @@ public enum D3NAPIError: Error {
     case none
 }
 
-final class D3NAPIkProvider {
+final class D3NAPIProvider {
     private static let provider = MoyaProvider<MultiTarget>(
         session: Session(interceptor: AuthInterceptor()),
         plugins: [D3NNetworkLoggerPlugin()]
