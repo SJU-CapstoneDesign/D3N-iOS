@@ -12,6 +12,7 @@ import Moya
 
 public enum QuizService {
     case fetch(newsId: Int)
+    case fetchSolved(newsId: Int)
     case submit(quizs: [QuizEntity])
 }
 
@@ -21,6 +22,7 @@ extension QuizService: TargetType {
     public var path: String {
         switch self {
         case .fetch: return "quiz/list"
+        case .fetchSolved: return "quiz/list/solved"
         case .submit: return "quiz/list/submit"
         }
     }
@@ -28,6 +30,7 @@ extension QuizService: TargetType {
     public var method: Moya.Method {
         switch self {
         case .fetch: return .get
+        case .fetchSolved: return .get
         case .submit: return .post
         }
     }
@@ -35,6 +38,8 @@ extension QuizService: TargetType {
     public var task: Task {
         switch self {
         case let .fetch(newsId: id):
+            return .requestParameters(parameters: ["newsId": id], encoding: URLEncoding.queryString)
+        case let .fetchSolved(newsId: id):
             return .requestParameters(parameters: ["newsId": id], encoding: URLEncoding.queryString)
         case let .submit(quizs):
             let dto: SubmitQuizListRequestDTO = quizs.compactMap {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct NewsEntity: Equatable {
+public struct NewsEntity: Equatable, Codable {
     let id: Int
     let field: NewsField
     let type: NewsType
@@ -20,7 +20,7 @@ public struct NewsEntity: Equatable {
     let mediaCompanyName: String
     
     //FIXME: 풀었던 뉴스 아이디 저장 로직 내부 구현
-    let isAlreadySolved: Bool = false
+    var isAlreadySolved: Bool = false
     
     init(
         id: Int,

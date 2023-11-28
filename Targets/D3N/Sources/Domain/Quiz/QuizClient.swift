@@ -13,17 +13,20 @@ import Moya
 
 struct QuizClient {
     var fetch: (Int) async -> Result<[QuizEntity], D3NAPIError>
+    var fetchSolved: (Int) async -> Result<[QuizEntity], D3NAPIError>
     var submit: ([QuizEntity]) async -> Result<[Int], D3NAPIError>
 }
 
 extension QuizClient: TestDependencyKey {
     static let previewValue = Self(
         fetch: { _ in .failure(.none) },
+        fetchSolved: { _ in .failure(.none) },
         submit: { _ in .failure(.none) }
     )
     
     static let testValue = Self(
         fetch: unimplemented("\(Self.self).fetch"),
+        fetchSolved: unimplemented("\(Self.self).fetchSolved"),
         submit: unimplemented("\(Self.self).submit")
     )
 }
@@ -42,6 +45,10 @@ extension QuizClient: DependencyKey {
             let response: Result<FetchQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
             
             return response.map { $0.map { $0.toEntity() } }
+        },
+        fetchSolved: { newsId in
+            let target: TargetType = NewsService.fetchSolvedQuizList
+            let response: Result<FetchSolvedQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.request(target: target)
         },
         submit: { quizs in
             let target: TargetType = QuizService.submit(quizs: quizs)

@@ -12,6 +12,7 @@ import Moya
 public enum NewsService {
     case fetchNewsList(pageIndex: Int,pageSize: Int)
     case fetchQuizList(newsId: Int)
+    case fetchSolvedQuizList
 }
 
 extension NewsService: TargetType {
@@ -23,6 +24,8 @@ extension NewsService: TargetType {
             return "news/list"
         case .fetchQuizList:
             return "quiz/list"
+        case .fetchSolvedQuizList:
+            return "quiz/list/solved"
         }
     }
     
@@ -30,6 +33,7 @@ extension NewsService: TargetType {
         switch self {
         case .fetchNewsList: return .get
         case .fetchQuizList: return .get
+        case .fetchSolvedQuizList: return.get
         }
     }
     
@@ -39,6 +43,8 @@ extension NewsService: TargetType {
             return .requestParameters(parameters: ["pageIndex": page, "pageSize": size], encoding: URLEncoding.queryString)
         case let .fetchQuizList(newsId: id):
             return .requestParameters(parameters: ["newsId": id], encoding: URLEncoding.queryString)
+        case .fetchSolvedQuizList:
+            return .requestPlain
         }
     }
     
