@@ -11,6 +11,7 @@ import Moya
 
 public enum NewsService {
     case fetchNewsList(pageIndex: Int,pageSize: Int)
+    case fetchTodayNewsList
     case updateNewsTime(newsId: Int, secondTime: Int)
 }
 
@@ -19,16 +20,16 @@ extension NewsService: TargetType {
     
     public var path: String {
         switch self {
-        case .fetchNewsList:
-            return "news/list"
-        case .updateNewsTime:
-            return "news/time"
+        case .fetchNewsList: return "news/list"
+        case .fetchTodayNewsList: return "news/today/list"
+        case .updateNewsTime: return "news/time"
         }
     }
     
     public var method: Moya.Method {
         switch self {
         case .fetchNewsList: return .get
+        case .fetchTodayNewsList: return .get
         case .updateNewsTime: return .patch
         }
     }
@@ -37,6 +38,8 @@ extension NewsService: TargetType {
         switch self {
         case let .fetchNewsList(pageIndex: page, pageSize: size):
             return .requestParameters(parameters: ["pageIndex": page, "pageSize": size], encoding: URLEncoding.queryString)
+        case .fetchTodayNewsList:
+            return .requestPlain
         case let .updateNewsTime(newsId: id, secondTime: time):
             let dto = UpdateNewsTimeRequestDTO(newsId: id, secondTime: time)
             return .requestJSONEncodable(dto)
