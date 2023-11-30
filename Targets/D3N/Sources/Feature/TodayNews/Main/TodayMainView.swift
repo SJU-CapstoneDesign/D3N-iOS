@@ -22,10 +22,9 @@ public struct TodayMainView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
-//                    todayNewsView(viewStore: viewStore)
-//                        .padding()
                     ForEachStore(self.store.scope(state: \.todayNewsListItems, action: TodayMainStore.Action.todayNewsListItems(id:action:))) {
                         TodayNewsListItemCellView(store: $0)
+                            .padding()
                     }
                 }
             }
@@ -35,43 +34,4 @@ public struct TodayMainView: View {
             .navigationTitle("Today")
         }
     }
-    
-//    private func todayNewsView(viewStore: ViewStoreOf<TodayMainStore>) -> some View {
-//        VStack(alignment: .leading, spacing: .zero) {
-//            VStack(alignment: .leading){
-//                Text("최신 뉴스를 가져왔어요")
-//                    .font(.subheadline)
-//                    .foregroundStyle(.gray)
-//                    .fontWeight(.semibold)
-//                
-//                HStack {
-//                    Text("오늘의 뉴스 3 문제")
-//                        .font(.title)
-//                        .fontWeight(.semibold)
-//                    
-//                    Spacer()
-//                    
-//                    Button("전체보기", action: {
-//                        viewStore.send(.allNewsButtonTapped)
-//                    }
-//                    )
-//                }
-//            }
-//            .padding([.horizontal, .top])
-//            .onTapGesture {
-//                viewStore.send(.allNewsButtonTapped)
-//            }
-//            
-//            VStack(alignment: .leading, spacing: .zero) {
-//                ForEachStore(self.store.scope(state: \.todayListItems, action: TodayMainStore.Action.todayListItems(id:action:))) {
-//                    TodayListItemCellView(store: $0)
-//                }
-//            }
-//            .padding(.bottom, 10)
-//        }
-//        .background(Color.background)
-//        .cornerRadius(20)
-//        .clipped()
-//        .shadow(color: .systemGray5, radius: 20)
-//    }
 }
