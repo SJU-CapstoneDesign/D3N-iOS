@@ -19,6 +19,7 @@ public struct NewsEntity: Equatable {
     let mediaCompanyLogo: String
     let mediaCompanyName: String
     var secondTime: Int
+    let level: Int
     
     init(
         id: Int,
@@ -30,7 +31,8 @@ public struct NewsEntity: Equatable {
         mediaCompanyId: String,
         mediaCompanyLogo: String,
         mediaCompanyName: String,
-        secondTime: Int
+        secondTime: Int,
+        level: Int
     ) {
         self.id = id
         self.field = field
@@ -42,6 +44,7 @@ public struct NewsEntity: Equatable {
         self.mediaCompanyLogo = mediaCompanyLogo
         self.mediaCompanyName = mediaCompanyName
         self.secondTime = secondTime
+        self.level = level
     }
     
     var timeString: String {
@@ -65,7 +68,8 @@ public extension NewsEntity {
         mediaCompanyId: "056",
         mediaCompanyLogo: "https://mimgnews.pstatic.net/image/upload/office_logo/056/2021/07/15/logo_056_57_20210715101841.png",
         mediaCompanyName: "KBS",
-        secondTime: 0
+        secondTime: 0,
+        level: 0
     )
     
     static let mocks = [
@@ -79,7 +83,8 @@ public extension NewsEntity {
             mediaCompanyId: "018",
             mediaCompanyLogo: "https://mimgnews.pstatic.net/image/upload/office_logo/018/2018/08/08/logo_018_57_20180808174308.png",
             mediaCompanyName: "이데일리",
-            secondTime: 0
+            secondTime: 0,
+            level: 0
           ),
         NewsEntity(
             id: 11605391,
@@ -91,7 +96,8 @@ public extension NewsEntity {
             mediaCompanyId: "056",
             mediaCompanyLogo: "https://mimgnews.pstatic.net/image/upload/office_logo/056/2021/07/15/logo_056_57_20210715101841.png",
             mediaCompanyName: "KBS",
-            secondTime: 0
+            secondTime: 0,
+            level: 0
         )
     ]
 }
