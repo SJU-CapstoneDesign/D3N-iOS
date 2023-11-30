@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct TodayNewsEntity {
-    let type: String
-    let title: String
-    let subtitle: String
-    let newses: [NewsEntity]
+public struct TodayNewsEntity: Equatable {
+    public let type: String
+    public let title: String
+    public let subtitle: String
+    public let newses: [NewsEntity]
 }
