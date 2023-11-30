@@ -27,24 +27,20 @@ public struct TodayNewsListItemCellStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case tapped
+        case select(NewsEntity)
         
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case onAppear
-            case tapped
+            case select(NewsEntity)
         }
     }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .onAppear:
-                return .send(.delegate(.onAppear))
-                
-            case .tapped:
-                return .send(.delegate(.tapped))
+            case let .select(news):
+                return .send(.delegate(.select(news)))
                 
             default:
                 return .none

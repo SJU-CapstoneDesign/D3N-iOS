@@ -46,7 +46,9 @@ public struct TodayNewsListItemCellView: View {
                             title: news.title,
                             content: news.summary,
                             isSelected: false,
-                            action: {}
+                            action: {
+                                viewStore.send(.select(news))
+                            }
                         )
                     }
                 }

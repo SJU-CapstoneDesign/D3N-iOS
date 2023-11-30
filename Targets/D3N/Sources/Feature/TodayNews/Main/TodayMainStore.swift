@@ -20,13 +20,7 @@ public struct TodayMainStore: Reducer {
                 self.todayNewsListItems = makeTodayNewsListItems(from: todayNewses)
             }
         }
-//        var newses: [NewsEntity] = [] {
-//            didSet {
-////                self.todayListItems = makeTodayListItems(from: newses)
-//            }
-//        }
         
-//        var todayListItems: IdentifiedArrayOf<TodayListItemCellStore.State> = []
         var todayNewsListItems: IdentifiedArrayOf<TodayNewsListItemCellStore.State> = []
         
         public init() { }
@@ -40,10 +34,6 @@ public struct TodayMainStore: Reducer {
         case fetchTodayNewsListRequest
         case fetchTodayNewsListResponse(Result<[TodayNewsEntity], D3NAPIError>)
         
-//        case fetchNewsListRequest
-//        case fetchNewsListResponse(Result<[NewsEntity], D3NAPIError>)
-        
-//        case todayListItems(id: TodayListItemCellStore.State.ID, action: TodayListItemCellStore.Action)
         case todayNewsListItems(id: TodayNewsListItemCellStore.State.ID, action: TodayNewsListItemCellStore.Action)
         
         case delegate(Delegate)
@@ -75,29 +65,16 @@ public struct TodayMainStore: Reducer {
                 state.todayNewses = todayNewses
                 return .none
                 
-//            case .fetchNewsListRequest:
-//                return .run { send in
-//                    let response = await newsClient.fetch(TODAY_NEWS_PAGE_INDEX, TODAY_NEWS_PAGE_SIZE)
-//                    await send(.fetchNewsListResponse(response))
-//                }
-//                
-//            case let .fetchNewsListResponse(.success(newses)):
-//                state.newses = newses
-//                return .none
-                
-//            case let .todayListItems(id: id, action: .delegate(.tapped)):
-//                if let newsEntity = state.todayListItems[id: id]?.newsEntity {
-//                    return .send(.delegate(.select(newsEntity)))
-//                }
-//                return .none
+            case let .todayNewsListItems(id: _, action: .delegate(action)):
+                switch action {
+                case let .select(news):
+                    return .send(.delegate(.select(news)))
+                }
                 
             default:
                 return .none
             }
         }
-//        .forEach(\.todayListItems, action: /Action.todayListItems(id:action:)) {
-//            TodayListItemCellStore()
-//        }
         .forEach(\.todayNewsListItems, action: /Action.todayNewsListItems(id: action:)) {
             TodayNewsListItemCellStore()
         }
