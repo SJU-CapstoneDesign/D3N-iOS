@@ -17,7 +17,7 @@ struct MainTabStore: Reducer {
     struct State: Equatable {
         var currentScene: MainScene = .question
         
-        var today: TodayNavigationStackStore.State? = .init()
+        var today: TodayNewsNavigationStackStore.State? = .init()
         var allNews: AllNewsNavigationStackStore.State? = .init()
         var myPage: MyPageNavigationStackStore.State? = .init()
     }
@@ -31,7 +31,7 @@ struct MainTabStore: Reducer {
         case authRefreshRequest
         case authRefreshResponse(Result<AuthEntity, D3NAPIError>)
         
-        case today(TodayNavigationStackStore.Action)
+        case today(TodayNewsNavigationStackStore.Action)
         case allNews(AllNewsNavigationStackStore.Action)
         case myPage(MyPageNavigationStackStore.Action)
         case delegate(Delegate)
@@ -69,7 +69,7 @@ struct MainTabStore: Reducer {
             }
         }
         .ifLet(\.today, action: /Action.today) {
-            TodayNavigationStackStore()
+            TodayNewsNavigationStackStore()
         }
         .ifLet(\.allNews, action: /Action.allNews) {
             AllNewsNavigationStackStore()

@@ -10,10 +10,7 @@ import Foundation
 
 import ComposableArchitecture
 
-public struct TodayMainStore: Reducer {
-    let TODAY_NEWS_PAGE_INDEX = 0
-    let TODAY_NEWS_PAGE_SIZE = 3
-    
+public struct TodayNewsMainStore: Reducer {
     public struct State: Equatable {
         var todayNewses: [TodayNewsEntity] = [] {
             didSet {
@@ -81,7 +78,7 @@ public struct TodayMainStore: Reducer {
     }
 }
 
-public extension TodayMainStore.State {
+public extension TodayNewsMainStore.State {
     func makeTodayNewsListItems(from todayNewses: [TodayNewsEntity]) -> IdentifiedArrayOf<TodayNewsListItemCellStore.State> {
         return .init(
             uniqueElements: todayNewses.map { todayNews in

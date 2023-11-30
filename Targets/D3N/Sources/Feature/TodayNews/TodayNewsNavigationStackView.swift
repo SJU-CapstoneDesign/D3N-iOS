@@ -11,19 +11,19 @@ import SwiftUI
 
 import ComposableArchitecture
 
-public struct TodayNavigationStackView: View {
-    let store: StoreOf<TodayNavigationStackStore>
+public struct TodayNewsNavigationStackView: View {
+    let store: StoreOf<TodayNewsNavigationStackStore>
     
-    public init(store: StoreOf<TodayNavigationStackStore>) {
+    public init(store: StoreOf<TodayNewsNavigationStackStore>) {
         self.store = store
     }
     
     public var body: some View {
         NavigationStackStore(self.store.scope(
             state: \.path,
-            action: TodayNavigationStackStore.Action.path)) {
+            action: TodayNewsNavigationStackStore.Action.path)) {
                 WithViewStore(self.store, observe: { $0 }) { viewStore in
-                    TodayMainView(store: self.store.scope(state: \.main, action: TodayNavigationStackStore.Action.main))
+                    TodayNewsMainView(store: self.store.scope(state: \.main, action: TodayNewsNavigationStackStore.Action.main))
                         .task {
                             viewStore.send(.onAppear)
                         }
@@ -32,22 +32,22 @@ public struct TodayNavigationStackView: View {
                 switch $0 {
                 case .quizMain:
                     CaseLet(
-                        /TodayNavigationStackStore.Path.State.quizMain,
-                         action: TodayNavigationStackStore.Path.Action.quizMain,
+                        /TodayNewsNavigationStackStore.Path.State.quizMain,
+                         action: TodayNewsNavigationStackStore.Path.Action.quizMain,
                          then: QuizMainView.init(store:)
                     )
                     
                 case .quizResult:
                     CaseLet(
-                        /TodayNavigationStackStore.Path.State.quizResult,
-                         action: TodayNavigationStackStore.Path.Action.quizResult,
+                        /TodayNewsNavigationStackStore.Path.State.quizResult,
+                         action: TodayNewsNavigationStackStore.Path.Action.quizResult,
                          then: QuizResultView.init(store:)
                     )
                     
                 case .allNews:
                     CaseLet(
-                        /TodayNavigationStackStore.Path.State.allNews,
-                         action: TodayNavigationStackStore.Path.Action.allNews,
+                        /TodayNewsNavigationStackStore.Path.State.allNews,
+                         action: TodayNewsNavigationStackStore.Path.Action.allNews,
                          then: AllNewsView.init(store:)
                     )
                 }

@@ -11,10 +11,10 @@ import SwiftUI
 
 import ComposableArchitecture
 
-public struct TodayMainView: View {
-    let store: StoreOf<TodayMainStore>
+public struct TodayNewsMainView: View {
+    let store: StoreOf<TodayNewsMainStore>
 
-    public init(store: StoreOf<TodayMainStore>) {
+    public init(store: StoreOf<TodayNewsMainStore>) {
         self.store = store
     }
     
@@ -22,7 +22,7 @@ public struct TodayMainView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
-                    ForEachStore(self.store.scope(state: \.todayNewsListItems, action: TodayMainStore.Action.todayNewsListItems(id:action:))) {
+                    ForEachStore(self.store.scope(state: \.todayNewsListItems, action: TodayNewsMainStore.Action.todayNewsListItems(id:action:))) {
                         TodayNewsListItemCellView(store: $0)
                             .padding()
                     }

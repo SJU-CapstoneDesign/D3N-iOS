@@ -8,9 +8,9 @@
 
 import ComposableArchitecture
 
-public struct TodayNavigationStackStore: Reducer {
+public struct TodayNewsNavigationStackStore: Reducer {
     public struct State: Equatable {
-        var main: TodayMainStore.State = .init()
+        var main: TodayNewsMainStore.State = .init()
         
         var path: StackState<Path.State> = .init()
     }
@@ -20,7 +20,7 @@ public struct TodayNavigationStackStore: Reducer {
         
         case onAppear
         
-        case main(TodayMainStore.Action)
+        case main(TodayNewsMainStore.Action)
         case path(StackAction<Path.State, Path.Action>)
         
         case popToRoot
@@ -104,7 +104,7 @@ public struct TodayNavigationStackStore: Reducer {
             }
         }
         Scope(state: \.main, action: /Action.main) {
-            TodayMainStore()
+            TodayNewsMainStore()
         }
         .forEach(\.path, action: /Action.path) {
             Path()
