@@ -21,6 +21,7 @@ public struct QuizListItemCellStore: Reducer {
         var reason: String
         var secondTime: Int
         var selectedAnswer: Int?
+        var level: Int
         
         init(
             id: Int = .init(),
@@ -30,16 +31,19 @@ public struct QuizListItemCellStore: Reducer {
             answer: Int,
             reason: String,
             secondTime: Int,
-            selectedAnswer: Int? = nil
+            selectedAnswer: Int? = nil,
+            level: Int
         ) {
             self.id = id
             self.isSolved = isSolved
+            
             self.question = question
             self.choices = choices
             self.answer = answer
             self.reason = reason
             self.secondTime = secondTime
             self.selectedAnswer = selectedAnswer
+            self.level = level
         }
     }
     

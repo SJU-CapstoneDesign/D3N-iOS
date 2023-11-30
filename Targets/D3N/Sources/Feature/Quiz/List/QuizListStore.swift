@@ -33,7 +33,8 @@ public struct QuizListStore: Reducer {
                         answer: quiz.answer,
                         reason: quiz.reason,
                         secondTime: quiz.secondTime,
-                        selectedAnswer: quiz.selectedAnswer
+                        selectedAnswer: quiz.selectedAnswer,
+                        level: quiz.level
                     )
                 }
             )

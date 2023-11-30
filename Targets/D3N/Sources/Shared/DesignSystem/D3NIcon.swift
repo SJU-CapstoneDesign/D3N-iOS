@@ -54,19 +54,35 @@ public extension D3NIcon {
         }
     }
     
-    static func one(isActive: Bool) -> D3NIcon {
-        return .init(systemImageName: "1.circle.fill", isActive: isActive)
+    static func one(color: Color? = nil, isActive: Bool) -> D3NIcon {
+        if let color = color {
+            return .init(systemImageName: "1.circle.fill", inactiveColor: color, isActive: isActive)
+        } else {
+            return .init(systemImageName: "1.circle.fill", isActive: isActive)
+        }
     }
     
-    static func two(isActive: Bool) -> D3NIcon {
-        return .init(systemImageName: "2.circle.fill", isActive: isActive)
+    static func two(color: Color? = nil, isActive: Bool) -> D3NIcon {
+        if let color = color {
+            return .init(systemImageName: "2.circle.fill", inactiveColor: color, isActive: isActive)
+        } else {
+            return .init(systemImageName: "2.circle.fill", isActive: isActive)
+        }
     }
     
-    static func three(isActive: Bool) -> D3NIcon {
-        return .init(systemImageName: "3.circle.fill", isActive: isActive)
+    static func three(color: Color? = nil, isActive: Bool) -> D3NIcon {
+        if let color = color {
+            return .init(systemImageName: "3.circle.fill", inactiveColor: color, isActive: isActive)
+        } else {
+            return .init(systemImageName: "3.circle.fill", isActive: isActive)
+        }
     }
     
-    static func four(isActive: Bool) -> D3NIcon {
-        return .init(systemImageName: "4.circle.fill", isActive: isActive)
+    static func four(color: Color? = nil, isActive: Bool) -> D3NIcon {
+        if let color = color {
+            return .init(systemImageName: "4.circle.fill", inactiveColor: color, isActive: isActive)
+        } else {
+            return .init(systemImageName: "4.circle.fill", isActive: isActive)
+        }
     }
 }
