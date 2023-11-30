@@ -33,23 +33,18 @@ public struct TodayNavigationStackStore: Reducer {
     
     public struct Path: Reducer {
         public enum State: Equatable {
-            case detail(TodayDetailStore.State)
             case quizMain(QuizMainStore.State)
             case quizResult(QuizResultStore.State)
             case allNews(AllNewsStore.State)
         }
         
         public enum Action: Equatable {
-            case detail(TodayDetailStore.Action)
             case quizMain(QuizMainStore.Action)
             case quizResult(QuizResultStore.Action)
             case allNews(AllNewsStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
-            Scope(state: /State.detail, action: /Action.detail) {
-                TodayDetailStore()
-            }
             Scope(state: /State.quizMain, action: /Action.quizMain) {
                 QuizMainStore()
             }
