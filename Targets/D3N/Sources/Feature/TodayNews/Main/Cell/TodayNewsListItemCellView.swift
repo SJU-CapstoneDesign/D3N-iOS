@@ -14,8 +14,6 @@ import ComposableArchitecture
 public struct TodayNewsListItemCellView: View {
     let store: StoreOf<TodayNewsListItemCellStore>
     
-    @State var isPressed: Bool = false
-    
     public init(store: StoreOf<TodayNewsListItemCellStore>) {
         self.store = store
     }
