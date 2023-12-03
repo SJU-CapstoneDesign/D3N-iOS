@@ -30,13 +30,6 @@ public struct TodayNavigationStackView: View {
                 }
             } destination: {
                 switch $0 {
-                case .detail:
-                    CaseLet(
-                        /TodayNavigationStackStore.Path.State.detail,
-                         action: TodayNavigationStackStore.Path.Action.detail,
-                         then: TodayDetailView.init(store:)
-                    )
-                    
                 case .quizMain:
                     CaseLet(
                         /TodayNavigationStackStore.Path.State.quizMain,

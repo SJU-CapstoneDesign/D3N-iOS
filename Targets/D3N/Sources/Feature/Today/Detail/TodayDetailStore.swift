@@ -1,30 +1,30 @@
+////
+////  TodayDetailStore.swift
+////  D3N
+////
+////  Created by 송영모 on 10/12/23.
+////  Copyright © 2023 sju. All rights reserved.
+////
 //
-//  TodayDetailStore.swift
-//  D3N
+//import ComposableArchitecture
 //
-//  Created by 송영모 on 10/12/23.
-//  Copyright © 2023 sju. All rights reserved.
+//public struct TodayDetailStore: Reducer {
+//    public struct State: Equatable { }
+//    
+//    public enum Action: Equatable {
+//        case onAppear
+//    }
+//    
+//    public var body: some ReducerOf<Self> {
+//        Reduce { state, action in
+//            switch action {
+//            case .onAppear:
+//                return .none
+//                
+//            default:
+//                return .none
+//            }
+//        }
+//    }
+//}
 //
-
-import ComposableArchitecture
-
-public struct TodayDetailStore: Reducer {
-    public struct State: Equatable { }
-    
-    public enum Action: Equatable {
-        case onAppear
-    }
-    
-    public var body: some ReducerOf<Self> {
-        Reduce { state, action in
-            switch action {
-            case .onAppear:
-                return .none
-                
-            default:
-                return .none
-            }
-        }
-    }
-}
-
