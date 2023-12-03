@@ -37,13 +37,6 @@ public struct TodayNewsNavigationStackView: View {
                          then: QuizMainView.init(store:)
                     )
                     
-                case .quizResult:
-                    CaseLet(
-                        /TodayNewsNavigationStackStore.Path.State.quizResult,
-                         action: TodayNewsNavigationStackStore.Path.Action.quizResult,
-                         then: QuizResultView.init(store:)
-                    )
-                    
                 case .allNews:
                     CaseLet(
                         /TodayNewsNavigationStackStore.Path.State.allNews,
