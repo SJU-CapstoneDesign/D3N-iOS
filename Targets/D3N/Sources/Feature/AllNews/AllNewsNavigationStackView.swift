@@ -47,7 +47,7 @@ public struct AllNewsNavigationStackView: View {
                 case .allNews:
                     CaseLet(
                         /AllNewsNavigationStackStore.Path.State.allNews,
-                         action: TodayNavigationStackStore.Path.Action.allNews,
+                         action: TodayNewsNavigationStackStore.Path.Action.allNews,
                          then: AllNewsView.init(store:)
                     )
                 }

@@ -16,7 +16,7 @@ struct MainTabView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             TabView {
                 IfLetStore(self.store.scope(state: \.today, action: MainTabStore.Action.today)) {
-                    TodayNavigationStackView(store: $0)
+                    TodayNewsNavigationStackView(store: $0)
                         .tabItem {
                             Image(systemName: "doc.text.image")
                             Text("투데이")

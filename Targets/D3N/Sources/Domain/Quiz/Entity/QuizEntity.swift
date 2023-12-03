@@ -16,6 +16,7 @@ public struct QuizEntity: Equatable {
     let reason: String
     var secondTime: Int
     var selectedAnswer: Int?
+    var level: Int
     
     var isSolved: Bool
     
@@ -35,7 +36,8 @@ public struct QuizEntity: Equatable {
         answer: Int,
         reason: String,
         secondTime: Int,
-        selectedAnswer: Int?
+        selectedAnswer: Int?,
+        level: Int
     ) {
         self.id = id
         self.question = question
@@ -44,6 +46,7 @@ public struct QuizEntity: Equatable {
         self.reason = reason
         self.secondTime = secondTime
         self.selectedAnswer = selectedAnswer
+        self.level = level
         
         self.isSolved = selectedAnswer != nil
     }

@@ -26,9 +26,10 @@ public struct QuizListItemCellView: View {
                     reason: viewStore.state.reason,
                     answer: viewStore.state.answer,
                     selectedAnswer: viewStore.state.selectedAnswer,
+                    level: viewStore.state.level,
                     isSolved: viewStore.state.isSolved
                 )
-                .padding(.top, 40)
+                .padding(.top, 10)
                 
                 Spacer()
                 
@@ -60,9 +61,13 @@ public struct QuizListItemCellView: View {
         reason: String,
         answer: Int,
         selectedAnswer: Int?,
+        level: Int,
         isSolved: Bool
     ) -> some View {
         VStack {
+            D3NIconTextBox.resolved(number: level)
+                .padding(.bottom, 10)
+            
             Text(question)
             
             Spacer()

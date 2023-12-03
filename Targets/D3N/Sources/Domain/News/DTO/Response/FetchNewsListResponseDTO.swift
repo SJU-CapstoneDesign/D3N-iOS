@@ -21,6 +21,7 @@ struct FetchNewsListResponseElement: Codable {
     let mediaCompanyLogo: String
     let mediaCompanyName: String
     let secondTime: Int
+    let level: Int
 }
 
 extension FetchNewsListResponseElement {
@@ -35,7 +36,8 @@ extension FetchNewsListResponseElement {
             mediaCompanyId: self.mediaCompanyId,
             mediaCompanyLogo: self.mediaCompanyLogo,
             mediaCompanyName: self.mediaCompanyName,
-            secondTime: self.secondTime
+            secondTime: self.secondTime,
+            level: self.level
         )
     }
 }

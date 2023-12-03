@@ -42,13 +42,13 @@ extension QuizClient: DependencyKey {
     static let liveValue = QuizClient(
         fetch: { newsId in
             let target: TargetType = QuizService.fetch(newsId: newsId)
-            let response: Result<FetchQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<FetchQuizListResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map { $0.map { $0.toEntity() } }
         },
         submit: { quizs in
             let target: TargetType = QuizService.submit(quizs: quizs)
-            let response: Result<SubmitQuizListResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<SubmitQuizListResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map {
                 $0.map { $0.quizId }
@@ -56,7 +56,7 @@ extension QuizClient: DependencyKey {
         },
         updateTime: { quizId, secondTime in
             let target: TargetType = QuizService.updateTime(quizId: quizId, secondTime: secondTime)
-            let response: Result<UpdateQuizTimeResponseDTO, D3NAPIError> = await D3NAPIkProvider.reqeust(target: target)
+            let response: Result<UpdateQuizTimeResponseDTO, D3NAPIError> = await D3NAPIProvider.reqeust(target: target)
             
             return response.map { _ in
                 return true
