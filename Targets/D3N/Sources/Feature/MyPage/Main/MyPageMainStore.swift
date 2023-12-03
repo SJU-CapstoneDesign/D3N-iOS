@@ -13,6 +13,7 @@ import ComposableArchitecture
 public struct MyPageMainStore: Reducer {
     public struct State: Equatable {
         @PresentationState var alert: AlertState<Action.Alert>?
+        
     }
     
     public enum Action: BindableAction, Equatable {
@@ -23,11 +24,15 @@ public struct MyPageMainStore: Reducer {
         case appleUnlinkRequest
         case appleUnlinkResponse(Result<Bool, D3NAPIError>)
         
+        case solvedNewsButtonTapped
+        
         case alert(PresentationAction<Alert>)
         case delegate(Delegate)
         
-        public enum Delegate {
+        public enum Delegate: Equatable {
             case unlinked
+            case solvedNewsButtonTapped
+            case select(NewsEntity)
         }
         
         public enum Alert: Equatable {
@@ -43,6 +48,7 @@ public struct MyPageMainStore: Reducer {
         
         Reduce { state, action in
             switch action {
+    
             case .unlinkButtonTapped:
                 state.alert = AlertState {
                     TextState("회원탈퇴는 되돌릴 수 없습니다.")
@@ -60,6 +66,8 @@ public struct MyPageMainStore: Reducer {
                 return .run { send in
                     await send(.appleUnlinkResponse(await authClient.appleUnlink()))
                 }
+            case .solvedNewsButtonTapped:
+                return .send(.delegate(.solvedNewsButtonTapped))
                 
             case .appleUnlinkResponse(.success), .appleUnlinkResponse(.failure):
                 return .send(.delegate(.unlinked))
@@ -78,5 +86,7 @@ public struct MyPageMainStore: Reducer {
             }
         }
         .ifLet(\.$alert, action: /Action.alert)
+        
     }
 }
+
