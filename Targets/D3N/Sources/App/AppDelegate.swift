@@ -8,14 +8,24 @@
 
 import UIKit
 import SwiftUI
-import FirebaseCore
-
 import AppTrackingTransparency
+
+import FirebaseCore
+import GoogleMobileAds
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+        
+        } else {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                GADMobileAds.sharedInstance().start(completionHandler: nil)
+            }
+        }
+        
         FirebaseApp.configure()
-        return true
+
+      return true
     }
 }

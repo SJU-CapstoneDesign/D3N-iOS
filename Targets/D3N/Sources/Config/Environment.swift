@@ -12,4 +12,8 @@ public struct Environment {
     public static var baseURL: String {
         return Bundle.main.infoDictionary?["SERVER_HOST"] as? String ?? ""
     }
+    
+    public static var appOpenAdsId: String {
+        return Bundle.main.infoDictionary?["APP_OPEN_ADS_ID"] as? String ?? ""
+    }
 }
