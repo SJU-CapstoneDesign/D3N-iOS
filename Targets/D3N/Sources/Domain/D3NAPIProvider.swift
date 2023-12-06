@@ -61,7 +61,7 @@ final class D3NAPIProvider {
         }
     }
     
-    private static func request<T: TargetType>(target: T) async -> Result<Response, MoyaError> {
+    public static func request<T: TargetType>(target: T) async -> Result<Response, MoyaError> {
         await withCheckedContinuation { continuation in
             provider.request(MultiTarget(target)) { result in
                 continuation.resume(returning: result)

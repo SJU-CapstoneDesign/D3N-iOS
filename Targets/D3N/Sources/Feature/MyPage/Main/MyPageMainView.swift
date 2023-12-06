@@ -35,7 +35,7 @@ public struct MyPageMainView: View {
     private func personalSection(viewStore: ViewStoreOf<MyPageMainStore>) -> some View {
         Section {
             Button( action: {
-                viewStore.send(.solvedNewsButtonTapped)
+                viewStore.send(.solvedQuizButtonTapped)
             }, label:{
                 Label(
                     title:{

@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  FetchSolvedQuizListResponseDTO.swift
 //  D3N
 //
 //  Created by Younghoon Ahn on 11/28/23.

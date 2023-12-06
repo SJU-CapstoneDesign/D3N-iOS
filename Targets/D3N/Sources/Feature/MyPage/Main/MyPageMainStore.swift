@@ -24,15 +24,15 @@ public struct MyPageMainStore: Reducer {
         case appleUnlinkRequest
         case appleUnlinkResponse(Result<Bool, D3NAPIError>)
         
-        case solvedNewsButtonTapped
+        case solvedQuizButtonTapped
         
         case alert(PresentationAction<Alert>)
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
             case unlinked
-            case solvedNewsButtonTapped
-            case select(NewsEntity)
+            case solvedQuizButtonTapped
+            case select(SolvedQuizEntity)
         }
         
         public enum Alert: Equatable {
@@ -66,8 +66,8 @@ public struct MyPageMainStore: Reducer {
                 return .run { send in
                     await send(.appleUnlinkResponse(await authClient.appleUnlink()))
                 }
-            case .solvedNewsButtonTapped:
-                return .send(.delegate(.solvedNewsButtonTapped))
+            case .solvedQuizButtonTapped:
+                return .send(.delegate(.solvedQuizButtonTapped))
                 
             case .appleUnlinkResponse(.success), .appleUnlinkResponse(.failure):
                 return .send(.delegate(.unlinked))

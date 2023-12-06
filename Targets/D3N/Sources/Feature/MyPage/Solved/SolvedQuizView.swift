@@ -11,10 +11,10 @@ import SwiftUI
 
 import ComposableArchitecture
 
-public struct SolvedNewsView: View {
-    let store: StoreOf<SolvedNewsStore>
+public struct SolvedQuizView: View {
+    let store: StoreOf<SolvedQuizStore>
     
-    public init(store: StoreOf<SolvedNewsStore>) {
+    public init(store: StoreOf<SolvedQuizStore>) {
         self.store = store
     }
     
@@ -35,11 +35,11 @@ public struct SolvedNewsView: View {
         }
     }
     
-    private var newsListItemsView: some View {
+    private var QuizListItemsView: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             if viewStore.state.isEmptyNewsEntityList() {
                 return AnyView(
-                    Text("아직 풀어본 뉴스가 없어요")
+                    Text("아직 풀어본 퀴즈가 없어요")
                         .font(.title2)
                         .foregroundColor(.gray)
                         .padding()
