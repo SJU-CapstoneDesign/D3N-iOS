@@ -14,6 +14,7 @@ extension Project {
             .external(name: "ComposableArchitecture"),
             .external(name: "Moya"),
             .external(name: "FirebaseAnalytics"),
+            .external(name: "GoogleMobileAds")
         ]
         
         var targets = makeAppTargets(

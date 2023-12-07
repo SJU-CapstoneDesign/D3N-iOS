@@ -9,6 +9,8 @@ import Foundation
 
 import ComposableArchitecture
 
+import GoogleMobileAds
+
 enum MainScene: Hashable {
     case question
 }
@@ -20,6 +22,8 @@ struct MainTabStore: Reducer {
         var today: TodayNewsNavigationStackStore.State? = .init()
         var allNews: AllNewsNavigationStackStore.State? = .init()
         var myPage: MyPageNavigationStackStore.State? = .init()
+        
+        var appOpenAds: AppOpenAds = .init(id: Environment.appOpenAdsId)
     }
     
     enum Action: BindableAction, Equatable {
